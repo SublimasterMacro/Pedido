@@ -527,6 +527,21 @@
                 <button type="button" class="btn-copy-link" onclick="copiarLinkGerado()">📋 Copiar Link</button>
             </div>
 
+            <div class="file-upload-section">
+                <h3>📊 Importar Planilha</h3>
+                <p>Importe um arquivo CSV ou Excel com os itens do pedido</p>
+                <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display: none;">
+                <div class="import-buttons">
+                    <button type="button" class="file-upload-btn" onclick="document.getElementById('fileInput').click()">
+                        📁 Importar Planilha
+                    </button>
+                    <button type="button" class="btn-template" onclick="baixarTemplate()">
+                        📥 Baixar Template
+                    </button>
+                </div>
+                <div class="file-name" id="fileName"></div>
+            </div>
+
             <div class="table-container">
                 <table>
                     <thead>
@@ -1255,3 +1270,4 @@
     </script>
 </body>
 </html>
+            
