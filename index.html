@@ -659,6 +659,19 @@
             const telefone = urlParams.get('tel') || urlParams.get('telefone') || urlParams.get('phone');
             const email = urlParams.get('email') || urlParams.get('mail');
             
+            // ✅ Se veio por link (tem parâmetros), ESCONDE o botão de gerar link
+            const temParametros = referencia || nome || telefone;
+            
+            if (temParametros) {
+                const btnGerarLink = document.querySelector('.btn-generate-link');
+                const linkResult = document.getElementById('linkResult');
+                
+                if (btnGerarLink) btnGerarLink.style.display = 'none';
+                if (linkResult) linkResult.style.display = 'none';
+                
+                console.log('👤 Modo Cliente: Botão de gerar link escondido');
+            }
+            
             if (referencia) {
                 document.getElementById('referencia').value = referencia;
                 document.getElementById('referencia').readOnly = true;
@@ -724,7 +737,6 @@
             
             tbody.appendChild(linhaPreenchida);
             
-            // Mantém o tipo selecionado e limpa os outros campos
             const tipoAtual = primeiraLinha.querySelector('.item-tipo').value;
             primeiraLinha.querySelectorAll('input').forEach(input => {
                 input.classList.contains('item-quantidade') ? input.value = '1' : input.value = '';
@@ -735,7 +747,6 @@
                 }
             });
             
-            // Foca no campo nome
             primeiraLinha.querySelector('.item-nome').focus();
         }
 
@@ -746,44 +757,7 @@
                 alert('⚠️ Não é possível remover a linha de entrada!');
                 return;
             }
-            
-            const jaEnviado = row.getAttribute('data-enviado') === 'true';
-            
-            if (jaEnviado) {
-                if (!confirm('🗑️ Esta linha já foi enviada para a planilha.\n\nDeseja deletar da planilha também?')) {
-                    return;
-                }
-                
-                // Deleta da planilha
-                const dados = {
-                    action: 'delete',
-                    referencia: document.getElementById('referencia').value,
-                    tipo: row.querySelector('.item-tipo').value,
-                    nome: row.querySelector('.item-nome').value,
-                    numero: row.querySelector('.item-numero').value,
-                    tamCamiseta: row.querySelector('.item-tam-camiseta').value
-                };
-                
-                btn.textContent = '⏳ Deletando...';
-                btn.disabled = true;
-                
-                fetch(scriptURL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(dados)
-                })
-                .then(() => {
-                    row.remove();
-                })
-                .catch(error => {
-                    alert('❌ Erro ao deletar da planilha: ' + error.message);
-                    btn.textContent = 'Remover';
-                    btn.disabled = false;
-                });
-            } else {
-                row.remove();
-            }
+            row.remove();
         }
 
         function novoPedido() {
@@ -807,8 +781,6 @@
                 try {
                     const text = event.target.result;
                     const linhas = text.split('\n').filter(linha => linha.trim());
-                    
-                    // Ignora o cabeçalho (primeira linha)
                     const dadosLinhas = linhas.slice(1);
                     
                     if (dadosLinhas.length === 0) {
@@ -879,9 +851,6 @@
             rows.forEach((row, index) => {
                 if (index === 0) return;
                 
-                const jaEnviado = row.getAttribute('data-enviado') === 'true';
-                if (jaEnviado) return;
-                
                 const tipoValue = row.querySelector('.item-tipo').value;
                 const item = {
                     tipo: tipoValue,
@@ -898,8 +867,12 @@
                 }
             });
 
+            console.log('🔍 DEBUG: Total de linhas na tabela:', rows.length);
+            console.log('📦 Itens coletados:', formData.itens.length);
+            console.log('📋 Dados finais:', formData);
+
             if (formData.itens.length === 0) {
-                alert('⚠️ Nenhum item novo para enviar!');
+                alert('⚠️ Nenhum item para enviar!\n\nPreencha pelo menos uma linha com o TIPO selecionado.');
                 return;
             }
             
@@ -922,31 +895,11 @@
                     `<em>Planilha atualizada com sucesso!</em>`;
                 document.getElementById('successModal').style.display = 'block';
                 
-                const rows = document.querySelectorAll('#itemsBody tr');
-                rows.forEach((row, index) => {
-                    if (index === 0) return;
-                    
-                    const tipoValue = row.querySelector('.item-tipo').value;
-                    const jaEnviado = row.getAttribute('data-enviado') === 'true';
-                    
-                    if (tipoValue && tipoValue.trim() !== '' && !jaEnviado) {
-                        row.setAttribute('data-enviado', 'true');
-                        row.style.backgroundColor = '#e8f5e9';
-                        row.querySelectorAll('input, select').forEach(campo => {
-                            campo.disabled = true;
-                            campo.style.backgroundColor = '#e8f5e9';
-                        });
-                        const btnCell = row.cells[row.cells.length - 1];
-                        const btnRemover = btnCell.querySelector('.btn-remove');
-                        if (btnRemover) {
-                            btnRemover.disabled = false;
-                            btnRemover.style.backgroundColor = '#dc3545';
-                        }
-                    }
-                });
+                console.log('✅ Pedido enviado com sucesso!');
             })
             .catch(error => {
                 alert('❌ Erro: ' + error.message);
+                console.error('Erro:', error);
             })
             .finally(() => {
                 btnSubmit.disabled = false;
@@ -979,10 +932,7 @@
                 return;
             }
 
-            // Pega a URL atual
             const urlAtual = window.location.href.split('?')[0];
-
-            // Cria os parâmetros
             const params = new URLSearchParams({
                 ref: referencia,
                 nome: nome,
@@ -994,7 +944,6 @@
             document.getElementById('generatedLink').textContent = linkCompleto;
             document.getElementById('linkResult').classList.add('show');
 
-            // Scroll suave até o link
             document.getElementById('linkResult').scrollIntoView({ 
                 behavior: 'smooth', 
                 block: 'nearest' 
