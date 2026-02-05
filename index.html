@@ -418,6 +418,26 @@
             background: #e0e0e0;
         }
 
+        .item-details {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        .item-details div {
+            text-align: left;
+            padding: 5px 0;
+            font-size: 14px;
+        }
+
+        .item-details strong {
+            color: #333;
+            min-width: 120px;
+            display: inline-block;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -636,6 +656,7 @@
         </form>
     </div>
 
+    <!-- MODAL DE SUCESSO -->
     <div id="successModal" class="modal">
         <div class="modal-content">
             <h2>✅ Pedido Enviado com Sucesso!</h2>
@@ -646,8 +667,153 @@
         </div>
     </div>
 
+    <!-- MODAL DE CONFIRMAÇÃO DE DELEÇÃO -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: #dc3545;">🗑️ Confirmar Deleção</h2>
+            <p id="deleteMessage"></p>
+            <div class="modal-buttons">
+                <button class="modal-btn" style="background: #dc3545; color: white;" id="btnConfirmarDelete">
+                    🗑️ Sim, Deletar
+                </button>
+                <button class="modal-btn modal-btn-secondary" id="btnCancelarDelete">
+                    ❌ Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE DUPLICATA -->
+    <div id="duplicataModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: #ffc107;">⚠️ Item Duplicado Detectado!</h2>
+            <p style="font-size: 15px; color: #666;">
+                <strong>Este item JÁ EXISTE na lista com os mesmos dados:</strong>
+            </p>
+            <div id="duplicataDetalhes" class="item-details"></div>
+            <p style="font-size: 14px; margin-top: 15px;">
+                Deseja <strong>adicionar mesmo assim</strong>?
+            </p>
+            <div class="modal-buttons">
+                <button class="modal-btn" style="background: #28a745; color: white;" id="btnConfirmarDuplicata">
+                    ✅ Sim, Adicionar
+                </button>
+                <button class="modal-btn modal-btn-secondary" id="btnCancelarDuplicata">
+                    ❌ Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwnjScm9c2iHeLjIpqh3NBJEjLnbPNyG9lb2qCvcUjIOh0GJ0lGLbPmKQj4tlvy0R8k/exec';
+        
+        // ============ VALIDAÇÃO DE DUPLICATAS ============
+        let itemDuplicadoParaAdicionar = null;
+
+        function verificarDuplicata() {
+            const tbody = document.getElementById('itemsBody');
+            const primeiraLinha = tbody.rows[0];
+            
+            // Pegar dados da linha de entrada
+            const novoItem = {
+                tipo: primeiraLinha.querySelector('.item-tipo').value.trim(),
+                nome: primeiraLinha.querySelector('.item-nome').value.trim().toUpperCase(),
+                numero: primeiraLinha.querySelector('.item-numero').value.trim(),
+                adicional: primeiraLinha.querySelector('.item-adicional').value.trim().toUpperCase(),
+                tamCamiseta: primeiraLinha.querySelector('.item-tam-camiseta').value.trim(),
+                tamCalcao: primeiraLinha.querySelector('.item-tam-calcao').value.trim(),
+                quantidade: primeiraLinha.querySelector('.item-quantidade').value.trim()
+            };
+            
+            // Verificar se existe duplicata nas linhas já adicionadas
+            let encontrouDuplicata = false;
+            
+            for (let i = 1; i < tbody.rows.length; i++) {
+                const row = tbody.rows[i];
+                
+                const itemExistente = {
+                    tipo: row.querySelector('.item-tipo').value.trim(),
+                    nome: row.querySelector('.item-nome').value.trim().toUpperCase(),
+                    numero: row.querySelector('.item-numero').value.trim(),
+                    adicional: row.querySelector('.item-adicional').value.trim().toUpperCase(),
+                    tamCamiseta: row.querySelector('.item-tam-camiseta').value.trim(),
+                    tamCalcao: row.querySelector('.item-tam-calcao').value.trim(),
+                    quantidade: row.querySelector('.item-quantidade').value.trim()
+                };
+                
+                // Comparar TODOS os campos
+                if (itemExistente.tipo === novoItem.tipo &&
+                    itemExistente.nome === novoItem.nome &&
+                    itemExistente.numero === novoItem.numero &&
+                    itemExistente.adicional === novoItem.adicional &&
+                    itemExistente.tamCamiseta === novoItem.tamCamiseta &&
+                    itemExistente.tamCalcao === novoItem.tamCalcao &&
+                    itemExistente.quantidade === novoItem.quantidade) {
+                    
+                    encontrouDuplicata = true;
+                    break;
+                }
+            }
+            
+            return {
+                isDuplicata: encontrouDuplicata,
+                dadosItem: novoItem
+            };
+        }
+
+        function mostrarModalDuplicata(dadosItem) {
+            // Montar detalhes do item
+            const detalhesHTML = `
+                <div><strong>Tipo:</strong> ${dadosItem.tipo || '(vazio)'}</div>
+                <div><strong>Nome:</strong> ${dadosItem.nome || '(vazio)'}</div>
+                <div><strong>Número:</strong> ${dadosItem.numero || '(vazio)'}</div>
+                <div><strong>Adicional:</strong> ${dadosItem.adicional || '(vazio)'}</div>
+                <div><strong>Tam. Camiseta:</strong> ${dadosItem.tamCamiseta || '(vazio)'}</div>
+                <div><strong>Tam. Calção:</strong> ${dadosItem.tamCalcao || '(vazio)'}</div>
+                <div><strong>Quantidade:</strong> ${dadosItem.quantidade || '1'}</div>
+            `;
+            
+            document.getElementById('duplicataDetalhes').innerHTML = detalhesHTML;
+            document.getElementById('duplicataModal').style.display = 'block';
+        }
+
+        function executarAdicaoLinha() {
+            const tbody = document.getElementById('itemsBody');
+            const primeiraLinha = tbody.rows[0];
+            
+            const linhaPreenchida = primeiraLinha.cloneNode(true);
+            linhaPreenchida.classList.remove('input-row');
+            
+            linhaPreenchida.querySelector('.item-tipo').value = primeiraLinha.querySelector('.item-tipo').value;
+            linhaPreenchida.querySelector('.item-tam-camiseta').value = primeiraLinha.querySelector('.item-tam-camiseta').value;
+            linhaPreenchida.querySelector('.item-tam-calcao').value = primeiraLinha.querySelector('.item-tam-calcao').value;
+            linhaPreenchida.querySelector('.item-nome').value = primeiraLinha.querySelector('.item-nome').value;
+            linhaPreenchida.querySelector('.item-numero').value = primeiraLinha.querySelector('.item-numero').value;
+            linhaPreenchida.querySelector('.item-adicional').value = primeiraLinha.querySelector('.item-adicional').value;
+            linhaPreenchida.querySelector('.item-quantidade').value = primeiraLinha.querySelector('.item-quantidade').value;
+            
+            const actionCell = linhaPreenchida.cells[linhaPreenchida.cells.length - 1];
+            actionCell.innerHTML = '<button type="button" class="btn-remove" onclick="removerLinha(this)">Remover</button>';
+            
+            tbody.appendChild(linhaPreenchida);
+            
+            // Limpar linha de entrada
+            const tipoAtual = primeiraLinha.querySelector('.item-tipo').value;
+            primeiraLinha.querySelectorAll('input').forEach(input => {
+                input.classList.contains('item-quantidade') ? input.value = '1' : input.value = '';
+            });
+            primeiraLinha.querySelectorAll('select').forEach(select => {
+                if (!select.classList.contains('item-tipo')) {
+                    select.selectedIndex = 0;
+                }
+            });
+            
+            primeiraLinha.querySelector('.item-nome').focus();
+            
+            console.log('✅ Item adicionado com sucesso!');
+        }
+        // ============ FIM VALIDAÇÃO DE DUPLICATAS ============
         
         // ============ CARREGA PARÂMETROS DA URL ============
         function carregarParametrosURL() {
@@ -658,7 +824,6 @@
             const telefone = urlParams.get('tel') || urlParams.get('telefone') || urlParams.get('phone');
             const email = urlParams.get('email') || urlParams.get('mail');
             
-            // ✅ Se veio por link (tem parâmetros), ESCONDE o botão de gerar link
             const temParametros = referencia || nome || telefone;
             
             if (temParametros) {
@@ -696,7 +861,6 @@
             }
         }
         
-        // Carrega os parâmetros quando a página carregar
         window.addEventListener('DOMContentLoaded', carregarParametrosURL);
         // ============ FIM DO CARREGAMENTO DE PARÂMETROS ============
         
@@ -720,44 +884,146 @@
                 return;
             }
             
-            const linhaPreenchida = primeiraLinha.cloneNode(true);
-            linhaPreenchida.classList.remove('input-row');
+            // ============ VERIFICAR DUPLICATA ============
+            const resultado = verificarDuplicata();
             
-            linhaPreenchida.querySelector('.item-tipo').value = primeiraLinha.querySelector('.item-tipo').value;
-            linhaPreenchida.querySelector('.item-tam-camiseta').value = primeiraLinha.querySelector('.item-tam-camiseta').value;
-            linhaPreenchida.querySelector('.item-tam-calcao').value = primeiraLinha.querySelector('.item-tam-calcao').value;
-            linhaPreenchida.querySelector('.item-nome').value = primeiraLinha.querySelector('.item-nome').value;
-            linhaPreenchida.querySelector('.item-numero').value = primeiraLinha.querySelector('.item-numero').value;
-            linhaPreenchida.querySelector('.item-adicional').value = primeiraLinha.querySelector('.item-adicional').value;
-            linhaPreenchida.querySelector('.item-quantidade').value = primeiraLinha.querySelector('.item-quantidade').value;
+            if (resultado.isDuplicata) {
+                console.log('⚠️ Duplicata detectada!');
+                itemDuplicadoParaAdicionar = resultado.dadosItem;
+                mostrarModalDuplicata(resultado.dadosItem);
+                return; // Para aqui e espera confirmação
+            }
             
-            const actionCell = linhaPreenchida.cells[linhaPreenchida.cells.length - 1];
-            actionCell.innerHTML = '<button type="button" class="btn-remove" onclick="removerLinha(this)">Remover</button>';
-            
-            tbody.appendChild(linhaPreenchida);
-            
-            const tipoAtual = primeiraLinha.querySelector('.item-tipo').value;
-            primeiraLinha.querySelectorAll('input').forEach(input => {
-                input.classList.contains('item-quantidade') ? input.value = '1' : input.value = '';
-            });
-            primeiraLinha.querySelectorAll('select').forEach(select => {
-                if (!select.classList.contains('item-tipo')) {
-                    select.selectedIndex = 0;
-                }
-            });
-            
-            primeiraLinha.querySelector('.item-nome').focus();
+            // Se não for duplicata, adiciona normalmente
+            executarAdicaoLinha();
         }
+
+        // Botão CONFIRMAR DUPLICATA
+        document.getElementById('btnConfirmarDuplicata').addEventListener('click', function() {
+            console.log('✅ Usuário confirmou adicionar duplicata');
+            document.getElementById('duplicataModal').style.display = 'none';
+            executarAdicaoLinha();
+            itemDuplicadoParaAdicionar = null;
+        });
+
+        // Botão CANCELAR DUPLICATA
+        document.getElementById('btnCancelarDuplicata').addEventListener('click', function() {
+            console.log('❌ Usuário cancelou adição de duplicata');
+            document.getElementById('duplicataModal').style.display = 'none';
+            itemDuplicadoParaAdicionar = null;
+        });
+
+        // Variável global para guardar a linha e botão a serem deletados
+        let linhaParaDeletar = null;
+        let botaoParaDeletar = null;
 
         function removerLinha(btn) {
             const row = btn.closest('tr');
             const tbody = document.getElementById('itemsBody');
+            
             if (tbody.rows.length <= 1) {
                 alert('⚠️ Não é possível remover a linha de entrada!');
                 return;
             }
-            row.remove();
+            
+            const jaEnviado = row.getAttribute('data-enviado') === 'true';
+            
+            if (jaEnviado) {
+                linhaParaDeletar = row;
+                botaoParaDeletar = btn;
+                
+                const tipo = row.querySelector('.item-tipo').value;
+                const nome = row.querySelector('.item-nome').value;
+                const numero = row.querySelector('.item-numero').value;
+                
+                document.getElementById('deleteMessage').innerHTML = 
+                    `<strong style="color: #dc3545;">⚠️ Esta linha JÁ FOI ENVIADA para a planilha!</strong><br><br>` +
+                    `<div style="background: #f8f9fa; padding: 10px; border-radius: 6px; margin: 15px 0;">` +
+                    `<strong>Item a deletar:</strong><br>` +
+                    `📋 Tipo: <strong>${tipo}</strong><br>` +
+                    `👤 Nome: <strong>${nome}</strong><br>` +
+                    `🔢 Número: <strong>${numero}</strong>` +
+                    `</div>` +
+                    `Deseja <strong style="color: #dc3545;">DELETAR</strong> este item da planilha?<br><br>` +
+                    `<span style="font-size: 13px; color: #666;">` +
+                    `✅ SIM = Remove do formulário E deleta da planilha<br>` +
+                    `❌ NÃO = Cancela a operação` +
+                    `</span>`;
+                
+                document.getElementById('deleteModal').style.display = 'block';
+                
+            } else {
+                row.remove();
+                console.log('🗑️ Linha removida do formulário (não estava na planilha)');
+            }
         }
+
+        document.getElementById('btnConfirmarDelete').addEventListener('click', function() {
+            if (!linhaParaDeletar || !botaoParaDeletar) return;
+            
+            const row = linhaParaDeletar;
+            const btn = botaoParaDeletar;
+            
+            document.getElementById('deleteModal').style.display = 'none';
+            
+            const dadosParaDeletar = {
+                action: 'delete',
+                referencia: document.getElementById('referencia').value,
+                tipo: row.querySelector('.item-tipo').value,
+                nome: row.querySelector('.item-nome').value,
+                numero: row.querySelector('.item-numero').value,
+                tamCamiseta: row.querySelector('.item-tam-camiseta').value,
+                tamCalcao: row.querySelector('.item-tam-calcao').value
+            };
+            
+            btn.textContent = '⏳ Deletando...';
+            btn.disabled = true;
+            btn.style.cursor = 'wait';
+            btn.style.backgroundColor = '#6c757d';
+            
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dadosParaDeletar)
+            })
+            .then(() => {
+                row.style.transition = 'opacity 0.3s, transform 0.3s';
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(-100%)';
+                
+                setTimeout(() => {
+                    row.remove();
+                    
+                    const modalMsg = document.getElementById('modalMessage');
+                    modalMsg.innerHTML = 
+                        `<strong style="color: #28a745;">✅ Item Deletado com Sucesso!</strong><br><br>` +
+                        `O item foi removido do formulário e da planilha.<br>` +
+                        `O resumo foi atualizado automaticamente.`;
+                    document.getElementById('successModal').style.display = 'block';
+                    
+                    console.log('🗑️ Item deletado:', dadosParaDeletar);
+                }, 300);
+            })
+            .catch(error => {
+                alert('❌ Erro ao deletar da planilha: ' + error.message);
+                console.error('Erro:', error);
+                btn.textContent = 'Remover';
+                btn.disabled = false;
+                btn.style.cursor = 'pointer';
+                btn.style.backgroundColor = '#dc3545';
+            });
+            
+            linhaParaDeletar = null;
+            botaoParaDeletar = null;
+        });
+
+        document.getElementById('btnCancelarDelete').addEventListener('click', function() {
+            document.getElementById('deleteModal').style.display = 'none';
+            linhaParaDeletar = null;
+            botaoParaDeletar = null;
+            console.log('❌ Deleção cancelada pelo usuário');
+        });
 
         function novoPedido() {
             if (confirm('🔄 Iniciar novo pedido?\n\nIsso vai limpar todos os dados do formulário atual.')) {
@@ -846,9 +1112,13 @@
             };
             
             const rows = document.querySelectorAll('#itemsBody tr');
+            const linhasParaEnviar = [];
             
             rows.forEach((row, index) => {
                 if (index === 0) return;
+                
+                const jaEnviado = row.getAttribute('data-enviado') === 'true';
+                if (jaEnviado) return;
                 
                 const tipoValue = row.querySelector('.item-tipo').value;
                 const item = {
@@ -863,15 +1133,16 @@
                 
                 if (item.tipo && item.tipo.trim() !== '') {
                     formData.itens.push(item);
+                    linhasParaEnviar.push(row);
                 }
             });
 
             console.log('🔍 DEBUG: Total de linhas na tabela:', rows.length);
-            console.log('📦 Itens coletados:', formData.itens.length);
+            console.log('📦 Itens novos para enviar:', formData.itens.length);
             console.log('📋 Dados finais:', formData);
 
             if (formData.itens.length === 0) {
-                alert('⚠️ Nenhum item para enviar!\n\nPreencha pelo menos uma linha com o TIPO selecionado.');
+                alert('⚠️ Nenhum item novo para enviar!\n\nTodos os itens já foram enviados ou não há itens preenchidos.');
                 return;
             }
             
@@ -887,14 +1158,33 @@
                 body: JSON.stringify(formData)
             })
             .then(response => {
+                linhasParaEnviar.forEach(row => {
+                    row.setAttribute('data-enviado', 'true');
+                    row.style.backgroundColor = '#d4edda';
+                    
+                    row.querySelectorAll('input, select').forEach(campo => {
+                        campo.disabled = true;
+                        campo.style.backgroundColor = '#e8f5e9';
+                        campo.style.cursor = 'not-allowed';
+                    });
+                    
+                    const btnRemover = row.querySelector('.btn-remove');
+                    if (btnRemover) {
+                        btnRemover.disabled = false;
+                        btnRemover.style.backgroundColor = '#dc3545';
+                        btnRemover.style.cursor = 'pointer';
+                    }
+                });
+                
                 document.getElementById('modalMessage').innerHTML = 
                     `<strong>📋 Referência:</strong> ${formData.referencia}<br>` +
                     `<strong>👤 Cliente:</strong> ${formData.nome}<br>` +
                     `<strong>📦 Itens Enviados:</strong> ${formData.itens.length}<br><br>` +
-                    `<em>Planilha atualizada com sucesso!</em>`;
+                    `<em>✅ Planilha atualizada com sucesso!</em><br>` +
+                    `<small>Linhas enviadas marcadas em verde</small>`;
                 document.getElementById('successModal').style.display = 'block';
                 
-                console.log('✅ Pedido enviado com sucesso!');
+                console.log('✅ Pedido enviado e linhas marcadas como enviadas!');
             })
             .catch(error => {
                 alert('❌ Erro: ' + error.message);
@@ -911,11 +1201,26 @@
         });
 
         window.onclick = function(event) {
-            const modal = document.getElementById('successModal');
-            if (event.target == modal) modal.style.display = 'none';
+            const successModal = document.getElementById('successModal');
+            const deleteModal = document.getElementById('deleteModal');
+            const duplicataModal = document.getElementById('duplicataModal');
+            
+            if (event.target == successModal) {
+                successModal.style.display = 'none';
+            }
+            
+            if (event.target == deleteModal) {
+                deleteModal.style.display = 'none';
+                linhaParaDeletar = null;
+                botaoParaDeletar = null;
+            }
+            
+            if (event.target == duplicataModal) {
+                duplicataModal.style.display = 'none';
+                itemDuplicadoParaAdicionar = null;
+            }
         }
 
-        // ============ GERAR LINK PARA CLIENTE ============
         function gerarLink() {
             const referencia = document.getElementById('referencia').value.trim();
             const nome = document.getElementById('nome').value.trim();
@@ -962,7 +1267,6 @@
                 alert('❌ Erro ao copiar: ' + err);
             });
         }
-        // ============ FIM GERAR LINK ============
     </script>
 </body>
 </html>
