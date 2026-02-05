@@ -641,8 +641,7 @@
             <h2>✅ Pedido Enviado com Sucesso!</h2>
             <p id="modalMessage">Planilha criada com sucesso!</p>
             <div class="modal-buttons">
-                <button class="modal-btn modal-btn-primary" id="btnAbrirPlanilha">Abrir Google Drive</button>
-                <button class="modal-btn modal-btn-secondary" id="btnFecharModal">Fechar</button>
+                <button class="modal-btn modal-btn-primary" id="btnFecharModal">Fechar</button>
             </div>
         </div>
     </div>
@@ -905,11 +904,6 @@
                 btnSubmit.disabled = false;
                 btnSubmit.textContent = textoOriginal;
             });
-        });
-
-        document.getElementById('btnAbrirPlanilha').addEventListener('click', function() {
-            window.open('https://drive.google.com/drive/my-drive', '_blank');
-            document.getElementById('successModal').style.display = 'none';
         });
 
         document.getElementById('btnFecharModal').addEventListener('click', function() {
