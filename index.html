@@ -1004,91 +1004,87 @@
             document.getElementById('novoTamCalcao').value = '';
             document.getElementById('novoQuantidade').value = '1';
         }
+    
+// ========================================
+// Função renderizarItens()
+// ========================================
 
-        function renderizarItens() {
-            const container = document.getElementById('itemsList');
-            
-            if (itens.length === 0) {
-                container.innerHTML = '<div class="empty-state" style="text-align: center; padding: 40px 20px; color: #999;"><div style="font-size: 3em; margin-bottom: 10px;">📦</div><p>Nenhum item adicionado ainda</p></div>';
-                return;
-            }
+function renderizarItens() {
+    const container = document.getElementById('itemsList');
+    
+    if (itens.length === 0) {
+        container.innerHTML = '<div class="empty-state" style="text-align: center; padding: 40px 20px; color: #999;"><div style="font-size: 3em; margin-bottom: 10px;">📦</div><p>Nenhum item adicionado ainda</p></div>';
+        return;
+    }
 
-            container.innerHTML = '';
+    container.innerHTML = '';
 
-            itens.forEach((item, index) => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'accordion-item' + (item.enviado ? ' enviado' : '');
-                
-                const displayNome = item.nome || '(sem nome)';
-                const displayNumero = item.numero ? ` - Nº ${item.numero}` : '';
-                const badgeEnviado = item.enviado ? '<span class="badge-enviado">✓ ENVIADO</span>' : '';
-                
-                itemDiv.innerHTML = `
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        <div><strong>Item #${index + 1}:</strong> ${displayNome}${displayNumero} ${badgeEnviado}</div>
-                        <span class="accordion-icon">▼</span>
-                    </div>
-                    <div class="accordion-content">
-                        <div class="accordion-body">
-                            <div class="item-summary">
-                                <span><strong>Tipo:</strong> ${item.tipo || '-'}</span>
-                                <span><strong>Nome:</strong> ${item.nome || '-'}</span>
-                                <span><strong>Número:</strong> ${item.numero || '-'}</span>
-                                <span><strong>Adicional:</strong> ${item.adicional || '-'}</span>
-                                <span><strong>Camiseta:</strong> ${item.tamCamiseta || '-'}</span>
-                                <span><strong>Calção:</strong> ${item.tamCalcao || '-'}</span>
-                                <span><strong>Qtd:</strong> ${item.quantidade || '1'}</span>
-                            </div>
-                            <hr style="border: none; border-top: 1px solid #e9ecef; margin: 15px 0;">
-                            <div class="item-edit-grid">
-                                <div class="item-edit-field" style="grid-column: 1 / -1;">
-                                    <label>Tipo</label>
-                                    <select class="item-tipo" data-index="${index}">
-                                        <option value="">Selecione</option>
-                                        ${['1 - Linha', '2 - Goleiro', '3 - Comissão Técnica', '4 - Arbitragem', '5 - Torcedor', '6 - Regata', '7 - Tradicional', '8 - Raglan', '9 - Gola V', '10 - Gola Polo'].map(t => `<option value="${t}" ${item.tipo === t ? 'selected' : ''}>${t}</option>`).join('')}
-                                    </select>
-                                </div>
-                                <div class="item-edit-field">
-                                    <label>Nome</label>
-                                    <input type="text" class="item-nome" data-index="${index}" value="${item.nome}" placeholder="Nome do jogador">
-                                </div>
-                                <div class="item-edit-field">
-                                    <label>Número</label>
-                                    <input type="text" class="item-numero" data-index="${index}" value="${item.numero}" placeholder="Nº">
-                                </div>
-                                <div class="item-edit-field" style="grid-column: 1 / -1;">
-                                    <label>Adicional</label>
-                                    <input type="text" class="item-adicional" data-index="${index}" value="${item.adicional}" placeholder="Ex: Capitão">
-                                </div>
-                                <div class="item-edit-field">
-                                    <label>Tam. Camiseta</label>
-                                    <select class="item-tam-camiseta" data-index="${index}">
-                                        <option value="">Selecione</option>
-                                        ${gerarOpcoesTamanho(item.tamCamiseta)}
-                                    </select>
-                                </div>
-                                <div class="item-edit-field">
-                                    <label>Tam. Calção</label>
-                                    <select class="item-tam-calcao" data-index="${index}">
-                                        <option value="">Selecione</option>
-                                        ${gerarOpcoesTamanho(item.tamCalcao)}
-                                    </select>
-                                </div>
-                                <div class="item-edit-field">
-                                    <label>Quantidade</label>
-                                    <input type="number" class="item-quantidade" data-index="${index}" value="${item.quantidade}" min="1">
-                                </div>
-                            </div>
-                            <button class="btn btn-remove" onclick="removerItem(${index})">🗑️ Remover</button>
+    itens.forEach((item, index) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'accordion-item' + (item.enviado ? ' enviado' : '');
+        
+        const displayNome = item.nome || '(sem nome)';
+        const displayNumero = item.numero ? ` - Nº ${item.numero}` : '';
+        const displayAdicional = item.adicional ? ` - ${item.adicional}` : '';
+        const displayTamanhos = (item.tamCamiseta || item.tamCalcao) ? ` - ${item.tamCamiseta || '-'}/${item.tamCalcao || '-'}` : '';
+        const displayQuantidade = item.quantidade ? ` - Qtd: ${item.quantidade}` : '';
+        const badgeEnviado = item.enviado ? '<span class="badge-enviado">✓ ENVIADO</span>' : '';
+        
+        itemDiv.innerHTML = `
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <div><strong>Item #${index + 1}:</strong> ${displayNome}${displayNumero}${displayAdicional}${displayTamanhos}${displayQuantidade} ${badgeEnviado}</div>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+                <div class="accordion-body">
+                    <div class="item-edit-grid">
+                        <div class="item-edit-field" style="grid-column: 1 / -1;">
+                            <label>Tipo</label>
+                            <select class="item-tipo" data-index="${index}">
+                                <option value="">Selecione</option>
+                                ${['1 - Linha', '2 - Goleiro', '3 - Comissão Técnica', '4 - Arbitragem', '5 - Torcedor', '6 - Regata', '7 - Tradicional', '8 - Raglan', '9 - Gola V', '10 - Gola Polo'].map(t => `<option value="${t}" ${item.tipo === t ? 'selected' : ''}>${t}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="item-edit-field">
+                            <label>Nome</label>
+                            <input type="text" class="item-nome" data-index="${index}" value="${item.nome}" placeholder="Nome do jogador">
+                        </div>
+                        <div class="item-edit-field">
+                            <label>Número</label>
+                            <input type="text" class="item-numero" data-index="${index}" value="${item.numero}" placeholder="Nº">
+                        </div>
+                        <div class="item-edit-field" style="grid-column: 1 / -1;">
+                            <label>Adicional</label>
+                            <input type="text" class="item-adicional" data-index="${index}" value="${item.adicional}" placeholder="Ex: Capitão">
+                        </div>
+                        <div class="item-edit-field">
+                            <label>Tam. Camiseta</label>
+                            <select class="item-tam-camiseta" data-index="${index}">
+                                <option value="">Selecione</option>
+                                ${gerarOpcoesTamanho(item.tamCamiseta)}
+                            </select>
+                        </div>
+                        <div class="item-edit-field">
+                            <label>Tam. Calção</label>
+                            <select class="item-tam-calcao" data-index="${index}">
+                                <option value="">Selecione</option>
+                                ${gerarOpcoesTamanho(item.tamCalcao)}
+                            </select>
+                        </div>
+                        <div class="item-edit-field">
+                            <label>Quantidade</label>
+                            <input type="number" class="item-quantidade" data-index="${index}" value="${item.quantidade}" min="1">
                         </div>
                     </div>
-                `;
-                container.appendChild(itemDiv);
-            });
+                    <button class="btn btn-remove" onclick="removerItem(${index})">🗑️ Remover</button>
+                </div>
+            </div>
+        `;
+        container.appendChild(itemDiv);
+    });
 
-            adicionarEventListenersEdicao();
-        }
-
+    adicionarEventListenersEdicao();
+}
         function adicionarEventListenersEdicao() {
             document.querySelectorAll('.item-tipo').forEach(select => {
                 select.addEventListener('change', function() {
@@ -1136,20 +1132,27 @@
             });
         }
 
-        function atualizarHeaderItem(index) {
-            const item = itens[index];
-            const displayNome = item.nome || '(sem nome)';
-            const displayNumero = item.numero ? ` - Nº ${item.numero}` : '';
-            const badgeEnviado = item.enviado ? '<span class="badge-enviado">✓ ENVIADO</span>' : '';
-            
-            const accordionItems = document.querySelectorAll('.accordion-item');
-            if (accordionItems[index]) {
-                const header = accordionItems[index].querySelector('.accordion-header > div');
-                if (header) {
-                    header.innerHTML = `<strong>Item #${index + 1}:</strong> ${displayNome}${displayNumero} ${badgeEnviado}`;
-                }
-            }
+// ========================================
+// Função atualizarHeaderItem()
+// ========================================
+
+function atualizarHeaderItem(index) {
+    const item = itens[index];
+    const displayNome = item.nome || '(sem nome)';
+    const displayNumero = item.numero ? ` - Nº ${item.numero}` : '';
+    const displayAdicional = item.adicional ? ` - ${item.adicional}` : '';
+    const displayTamanhos = (item.tamCamiseta || item.tamCalcao) ? ` - ${item.tamCamiseta || '-'}/${item.tamCalcao || '-'}` : '';
+    const displayQuantidade = item.quantidade ? ` - Qtd: ${item.quantidade}` : '';
+    const badgeEnviado = item.enviado ? '<span class="badge-enviado">✓ ENVIADO</span>' : '';
+    
+    const accordionItems = document.querySelectorAll('.accordion-item');
+    if (accordionItems[index]) {
+        const header = accordionItems[index].querySelector('.accordion-header > div');
+        if (header) {
+            header.innerHTML = `<strong>Item #${index + 1}:</strong> ${displayNome}${displayNumero}${displayAdicional}${displayTamanhos}${displayQuantidade} ${badgeEnviado}`;
         }
+    }
+}
 
         function gerarOpcoesTamanho(valorSelecionado) {
             const tamanhos = ['PP', 'P', 'M', 'G', 'GG', 'G1', 'G2', 'G3', 'G4', 'G5', 'BLPP', 'BLP', 'BLM', 'BLG', 'BLGG', 'BLG1', 'BLG2', 'BLG3', 'BLG4', 'BLG5', '1A', '2A', '4A', '6A', '8A', '10A', '12A'];
@@ -1183,28 +1186,31 @@
                 atualizarContador();
             }
         }
+    
+/ ========================================
+// Função atualizarRevisao()
+// ========================================
 
-        // ==================== REVISÃO ====================
-        function atualizarRevisao() {
-            document.getElementById('reviewRef').textContent = document.getElementById('referencia').value || '-';
-            document.getElementById('reviewNome').textContent = document.getElementById('nome').value || '-';
-            document.getElementById('reviewTel').textContent = document.getElementById('telefone').value || '-';
-            document.getElementById('reviewEmail').textContent = document.getElementById('email').value || '-';
-            document.getElementById('reviewTotal').textContent = itens.length;
-            
-            const lista = document.getElementById('reviewList');
-            lista.innerHTML = '';
-            
-            if (itens.length === 0) {
-                lista.innerHTML = '<li style="color: #999;">Nenhum item adicionado</li>';
-            } else {
-                itens.forEach((item, index) => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<strong>${index + 1}.</strong> ${item.nome || '(sem nome)'} - Nº ${item.numero || '-'} (${item.tipo}) - ${item.tamCamiseta}/${item.tamCalcao}`;
-                    lista.appendChild(li);
-                });
-            }
-        }
+function atualizarRevisao() {
+    document.getElementById('reviewRef').textContent = document.getElementById('referencia').value || '-';
+    document.getElementById('reviewNome').textContent = document.getElementById('nome').value || '-';
+    document.getElementById('reviewTel').textContent = document.getElementById('telefone').value || '-';
+    document.getElementById('reviewEmail').textContent = document.getElementById('email').value || '-';
+    document.getElementById('reviewTotal').textContent = itens.length;
+    
+    const lista = document.getElementById('reviewList');
+    lista.innerHTML = '';
+    
+    if (itens.length === 0) {
+        lista.innerHTML = '<li style="color: #999;">Nenhum item adicionado</li>';
+    } else {
+        itens.forEach((item, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `<strong>${index + 1}.</strong> ${item.nome || '(sem nome)'} - Nº ${item.numero || '-'} - ${item.tamCamiseta || '-'}/${item.tamCalcao || '-'} (${item.tipo})`;
+            lista.appendChild(li);
+        });
+    }
+}
 
         // ==================== ENVIAR PEDIDO ====================
         function enviarPedido() {
