@@ -15,331 +15,74 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 15px;
+            padding: 20px;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            overflow: hidden;
+            border-radius: 12px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
         }
 
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
+        h1 {
             text-align: center;
-        }
-
-        .header h1 {
-            font-size: 1.8em;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 1em;
-            opacity: 0.9;
-        }
-
-        .tabs {
-            display: flex;
-            background: #f8f9fa;
-            border-bottom: 3px solid #e9ecef;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 18px;
-            text-align: center;
-            cursor: pointer;
-            background: #f8f9fa;
-            border: none;
-            font-size: 15px;
-            font-weight: 600;
-            color: #666;
-            transition: all 0.3s;
-            border-bottom: 3px solid transparent;
-            margin-bottom: -3px;
-        }
-
-        .tab:hover {
-            background: #e9ecef;
-        }
-
-        .tab.active {
-            background: white;
-            color: #667eea;
-            border-bottom-color: #667eea;
-        }
-
-        .tab-content {
-            display: none;
-            padding: 30px;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
             color: #333;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
+            margin-bottom: 30px;
+            font-size: 2em;
         }
 
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px dashed #ccc;
             border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.3s;
+            background: #f9f9f9;
         }
 
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #667eea;
+        .logo-placeholder {
+            color: #666;
+            font-size: 1.2em;
         }
 
-        .form-group input:disabled,
-        .form-group select:disabled {
-            background-color: #f0f0f0;
-            cursor: not-allowed;
+        .logo-placeholder span {
+            color: #764ba2;
+            font-weight: bold;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 20px;
+            margin-bottom: 30px;
         }
 
-        .accordion-item {
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            margin-bottom: 12px;
-            overflow: hidden;
-            transition: all 0.3s;
-        }
-
-        .accordion-item:hover {
-            border-color: #667eea;
-        }
-
-        .accordion-item.enviado {
-            background: #d4edda;
-            border-color: #28a745;
-        }
-
-        .accordion-header {
-            background: #f8f9fa;
-            padding: 15px 20px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            color: #333;
-            user-select: none;
-        }
-
-        .accordion-item.enviado .accordion-header {
-            background: #d4edda;
-        }
-
-        .accordion-header:hover {
-            background: #e9ecef;
-        }
-
-        .accordion-header.active {
-            background: #667eea;
-            color: white;
-        }
-
-        .accordion-icon {
-            transition: transform 0.3s;
-            font-size: 1.2em;
-        }
-
-        .accordion-header.active .accordion-icon {
-            transform: rotate(180deg);
-        }
-
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-            background: white;
-        }
-
-        .accordion-content.active {
-            max-height: 1000px;
-        }
-
-        .accordion-body {
-            padding: 20px;
-        }
-
-        .item-summary {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 15px;
-        }
-
-        .item-summary span {
-            background: #e9ecef;
-            padding: 4px 10px;
-            border-radius: 5px;
-        }
-
-        .item-edit-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .item-edit-field {
+        .form-group {
             display: flex;
             flex-direction: column;
         }
 
-        .item-edit-field label {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        .item-edit-field input,
-        .item-edit-field select {
-            padding: 8px 10px;
-            border: 1px solid #d2d2d7;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: border-color 0.2s;
-        }
-
-        .item-edit-field input:focus,
-        .item-edit-field select:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .item-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .item-actions button {
-            flex: 1;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-primary {
-            background: #667eea;
-            color: white;
-            width: 100%;
-            padding: 15px;
-            font-size: 16px;
-        }
-
-        .btn-primary:hover {
-            background: #764ba2;
-            transform: translateY(-2px);
-        }
-
-        .btn-primary:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-add {
-            background: #28a745;
-            color: white;
-            width: 100%;
-            margin-top: 15px;
-        }
-
-        .btn-add:hover {
-            background: #218838;
-        }
-
-        .btn-remove {
-            background: #dc3545;
-            color: white;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .btn-remove:hover {
-            background: #c82333;
-        }
-
-        .btn-link {
+        .btn-generate-link {
             background: #ffc107;
             color: #333;
-            width: 100%;
-            margin-top: 15px;
-        }
-
-        .btn-link:hover {
-            background: #ffb300;
-        }
-
-        .new-item-box {
-            background: linear-gradient(135deg, #fff3cd 0%, #fff9e6 100%);
-            border: 2px solid #ffc107;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .new-item-box h3 {
-            color: #856404;
-            margin-bottom: 15px;
-            font-size: 1.1em;
-        }
-
-        .items-list {
-            max-height: 500px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
-        .counter-badge {
-            background: #667eea;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
             font-weight: 600;
-            margin-left: 8px;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .btn-generate-link:hover {
+            background: #ffb300;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(255, 193, 7, 0.3);
         }
 
         .link-result {
@@ -348,7 +91,7 @@
             border: 2px solid #ffc107;
             border-radius: 8px;
             padding: 15px;
-            margin-top: 15px;
+            margin-bottom: 20px;
         }
 
         .link-result.show {
@@ -381,6 +124,231 @@
 
         .btn-copy-link:hover {
             background: #218838;
+        }
+
+        label {
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="email"] {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            height: 44px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .file-upload-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .file-upload-section h3 {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .file-upload-section p {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .import-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .file-upload-btn {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .file-upload-btn:hover {
+            background: #0056b3;
+        }
+
+        .btn-template {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .btn-template:hover {
+            background: #5a6268;
+        }
+
+        .file-name {
+            margin-top: 10px;
+            color: #28a745;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .table-container {
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+
+        .input-row {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            padding: 14px 8px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 8px 4px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        .col-tipo { width: 140px; }
+        .col-nome { width: 200px; }
+        .col-numero { width: 100px; }
+        .col-adicional { width: 180px; }
+        .col-tam-camiseta { width: 120px; }
+        .col-tam-calcao { width: 120px; }
+        .col-quantidade { width: 80px; }
+        .col-acoes { width: 100px; }
+
+        td input,
+        td select {
+            width: 100%;
+            height: 38px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+            transition: border-color 0.3s;
+        }
+
+        td input:focus,
+        td select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-add {
+            background: #28a745;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            height: 38px;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        .btn-add:hover {
+            background: #218838;
+        }
+
+        .btn-remove {
+            background: #dc3545;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            height: 38px;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        .btn-remove:hover {
+            background: #c82333;
+        }
+
+        .submit-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .btn-submit {
+            background: #667eea;
+            color: white;
+            padding: 15px 50px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-new {
+            background: #28a745;
+            color: white;
+            padding: 15px 50px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-right: 15px;
+        }
+
+        .btn-new:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .modal {
@@ -450,36 +418,6 @@
             background: #e0e0e0;
         }
 
-        .item-details {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 6px;
-            margin: 15px 0;
-            border-left: 4px solid #ffc107;
-        }
-
-        .item-details div {
-            text-align: left;
-            padding: 5px 0;
-            font-size: 14px;
-        }
-
-        .item-details strong {
-            color: #333;
-            min-width: 120px;
-            display: inline-block;
-        }
-
-        .badge-enviado {
-            background: #28a745;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-left: 10px;
-        }
-
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -496,253 +434,208 @@
             }
         }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             .form-grid {
                 grid-template-columns: 1fr;
             }
 
-            .tab {
-                font-size: 13px;
-                padding: 15px 10px;
-            }
-
-            .header {
+            .container {
                 padding: 20px;
             }
 
-            .header h1 {
-                font-size: 1.4em;
+            h1 {
+                font-size: 1.5em;
             }
 
-            .tab-content {
-                padding: 20px;
+            table {
+                font-size: 11px;
+            }
+
+            th, td {
+                padding: 6px 2px;
+            }
+
+            .modal-content {
+                margin: 50% auto;
+                width: 95%;
             }
         }
     </style>
 </head>
 <body>
-    <!-- MODAL DE SENHA ADMIN -->
-    <div id="senhaModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <h2 style="color: #667eea;">🔐 Acesso Administrativo</h2>
-            <p style="margin-bottom: 20px;">Digite a senha para acessar o formulário completo:</p>
-            <div class="form-group">
-                <input type="password" id="senhaAdmin" placeholder="Digite a senha" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; text-align: center;">
+    <div class="container">
+        <h1>📋 Sublimaster | Pedido</h1>
+        
+        <div class="logo-section">
+            <div class="logo-placeholder">
+                Sua<br>
+                marca<br>
+                <span>AQUI.</span>
             </div>
-            <div style="color: #dc3545; font-size: 13px; margin-top: 10px; min-height: 20px;" id="senhaErro"></div>
-            <div class="modal-buttons" style="margin-top: 20px;">
-                <button class="modal-btn modal-btn-primary" onclick="validarSenha()">🔓 Acessar</button>
-            </div>
-            <p style="margin-top: 15px; font-size: 12px; color: #999;">Caso tenha recebido um link, acesse-o diretamente</p>
-        </div>
-    </div>
-
-    <div class="container" id="mainContainer" style="display: none;">
-        <div class="header">
-            <h1>📋 Sublimaster | Pedido</h1>
-            <p>Crie seu pedido em 3 passos</p>
         </div>
 
-        <div class="tabs">
-            <button class="tab active" onclick="openTab(event, 'dados')">
-                📝 Dados
-            </button>
-            <button class="tab" onclick="openTab(event, 'itens')">
-                📦 Itens <span class="counter-badge" id="counterBadge">0</span>
-            </button>
-            <button class="tab" onclick="openTab(event, 'revisar')">
-                ✅ Revisar
-            </button>
-        </div>
-
-        <div id="dados" class="tab-content active">
-            <h2 style="color: #667eea; margin-bottom: 20px;">Informações do Pedido</h2>
-            
-            <div class="form-group">
-                <label>📝 Referência do Pedido *</label>
-                <input type="text" id="referencia" placeholder="Ex: PED-2026-001" required>
-            </div>
-
-            <div class="form-group">
-                <label>👤 Nome Completo *</label>
-                <input type="text" id="nome" placeholder="Digite o nome completo" required>
-            </div>
-
+        <form id="orderForm">
             <div class="form-grid">
+                <div class="form-group">
+                    <label>📝 Referência do Pedido *</label>
+                    <input type="text" id="referencia" placeholder="Ex: PED-2026-001" required>
+                </div>
+
+                <div class="form-group">
+                    <label>👤 Nome Completo *</label>
+                    <input type="text" id="nome" placeholder="Digite o nome completo" required>
+                </div>
+
                 <div class="form-group">
                     <label>📱 Telefone *</label>
                     <input type="tel" id="telefone" placeholder="(00) 00000-0000" required>
                 </div>
+
                 <div class="form-group">
-                    <label>📧 E-mail</label>
-                    <input type="email" id="email" placeholder="email@exemplo.com">
+                    <label>📧 E-mail *</label>
+                    <input type="email" id="email" placeholder="email@exemplo.com" required>
                 </div>
             </div>
 
-            <button class="btn btn-link" onclick="gerarLink()">🔗 Gerar Link para Cliente Preencher</button>
+            <button type="button" class="btn-generate-link" onclick="gerarLink()">
+                🔗 Gerar Link para Cliente Preencher
+            </button>
 
             <div id="linkResult" class="link-result">
                 <strong>📋 Link gerado com sucesso!</strong>
                 <div class="link-url" id="generatedLink"></div>
                 <button type="button" class="btn-copy-link" onclick="copiarLinkGerado()">📋 Copiar Link</button>
             </div>
-        </div>
 
-        <div id="itens" class="tab-content">
-            <h2 style="color: #667eea; margin-bottom: 20px;">Gerenciar Itens</h2>
-
-            <div class="new-item-box">
-                <h3>➕ Adicionar Novo Item</h3>
-                
-                <div class="form-group">
-                    <label>Tipo *</label>
-                    <select id="novoTipo">
-                        <option value="">Selecione o tipo</option>
-                        <option value="1 - Linha">1 - Linha</option>
-                        <option value="2 - Goleiro">2 - Goleiro</option>
-                        <option value="3 - Comissão Técnica">3 - Comissão Técnica</option>
-                        <option value="4 - Arbitragem">4 - Arbitragem</option>
-                        <option value="5 - Torcedor">5 - Torcedor</option>
-                        <option value="6 - Regata">6 - Regata</option>
-                        <option value="7 - Tradicional">7 - Tradicional</option>
-                        <option value="8 - Raglan">8 - Raglan</option>
-                        <option value="9 - Gola V">9 - Gola V</option>
-                        <option value="10 - Gola Polo">10 - Gola Polo</option>
-                    </select>
+            <div class="file-upload-section">
+                <h3>📊 Importar Planilha</h3>
+                <p>Importe um arquivo CSV ou Excel com os itens do pedido</p>
+                <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display: none;">
+                <div class="import-buttons">
+                    <button type="button" class="file-upload-btn" onclick="document.getElementById('fileInput').click()">
+                        📁 Importar Planilha
+                    </button>
+                    <button type="button" class="btn-template" onclick="baixarTemplate()">
+                        📥 Baixar Template
+                    </button>
                 </div>
-
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Nome</label>
-                        <input type="text" id="novoNome" placeholder="Nome do jogador">
-                    </div>
-                    <div class="form-group">
-                        <label>Número</label>
-                        <input type="text" id="novoNumero" placeholder="Nº">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Adicional</label>
-                    <input type="text" id="novoAdicional" placeholder="Ex: Capitão">
-                </div>
-
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Tamanho Camiseta</label>
-                        <select id="novoTamCamiseta">
-                            <option value="">Selecione</option>
-                            <option value="PP">PP</option>
-                            <option value="P">P</option>
-                            <option value="M">M</option>
-                            <option value="G">G</option>
-                            <option value="GG">GG</option>
-                            <option value="G1">G1</option>
-                            <option value="G2">G2</option>
-                            <option value="G3">G3</option>
-                            <option value="G4">G4</option>
-                            <option value="G5">G5</option>
-                            <option value="BLPP">BLPP</option>
-                            <option value="BLP">BLP</option>
-                            <option value="BLM">BLM</option>
-                            <option value="BLG">BLG</option>
-                            <option value="BLGG">BLGG</option>
-                            <option value="BLG1">BLG1</option>
-                            <option value="BLG2">BLG2</option>
-                            <option value="BLG3">BLG3</option>
-                            <option value="BLG4">BLG4</option>
-                            <option value="BLG5">BLG5</option>
-                            <option value="1A">1A</option>
-                            <option value="2A">2A</option>
-                            <option value="4A">4A</option>
-                            <option value="6A">6A</option>
-                            <option value="8A">8A</option>
-                            <option value="10A">10A</option>
-                            <option value="12A">12A</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Tamanho Calção</label>
-                        <select id="novoTamCalcao">
-                            <option value="">Selecione</option>
-                            <option value="PP">PP</option>
-                            <option value="P">P</option>
-                            <option value="M">M</option>
-                            <option value="G">G</option>
-                            <option value="GG">GG</option>
-                            <option value="G1">G1</option>
-                            <option value="G2">G2</option>
-                            <option value="G3">G3</option>
-                            <option value="G4">G4</option>
-                            <option value="G5">G5</option>
-                            <option value="BLPP">BLPP</option>
-                            <option value="BLP">BLP</option>
-                            <option value="BLM">BLM</option>
-                            <option value="BLG">BLG</option>
-                            <option value="BLGG">BLGG</option>
-                            <option value="BLG1">BLG1</option>
-                            <option value="BLG2">BLG2</option>
-                            <option value="BLG3">BLG3</option>
-                            <option value="BLG4">BLG4</option>
-                            <option value="BLG5">BLG5</option>
-                            <option value="1A">1A</option>
-                            <option value="2A">2A</option>
-                            <option value="4A">4A</option>
-                            <option value="6A">6A</option>
-                            <option value="8A">8A</option>
-                            <option value="10A">10A</option>
-                            <option value="12A">12A</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Quantidade</label>
-                    <input type="number" id="novoQuantidade" value="1" min="1">
-                </div>
-
-                <button class="btn btn-add" onclick="adicionarItem()">✅ Adicionar à Lista</button>
+                <div class="file-name" id="fileName"></div>
             </div>
 
-            <h3 style="color: #333; margin: 25px 0 15px 0;">📋 Itens Adicionados</h3>
-
-            <div class="items-list" id="itemsList">
-                <div class="empty-state" style="text-align: center; padding: 40px 20px; color: #999;">
-                    <div style="font-size: 3em; margin-bottom: 10px;">📦</div>
-                    <p>Nenhum item adicionado ainda</p>
-                </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="col-tipo">Tipo</th>
+                            <th class="col-nome">Nome</th>
+                            <th class="col-numero">Número</th>
+                            <th class="col-adicional">Adicional</th>
+                            <th class="col-tam-camiseta">Tam. Camiseta</th>
+                            <th class="col-tam-calcao">Tam. Calção</th>
+                            <th class="col-quantidade">Quant.</th>
+                            <th class="col-acoes">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="itemsBody">
+                        <tr class="input-row">
+                            <td>
+                                <select class="item-tipo">
+                                    <option value="">Selecione</option>
+                                    <option value="1 - Linha">1 - Linha</option>
+                                    <option value="2 - Goleiro">2 - Goleiro</option>
+                                    <option value="3 - Comissão Técnica">3 - Comissão Técnica</option>
+                                    <option value="4 - Arbitragem">4 - Arbitragem</option>
+                                    <option value="5 - Torcedor">5 - Torcedor</option>
+                                    <option value="6 - Regata">6 - Regata</option>
+                                    <option value="7 - Tradicional">7 - Tradicional</option>
+                                    <option value="8 - Raglan">8 - Raglan</option>
+                                    <option value="9 - Gola V">9 - Gola V</option>
+                                    <option value="10 - Gola Polo">10 - Gola Polo</option>
+                                </select>
+                            </td>
+                            <td><input type="text" class="item-nome" placeholder="Nome do jogador"></td>
+                            <td><input type="text" class="item-numero" placeholder="Nº"></td>
+                            <td><input type="text" class="item-adicional" placeholder="Ex: Capitão"></td>
+                            <td>
+                                <select class="item-tam-camiseta">
+                                    <option value="">Selecione</option>
+                                    <option value="PP">PP</option>
+                                    <option value="P">P</option>
+                                    <option value="M">M</option>
+                                    <option value="G">G</option>
+                                    <option value="GG">GG</option>
+                                    <option value="G1">G1</option>
+                                    <option value="G2">G2</option>
+                                    <option value="G3">G3</option>
+                                    <option value="G4">G4</option>
+                                    <option value="G5">G5</option>
+                                    <option value="BLPP">BLPP</option>
+                                    <option value="BLP">BLP</option>
+                                    <option value="BLM">BLM</option>
+                                    <option value="BLG">BLG</option>
+                                    <option value="BLGG">BLGG</option>
+                                    <option value="BLG1">BLG1</option>
+                                    <option value="BLG2">BLG2</option>
+                                    <option value="BLG3">BLG3</option>
+                                    <option value="BLG4">BLG4</option>
+                                    <option value="BLG5">BLG5</option>
+                                    <option value="1A">1A</option>
+                                    <option value="2A">2A</option>
+                                    <option value="4A">4A</option>
+                                    <option value="6A">6A</option>
+                                    <option value="8A">8A</option>
+                                    <option value="10A">10A</option>
+                                    <option value="12A">12A</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="item-tam-calcao">
+                                    <option value="">Selecione</option>
+                                    <option value="PP">PP</option>
+                                    <option value="P">P</option>
+                                    <option value="M">M</option>
+                                    <option value="G">G</option>
+                                    <option value="GG">GG</option>
+                                    <option value="G1">G1</option>
+                                    <option value="G2">G2</option>
+                                    <option value="G3">G3</option>
+                                    <option value="G4">G4</option>
+                                    <option value="G5">G5</option>
+                                    <option value="BLPP">BLPP</option>
+                                    <option value="BLP">BLP</option>
+                                    <option value="BLM">BLM</option>
+                                    <option value="BLG">BLG</option>
+                                    <option value="BLGG">BLGG</option>
+                                    <option value="BLG1">BLG1</option>
+                                    <option value="BLG2">BLG2</option>
+                                    <option value="BLG3">BLG3</option>
+                                    <option value="BLG4">BLG4</option>
+                                    <option value="BLG5">BLG5</option>
+                                    <option value="1A">1A</option>
+                                    <option value="2A">2A</option>
+                                    <option value="4A">4A</option>
+                                    <option value="6A">6A</option>
+                                    <option value="8A">8A</option>
+                                    <option value="10A">10A</option>
+                                    <option value="12A">12A</option>
+                                </select>
+                            </td>
+                            <td><input type="number" class="item-quantidade" value="1" min="1"></td>
+                            <td>
+                                <button type="button" class="btn-add" onclick="adicionarLinha()">Adicionar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </div>
 
-        <div id="revisar" class="tab-content">
-            <h2 style="color: #667eea; margin-bottom: 20px;">Revisão Final</h2>
-            
-            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                <h3 style="color: #333; margin-bottom: 15px;">📝 Dados do Pedido</h3>
-                <p><strong>Referência:</strong> <span id="reviewRef">-</span></p>
-                <p><strong>Cliente:</strong> <span id="reviewNome">-</span></p>
-                <p><strong>Telefone:</strong> <span id="reviewTel">-</span></p>
-                <p><strong>E-mail:</strong> <span id="reviewEmail">-</span></p>
+            <div class="submit-section">
+                <button type="button" class="btn-new" onclick="novoPedido()">🔄 Novo Pedido</button>
+                <button type="submit" class="btn-submit">📤 Enviar Pedido</button>
             </div>
-
-            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 25px;">
-                <h3 style="color: #333; margin-bottom: 15px;">📦 Itens do Pedido</h3>
-                <p><strong>Total de itens:</strong> <span id="reviewTotal">0</span></p>
-                <ul id="reviewList" style="list-style: none; padding: 0; margin-top: 15px; font-size: 14px; color: #666; line-height: 1.8;">
-                </ul>
-            </div>
-
-            <button class="btn btn-primary" onclick="enviarPedido()">📤 Enviar Pedido Completo</button>
-        </div>
+        </form>
     </div>
 
-    <!-- MODAIS -->
     <div id="successModal" class="modal">
         <div class="modal-content">
             <h2>✅ Pedido Enviado com Sucesso!</h2>
@@ -753,133 +646,9 @@
         </div>
     </div>
 
-    <div id="deleteModal" class="modal">
-        <div class="modal-content">
-            <h2 style="color: #dc3545;">🗑️ Confirmar Deleção</h2>
-            <p id="deleteMessage"></p>
-            <div class="modal-buttons">
-                <button class="modal-btn" style="background: #dc3545; color: white;" id="btnConfirmarDelete">
-                    🗑️ Sim, Deletar
-                </button>
-                <button class="modal-btn modal-btn-secondary" id="btnCancelarDelete">
-                    ❌ Cancelar
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div id="duplicataModal" class="modal">
-        <div class="modal-content">
-            <h2 style="color: #ffc107;">⚠️ Item Duplicado Detectado!</h2>
-            <p style="font-size: 15px; color: #666;">
-                <strong>Este item JÁ EXISTE na lista com os mesmos dados:</strong>
-            </p>
-            <div id="duplicataDetalhes" class="item-details"></div>
-            <p style="font-size: 14px; margin-top: 15px;">
-                Deseja <strong>adicionar mesmo assim</strong>?
-            </p>
-            <div class="modal-buttons">
-                <button class="modal-btn" style="background: #28a745; color: white;" id="btnConfirmarDuplicata">
-                    ✅ Sim, Adicionar
-                </button>
-                <button class="modal-btn modal-btn-secondary" id="btnCancelarDuplicata">
-                    ❌ Cancelar
-                </button>
-            </div>
-        </div>
-    </div>
-
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwnjScm9c2iHeLjIpqh3NBJEjLnbPNyG9lb2qCvcUjIOh0GJ0lGLbPmKQj4tlvy0R8k/exec';
         
-        // ============ CONFIGURAÇÃO DE SENHA ============
-        const SENHA_ADMIN = 'subli2026'; // ALTERE AQUI SUA SENHA
-        
-        let itens = [];
-        let itemDuplicadoParaAdicionar = null;
-        let itemParaDeletar = null;
-
-        // ============ VALIDAÇÃO DE ACESSO ============
-        window.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const temParametros = urlParams.has('ref') || urlParams.has('referencia') || urlParams.has('nome') || urlParams.has('tel');
-            
-            if (temParametros) {
-                // É um link de cliente - libera acesso direto
-                document.getElementById('mainContainer').style.display = 'block';
-                carregarParametrosURL();
-            } else {
-                // Sem parâmetros - pede senha
-                document.getElementById('senhaModal').style.display = 'block';
-                document.getElementById('senhaAdmin').focus();
-                
-                // Permite Enter para validar
-                document.getElementById('senhaAdmin').addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        validarSenha();
-                    }
-                });
-            }
-        });
-
-        function validarSenha() {
-            const senhaDigitada = document.getElementById('senhaAdmin').value;
-            const senhaErro = document.getElementById('senhaErro');
-            
-            if (senhaDigitada === SENHA_ADMIN) {
-                document.getElementById('senhaModal').style.display = 'none';
-                document.getElementById('mainContainer').style.display = 'block';
-                senhaErro.textContent = '';
-            } else {
-                senhaErro.textContent = '❌ Senha incorreta! Tente novamente.';
-                document.getElementById('senhaAdmin').value = '';
-                document.getElementById('senhaAdmin').focus();
-                
-                // Adiciona shake animation
-                const modal = document.querySelector('#senhaModal .modal-content');
-                modal.style.animation = 'shake 0.5s';
-                setTimeout(() => {
-                    modal.style.animation = '';
-                }, 500);
-            }
-        }
-        
-        // ============ NAVEGAÇÃO DE ABAS ============
-        function openTab(evt, tabName) {
-            const tabContents = document.getElementsByClassName('tab-content');
-            for (let i = 0; i < tabContents.length; i++) {
-                tabContents[i].classList.remove('active');
-            }
-
-            const tabs = document.getElementsByClassName('tab');
-            for (let i = 0; i < tabs.length; i++) {
-                tabs[i].classList.remove('active');
-            }
-
-            document.getElementById(tabName).classList.add('active');
-            evt.currentTarget.classList.add('active');
-
-            if (tabName === 'revisar') {
-                atualizarRevisao();
-            }
-        }
-
-        // ============ ACCORDION ============
-        function toggleAccordion(header) {
-            const content = header.nextElementSibling;
-            const isActive = header.classList.contains('active');
-
-            document.querySelectorAll('.accordion-header').forEach(h => {
-                h.classList.remove('active');
-                h.nextElementSibling.classList.remove('active');
-            });
-
-            if (!isActive) {
-                header.classList.add('active');
-                content.classList.add('active');
-            }
-        }
-
         // ============ CARREGA PARÂMETROS DA URL ============
         function carregarParametrosURL() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -889,14 +658,17 @@
             const telefone = urlParams.get('tel') || urlParams.get('telefone') || urlParams.get('phone');
             const email = urlParams.get('email') || urlParams.get('mail');
             
+            // ✅ Se veio por link (tem parâmetros), ESCONDE o botão de gerar link
             const temParametros = referencia || nome || telefone;
             
             if (temParametros) {
-                const btnGerarLink = document.querySelector('.btn-link');
+                const btnGerarLink = document.querySelector('.btn-generate-link');
                 const linkResult = document.getElementById('linkResult');
                 
                 if (btnGerarLink) btnGerarLink.style.display = 'none';
                 if (linkResult) linkResult.style.display = 'none';
+                
+                console.log('👤 Modo Cliente: Botão de gerar link escondido');
             }
             
             if (referencia) {
@@ -923,10 +695,11 @@
                 document.getElementById('email').style.backgroundColor = '#f0f0f0';
             }
         }
-
+        
+        // Carrega os parâmetros quando a página carregar
         window.addEventListener('DOMContentLoaded', carregarParametrosURL);
-
-        // ============ MÁSCARA DE TELEFONE ============
+        // ============ FIM DO CARREGAMENTO DE PARÂMETROS ============
+        
         document.getElementById('telefone').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length <= 11) {
@@ -936,7 +709,213 @@
             e.target.value = value;
         });
 
-        // ============ GERAR LINK ============
+        function adicionarLinha() {
+            const tbody = document.getElementById('itemsBody');
+            const primeiraLinha = tbody.rows[0];
+            const tipoSelecionado = primeiraLinha.querySelector('.item-tipo').value;
+            
+            if (!tipoSelecionado) {
+                alert('⚠️ Preencha o TIPO antes de adicionar!');
+                primeiraLinha.querySelector('.item-tipo').focus();
+                return;
+            }
+            
+            const linhaPreenchida = primeiraLinha.cloneNode(true);
+            linhaPreenchida.classList.remove('input-row');
+            
+            linhaPreenchida.querySelector('.item-tipo').value = primeiraLinha.querySelector('.item-tipo').value;
+            linhaPreenchida.querySelector('.item-tam-camiseta').value = primeiraLinha.querySelector('.item-tam-camiseta').value;
+            linhaPreenchida.querySelector('.item-tam-calcao').value = primeiraLinha.querySelector('.item-tam-calcao').value;
+            linhaPreenchida.querySelector('.item-nome').value = primeiraLinha.querySelector('.item-nome').value;
+            linhaPreenchida.querySelector('.item-numero').value = primeiraLinha.querySelector('.item-numero').value;
+            linhaPreenchida.querySelector('.item-adicional').value = primeiraLinha.querySelector('.item-adicional').value;
+            linhaPreenchida.querySelector('.item-quantidade').value = primeiraLinha.querySelector('.item-quantidade').value;
+            
+            const actionCell = linhaPreenchida.cells[linhaPreenchida.cells.length - 1];
+            actionCell.innerHTML = '<button type="button" class="btn-remove" onclick="removerLinha(this)">Remover</button>';
+            
+            tbody.appendChild(linhaPreenchida);
+            
+            const tipoAtual = primeiraLinha.querySelector('.item-tipo').value;
+            primeiraLinha.querySelectorAll('input').forEach(input => {
+                input.classList.contains('item-quantidade') ? input.value = '1' : input.value = '';
+            });
+            primeiraLinha.querySelectorAll('select').forEach(select => {
+                if (!select.classList.contains('item-tipo')) {
+                    select.selectedIndex = 0;
+                }
+            });
+            
+            primeiraLinha.querySelector('.item-nome').focus();
+        }
+
+        function removerLinha(btn) {
+            const row = btn.closest('tr');
+            const tbody = document.getElementById('itemsBody');
+            if (tbody.rows.length <= 1) {
+                alert('⚠️ Não é possível remover a linha de entrada!');
+                return;
+            }
+            row.remove();
+        }
+
+        function novoPedido() {
+            if (confirm('🔄 Iniciar novo pedido?\n\nIsso vai limpar todos os dados do formulário atual.')) {
+                document.getElementById('orderForm').reset();
+                const tbody = document.getElementById('itemsBody');
+                while (tbody.rows.length > 1) tbody.deleteRow(1);
+                document.getElementById('fileName').textContent = '';
+                document.getElementById('referencia').focus();
+            }
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            document.getElementById('fileName').textContent = `⏳ Processando: ${file.name}`;
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const text = event.target.result;
+                    const linhas = text.split('\n').filter(linha => linha.trim());
+                    const dadosLinhas = linhas.slice(1);
+                    
+                    if (dadosLinhas.length === 0) {
+                        alert('⚠️ Arquivo vazio ou sem dados!');
+                        return;
+                    }
+                    
+                    const tbody = document.getElementById('itemsBody');
+                    let itensImportados = 0;
+                    
+                    dadosLinhas.forEach(linha => {
+                        const colunas = linha.split(',').map(col => col.trim().replace(/^"|"$/g, ''));
+                        
+                        if (colunas.length >= 7 && colunas[0]) {
+                            const novaLinha = tbody.rows[0].cloneNode(true);
+                            
+                            novaLinha.querySelector('.item-tipo').value = colunas[0] || '';
+                            novaLinha.querySelector('.item-nome').value = colunas[1] || '';
+                            novaLinha.querySelector('.item-numero').value = colunas[2] || '';
+                            novaLinha.querySelector('.item-adicional').value = colunas[3] || '';
+                            novaLinha.querySelector('.item-tam-camiseta').value = colunas[4] || '';
+                            novaLinha.querySelector('.item-tam-calcao').value = colunas[5] || '';
+                            novaLinha.querySelector('.item-quantidade').value = colunas[6] || '1';
+                            
+                            const actionCell = novaLinha.cells[novaLinha.cells.length - 1];
+                            actionCell.innerHTML = '<button type="button" class="btn-remove" onclick="removerLinha(this)">Remover</button>';
+                            
+                            tbody.appendChild(novaLinha);
+                            itensImportados++;
+                        }
+                    });
+                    
+                    document.getElementById('fileName').textContent = `✅ ${itensImportados} itens importados de: ${file.name}`;
+                    
+                } catch (error) {
+                    alert('❌ Erro ao processar arquivo: ' + error.message);
+                    document.getElementById('fileName').textContent = '';
+                }
+            };
+            
+            reader.readAsText(file);
+        });
+
+        function baixarTemplate() {
+            const csvContent = "Tipo,Nome,Número,Adicional,Tam. Camiseta,Tam. Calção,Quantidade\n1 - Linha,José Silva,10,Capitão,M,M,1";
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'template_pedido.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                referencia: document.getElementById('referencia').value,
+                nome: document.getElementById('nome').value,
+                telefone: document.getElementById('telefone').value,
+                email: document.getElementById('email').value,
+                itens: []
+            };
+            
+            const rows = document.querySelectorAll('#itemsBody tr');
+            
+            rows.forEach((row, index) => {
+                if (index === 0) return;
+                
+                const tipoValue = row.querySelector('.item-tipo').value;
+                const item = {
+                    tipo: tipoValue,
+                    nome: row.querySelector('.item-nome').value,
+                    numero: row.querySelector('.item-numero').value,
+                    adicional: row.querySelector('.item-adicional').value,
+                    tamCamiseta: row.querySelector('.item-tam-camiseta').value,
+                    tamCalcao: row.querySelector('.item-tam-calcao').value,
+                    quantidade: row.querySelector('.item-quantidade').value
+                };
+                
+                if (item.tipo && item.tipo.trim() !== '') {
+                    formData.itens.push(item);
+                }
+            });
+
+            console.log('🔍 DEBUG: Total de linhas na tabela:', rows.length);
+            console.log('📦 Itens coletados:', formData.itens.length);
+            console.log('📋 Dados finais:', formData);
+
+            if (formData.itens.length === 0) {
+                alert('⚠️ Nenhum item para enviar!\n\nPreencha pelo menos uma linha com o TIPO selecionado.');
+                return;
+            }
+            
+            const btnSubmit = document.querySelector('.btn-submit');
+            const textoOriginal = btnSubmit.textContent;
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = '⏳ Enviando...';
+            
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                document.getElementById('modalMessage').innerHTML = 
+                    `<strong>📋 Referência:</strong> ${formData.referencia}<br>` +
+                    `<strong>👤 Cliente:</strong> ${formData.nome}<br>` +
+                    `<strong>📦 Itens Enviados:</strong> ${formData.itens.length}<br><br>` +
+                    `<em>Planilha atualizada com sucesso!</em>`;
+                document.getElementById('successModal').style.display = 'block';
+                
+                console.log('✅ Pedido enviado com sucesso!');
+            })
+            .catch(error => {
+                alert('❌ Erro: ' + error.message);
+                console.error('Erro:', error);
+            })
+            .finally(() => {
+                btnSubmit.disabled = false;
+                btnSubmit.textContent = textoOriginal;
+            });
+        });
+
+        document.getElementById('btnFecharModal').addEventListener('click', function() {
+            document.getElementById('successModal').style.display = 'none';
+        });
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('successModal');
+            if (event.target == modal) modal.style.display = 'none';
+        }
+
+        // ============ GERAR LINK PARA CLIENTE ============
         function gerarLink() {
             const referencia = document.getElementById('referencia').value.trim();
             const nome = document.getElementById('nome').value.trim();
@@ -983,479 +962,7 @@
                 alert('❌ Erro ao copiar: ' + err);
             });
         }
-
-        // ============ VERIFICAR DUPLICATA ============
-        function verificarDuplicata(novoItem) {
-            for (let i = 0; i < itens.length; i++) {
-                const item = itens[i];
-                
-                if (item.tipo === novoItem.tipo &&
-                    item.nome === novoItem.nome &&
-                    item.numero === novoItem.numero &&
-                    item.adicional === novoItem.adicional &&
-                    item.tamCamiseta === novoItem.tamCamiseta &&
-                    item.tamCalcao === novoItem.tamCalcao &&
-                    item.quantidade === novoItem.quantidade) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        // ============ ADICIONAR ITEM ============
-        function adicionarItem() {
-            const tipo = document.getElementById('novoTipo').value;
-            
-            if (!tipo) {
-                alert('⚠️ Selecione o TIPO do item!');
-                document.getElementById('novoTipo').focus();
-                return;
-            }
-
-            const novoItem = {
-                tipo: tipo,
-                nome: document.getElementById('novoNome').value.trim().toUpperCase(),
-                numero: document.getElementById('novoNumero').value.trim(),
-                adicional: document.getElementById('novoAdicional').value.trim().toUpperCase(),
-                tamCamiseta: document.getElementById('novoTamCamiseta').value.trim(),
-                tamCalcao: document.getElementById('novoTamCalcao').value.trim(),
-                quantidade: document.getElementById('novoQuantidade').value.trim(),
-                enviado: false
-            };
-
-            if (verificarDuplicata(novoItem)) {
-                itemDuplicadoParaAdicionar = novoItem;
-                mostrarModalDuplicata(novoItem);
-                return;
-            }
-
-            executarAdicaoItem(novoItem);
-        }
-
-        function executarAdicaoItem(item) {
-            itens.push(item);
-            renderizarItens();
-            limparFormularioNovo();
-            atualizarContador();
-            document.getElementById('novoTipo').focus();
-        }
-
-        function limparFormularioNovo() {
-            document.getElementById('novoTipo').value = '';
-            document.getElementById('novoNome').value = '';
-            document.getElementById('novoNumero').value = '';
-            document.getElementById('novoAdicional').value = '';
-            document.getElementById('novoTamCamiseta').value = '';
-            document.getElementById('novoTamCalcao').value = '';
-            document.getElementById('novoQuantidade').value = '1';
-        }
-
-        // ============ RENDERIZAR ITENS ============
-        function renderizarItens() {
-            const container = document.getElementById('itemsList');
-            
-            if (itens.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state" style="text-align: center; padding: 40px 20px; color: #999;">
-                        <div style="font-size: 3em; margin-bottom: 10px;">📦</div>
-                        <p>Nenhum item adicionado ainda</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = '';
-
-            itens.forEach((item, index) => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'accordion-item' + (item.enviado ? ' enviado' : '');
-                
-                const displayNome = item.nome || '(sem nome)';
-                const displayNumero = item.numero ? ` - Nº ${item.numero}` : '';
-                const badgeEnviado = item.enviado ? '<span class="badge-enviado">✓ ENVIADO</span>' : '';
-                
-                itemDiv.innerHTML = `
-                    <div class="accordion-header" onclick="toggleAccordion(this)">
-                        <div>
-                            <strong>Item #${index + 1}:</strong> ${displayNome}${displayNumero} ${badgeEnviado}
-                        </div>
-                        <span class="accordion-icon">▼</span>
-                    </div>
-                    <div class="accordion-content">
-                        <div class="accordion-body">
-                            <div class="item-summary">
-                                <span><strong>Tipo:</strong> ${item.tipo || '-'}</span>
-                                <span><strong>Nome:</strong> ${item.nome || '-'}</span>
-                                <span><strong>Número:</strong> ${item.numero || '-'}</span>
-                                <span><strong>Adicional:</strong> ${item.adicional || '-'}</span>
-                                <span><strong>Camiseta:</strong> ${item.tamCamiseta || '-'}</span>
-                                <span><strong>Calção:</strong> ${item.tamCalcao || '-'}</span>
-                                <span><strong>Qtd:</strong> ${item.quantidade || '1'}</span>
-                            </div>
-
-                            <hr style="border: none; border-top: 1px solid #e9ecef; margin: 15px 0;">
-
-                            <div class="item-edit-grid">
-                                <div class="item-edit-field" style="grid-column: 1 / -1;">
-                                    <label>Tipo</label>
-                                    <select class="item-tipo" data-index="${index}">
-                                        <option value="">Selecione</option>
-                                        <option value="1 - Linha" ${item.tipo === '1 - Linha' ? 'selected' : ''}>1 - Linha</option>
-                                        <option value="2 - Goleiro" ${item.tipo === '2 - Goleiro' ? 'selected' : ''}>2 - Goleiro</option>
-                                        <option value="3 - Comissão Técnica" ${item.tipo === '3 - Comissão Técnica' ? 'selected' : ''}>3 - Comissão Técnica</option>
-                                        <option value="4 - Arbitragem" ${item.tipo === '4 - Arbitragem' ? 'selected' : ''}>4 - Arbitragem</option>
-                                        <option value="5 - Torcedor" ${item.tipo === '5 - Torcedor' ? 'selected' : ''}>5 - Torcedor</option>
-                                        <option value="6 - Regata" ${item.tipo === '6 - Regata' ? 'selected' : ''}>6 - Regata</option>
-                                        <option value="7 - Tradicional" ${item.tipo === '7 - Tradicional' ? 'selected' : ''}>7 - Tradicional</option>
-                                        <option value="8 - Raglan" ${item.tipo === '8 - Raglan' ? 'selected' : ''}>8 - Raglan</option>
-                                        <option value="9 - Gola V" ${item.tipo === '9 - Gola V' ? 'selected' : ''}>9 - Gola V</option>
-                                        <option value="10 - Gola Polo" ${item.tipo === '10 - Gola Polo' ? 'selected' : ''}>10 - Gola Polo</option>
-                                    </select>
-                                </div>
-
-                                <div class="item-edit-field">
-                                    <label>Nome</label>
-                                    <input type="text" class="item-nome" data-index="${index}" value="${item.nome}" placeholder="Nome do jogador">
-                                </div>
-
-                                <div class="item-edit-field">
-                                    <label>Número</label>
-                                    <input type="text" class="item-numero" data-index="${index}" value="${item.numero}" placeholder="Nº">
-                                </div>
-
-                                <div class="item-edit-field" style="grid-column: 1 / -1;">
-                                    <label>Adicional</label>
-                                    <input type="text" class="item-adicional" data-index="${index}" value="${item.adicional}" placeholder="Ex: Capitão">
-                                </div>
-
-                                <div class="item-edit-field">
-                                    <label>Tam. Camiseta</label>
-                                    <select class="item-tam-camiseta" data-index="${index}">
-                                        <option value="">Selecione</option>
-                                        ${gerarOpcoesTamanho(item.tamCamiseta)}
-                                    </select>
-                                </div>
-
-                                <div class="item-edit-field">
-                                    <label>Tam. Calção</label>
-                                    <select class="item-tam-calcao" data-index="${index}">
-                                        <option value="">Selecione</option>
-                                        ${gerarOpcoesTamanho(item.tamCalcao)}
-                                    </select>
-                                </div>
-
-                                <div class="item-edit-field">
-                                    <label>Quantidade</label>
-                                    <input type="number" class="item-quantidade" data-index="${index}" value="${item.quantidade}" min="1">
-                                </div>
-                            </div>
-
-                            <div class="item-actions">
-                                <button class="btn btn-remove" onclick="removerItem(${index})">🗑️ Remover</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                container.appendChild(itemDiv);
-            });
-
-            // Adicionar event listeners para atualizar em tempo real
-            adicionarEventListenersEdicao();
-        }
-
-        function adicionarEventListenersEdicao() {
-            document.querySelectorAll('.item-tipo').forEach(select => {
-                select.addEventListener('change', function() {
-                    const index = parseInt(this.dataset.index);
-                    itens[index].tipo = this.value;
-                    atualizarHeaderItem(index);
-                });
-            });
-
-            document.querySelectorAll('.item-nome').forEach(input => {
-                input.addEventListener('input', function() {
-                    const index = parseInt(this.dataset.index);
-                    itens[index].nome = this.value.trim().toUpperCase();
-                    atualizarHeaderItem(index);
-                });
-            });
-
-            document.querySelectorAll('.item-numero').forEach(input => {
-                input.addEventListener('input', function() {
-                    const index = parseInt(this.dataset.index);
-                    itens[index].numero = this.value.trim();
-                    atualizarHeaderItem(index);
-                });
-            });
-
-            document.querySelectorAll('.item-adicional').forEach(input => {
-                input.addEventListener('input', function() {
-                    const index = parseInt(this.dataset.index);
-                    itens[index].adicional = this.value.trim().toUpperCase();
-                });
-            });
-
-            document.querySelectorAll('.item-tam-camiseta').forEach(select => {
-                select.addEventListener('change', function() {
-                    const index = parseInt(this.dataset.index);
-                    itens[index].tamCamiseta = this.value;
-                });
-            });
-
-            document.querySelectorAll('.item-tam-calcao').forEach(select => {
-                select.addEventListener('change', function() {
-                    const index = parseInt(this.dataset.index);
-                    itens[index].tamCalcao = this.value;
-                });
-            });
-
-            document.querySelectorAll('.item-quantidade').forEach(input => {
-                input.addEventListener('input', function() {
-                    const index = parseInt(this.dataset.index);
-                    itens[index].quantidade = this.value.trim();
-                });
-            });
-        }
-
-        function atualizarHeaderItem(index) {
-            const item = itens[index];
-            const displayNome = item.nome || '(sem nome)';
-            const displayNumero = item.numero ? ` - Nº ${item.numero}` : '';
-            const badgeEnviado = item.enviado ? '<span class="badge-enviado">✓ ENVIADO</span>' : '';
-            
-            const accordionItems = document.querySelectorAll('.accordion-item');
-            if (accordionItems[index]) {
-                const header = accordionItems[index].querySelector('.accordion-header > div');
-                if (header) {
-                    header.innerHTML = `<strong>Item #${index + 1}:</strong> ${displayNome}${displayNumero} ${badgeEnviado}`;
-                }
-            }
-        }
-
-        function gerarOpcoesTamanho(valorSelecionado) {
-            const tamanhos = ['PP', 'P', 'M', 'G', 'GG', 'G1', 'G2', 'G3', 'G4', 'G5', 
-                            'BLPP', 'BLP', 'BLM', 'BLG', 'BLGG', 'BLG1', 'BLG2', 'BLG3', 'BLG4', 'BLG5',
-                            '1A', '2A', '4A', '6A', '8A', '10A', '12A'];
-            
-            return tamanhos.map(t => 
-                `<option value="${t}" ${t === valorSelecionado ? 'selected' : ''}>${t}</option>`
-            ).join('');
-        }
-
-        function atualizarContador() {
-            document.getElementById('counterBadge').textContent = itens.length;
-        }
-
-        // ============ REMOVER ITEM ============
-        function removerItem(index) {
-            const item = itens[index];
-            
-            if (item.enviado) {
-                itemParaDeletar = index;
-                
-                document.getElementById('deleteMessage').innerHTML = 
-                    `<strong style="color: #dc3545;">⚠️ Esta linha JÁ FOI ENVIADA para a planilha!</strong><br><br>` +
-                    `<div style="background: #f8f9fa; padding: 10px; border-radius: 6px; margin: 15px 0;">` +
-                    `<strong>Item a deletar:</strong><br>` +
-                    `📋 Tipo: <strong>${item.tipo}</strong><br>` +
-                    `👤 Nome: <strong>${item.nome}</strong><br>` +
-                    `🔢 Número: <strong>${item.numero}</strong>` +
-                    `</div>` +
-                    `Deseja <strong style="color: #dc3545;">DELETAR</strong> este item da planilha?`;
-                
-                document.getElementById('deleteModal').style.display = 'block';
-            } else {
-                itens.splice(index, 1);
-                renderizarItens();
-                atualizarContador();
-            }
-        }
-
-        // ============ ATUALIZAR REVISÃO ============
-        function atualizarRevisao() {
-            document.getElementById('reviewRef').textContent = document.getElementById('referencia').value || '-';
-            document.getElementById('reviewNome').textContent = document.getElementById('nome').value || '-';
-            document.getElementById('reviewTel').textContent = document.getElementById('telefone').value || '-';
-            document.getElementById('reviewEmail').textContent = document.getElementById('email').value || '-';
-            document.getElementById('reviewTotal').textContent = itens.length;
-            
-            const lista = document.getElementById('reviewList');
-            lista.innerHTML = '';
-            
-            if (itens.length === 0) {
-                lista.innerHTML = '<li style="color: #999;">Nenhum item adicionado</li>';
-            } else {
-                itens.forEach((item, index) => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<strong>${index + 1}.</strong> ${item.nome || '(sem nome)'} - Nº ${item.numero || '-'} (${item.tipo}) - ${item.tamCamiseta}/${item.tamCalcao}`;
-                    lista.appendChild(li);
-                });
-            }
-        }
-
-        // ============ ENVIAR PEDIDO ============
-        function enviarPedido() {
-            const referencia = document.getElementById('referencia').value;
-            const nome = document.getElementById('nome').value;
-            const telefone = document.getElementById('telefone').value;
-            const email = document.getElementById('email').value;
-
-            if (!referencia || !nome || !telefone) {
-                alert('⚠️ Preencha Referência, Nome e Telefone!');
-                return;
-            }
-
-            const itensParaEnviar = itens.filter(item => !item.enviado);
-
-            if (itensParaEnviar.length === 0) {
-                alert('⚠️ Nenhum item novo para enviar!\n\nTodos os itens já foram enviados ou não há itens preenchidos.');
-                return;
-            }
-
-            const formData = {
-                referencia: referencia,
-                nome: nome,
-                telefone: telefone,
-                email: email,
-                itens: itensParaEnviar
-            };
-
-            const btnSubmit = document.querySelector('.btn-primary');
-            const textoOriginal = btnSubmit.textContent;
-            btnSubmit.disabled = true;
-            btnSubmit.textContent = '⏳ Enviando...';
-
-            fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            })
-            .then(response => {
-                itens.forEach(item => {
-                    if (!item.enviado) {
-                        item.enviado = true;
-                    }
-                });
-
-                renderizarItens();
-                
-                document.getElementById('modalMessage').innerHTML = 
-                    `<strong>📋 Referência:</strong> ${referencia}<br>` +
-                    `<strong>👤 Cliente:</strong> ${nome}<br>` +
-                    `<strong>📦 Itens Enviados:</strong> ${itensParaEnviar.length}<br><br>` +
-                    `<em>✅ Planilha atualizada com sucesso!</em>`;
-                document.getElementById('successModal').style.display = 'block';
-            })
-            .catch(error => {
-                alert('❌ Erro: ' + error.message);
-                console.error('Erro:', error);
-            })
-            .finally(() => {
-                btnSubmit.disabled = false;
-                btnSubmit.textContent = textoOriginal;
-            });
-        }
-
-        // ============ MODAL DUPLICATA ============
-        function mostrarModalDuplicata(item) {
-            const detalhesHTML = `
-                <div><strong>Tipo:</strong> ${item.tipo || '(vazio)'}</div>
-                <div><strong>Nome:</strong> ${item.nome || '(vazio)'}</div>
-                <div><strong>Número:</strong> ${item.numero || '(vazio)'}</div>
-                <div><strong>Adicional:</strong> ${item.adicional || '(vazio)'}</div>
-                <div><strong>Tam. Camiseta:</strong> ${item.tamCamiseta || '(vazio)'}</div>
-                <div><strong>Tam. Calção:</strong> ${item.tamCalcao || '(vazio)'}</div>
-                <div><strong>Quantidade:</strong> ${item.quantidade || '1'}</div>
-            `;
-            
-            document.getElementById('duplicataDetalhes').innerHTML = detalhesHTML;
-            document.getElementById('duplicataModal').style.display = 'block';
-        }
-
-        // ============ EVENT LISTENERS DOS MODAIS ============
-        document.getElementById('btnConfirmarDuplicata').addEventListener('click', function() {
-            document.getElementById('duplicataModal').style.display = 'none';
-            executarAdicaoItem(itemDuplicadoParaAdicionar);
-            itemDuplicadoParaAdicionar = null;
-        });
-
-        document.getElementById('btnCancelarDuplicata').addEventListener('click', function() {
-            document.getElementById('duplicataModal').style.display = 'none';
-            itemDuplicadoParaAdicionar = null;
-        });
-
-        document.getElementById('btnConfirmarDelete').addEventListener('click', function() {
-            if (itemParaDeletar === null) return;
-            
-            const item = itens[itemParaDeletar];
-            document.getElementById('deleteModal').style.display = 'none';
-            
-            const dadosParaDeletar = {
-                action: 'delete',
-                referencia: document.getElementById('referencia').value,
-                tipo: item.tipo,
-                nome: item.nome,
-                numero: item.numero,
-                tamCamiseta: item.tamCamiseta,
-                tamCalcao: item.tamCalcao
-            };
-            
-            fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dadosParaDeletar)
-            })
-            .then(() => {
-                itens.splice(itemParaDeletar, 1);
-                renderizarItens();
-                atualizarContador();
-                
-                const modalMsg = document.getElementById('modalMessage');
-                modalMsg.innerHTML = 
-                    `<strong style="color: #28a745;">✅ Item Deletado com Sucesso!</strong><br><br>` +
-                    `O item foi removido do formulário e da planilha.<br>` +
-                    `O resumo foi atualizado automaticamente.`;
-                document.getElementById('successModal').style.display = 'block';
-            })
-            .catch(error => {
-                alert('❌ Erro ao deletar da planilha: ' + error.message);
-                console.error('Erro:', error);
-            });
-            
-            itemParaDeletar = null;
-        });
-
-        document.getElementById('btnCancelarDelete').addEventListener('click', function() {
-            document.getElementById('deleteModal').style.display = 'none';
-            itemParaDeletar = null;
-        });
-
-        document.getElementById('btnFecharModal').addEventListener('click', function() {
-            document.getElementById('successModal').style.display = 'none';
-        });
-
-        window.onclick = function(event) {
-            const successModal = document.getElementById('successModal');
-            const deleteModal = document.getElementById('deleteModal');
-            const duplicataModal = document.getElementById('duplicataModal');
-            
-            if (event.target == successModal) {
-                successModal.style.display = 'none';
-            }
-            
-            if (event.target == deleteModal) {
-                deleteModal.style.display = 'none';
-                itemParaDeletar = null;
-            }
-            
-            if (event.target == duplicataModal) {
-                duplicataModal.style.display = 'none';
-                itemDuplicadoParaAdicionar = null;
-            }
-        }
+        // ============ FIM GERAR LINK ============
     </script>
 </body>
 </html>
