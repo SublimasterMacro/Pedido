@@ -1023,7 +1023,17 @@ function renderizarItens() {
         const displayNome = item.nome || '(sem nome)';
         const displayNumero = item.numero ? ` - Nº ${item.numero}` : '';
         const displayAdicional = item.adicional ? ` - ${item.adicional}` : '';
-        const displayTamanhos = (item.tamCamiseta || item.tamCalcao) ? ` - ${item.tamCamiseta || '-'}/${item.tamCalcao || '-'}` : '';
+        
+        // Montar tamanhos: só mostra barra se tiver os dois
+        let displayTamanhos = '';
+        if (item.tamCamiseta && item.tamCalcao) {
+            displayTamanhos = ` - ${item.tamCamiseta}/${item.tamCalcao}`;
+        } else if (item.tamCamiseta) {
+            displayTamanhos = ` - Cam: ${item.tamCamiseta}`;
+        } else if (item.tamCalcao) {
+            displayTamanhos = ` - Cal: ${item.tamCalcao}`;
+        }
+        
         const displayQuantidade = item.quantidade ? ` - Qtd: ${item.quantidade}` : '';
         const badgeEnviado = item.enviado ? '<span class="badge-enviado">✓ ENVIADO</span>' : '';
         
@@ -1074,6 +1084,7 @@ function renderizarItens() {
 
     adicionarEventListenersEdicao();
 }
+    
         function adicionarEventListenersEdicao() {
             document.querySelectorAll('.item-tipo').forEach(select => {
                 select.addEventListener('change', function() {
@@ -1127,7 +1138,17 @@ function atualizarHeaderItem(index) {
     const displayNome = item.nome || '(sem nome)';
     const displayNumero = item.numero ? ` - Nº ${item.numero}` : '';
     const displayAdicional = item.adicional ? ` - ${item.adicional}` : '';
-    const displayTamanhos = (item.tamCamiseta || item.tamCalcao) ? ` - ${item.tamCamiseta || '-'}/${item.tamCalcao || '-'}` : '';
+    
+    // Montar tamanhos: só mostra barra se tiver os dois
+    let displayTamanhos = '';
+    if (item.tamCamiseta && item.tamCalcao) {
+        displayTamanhos = ` - ${item.tamCamiseta}/${item.tamCalcao}`;
+    } else if (item.tamCamiseta) {
+        displayTamanhos = ` - Cam: ${item.tamCamiseta}`;
+    } else if (item.tamCalcao) {
+        displayTamanhos = ` - Cal: ${item.tamCalcao}`;
+    }
+    
     const displayQuantidade = item.quantidade ? ` - Qtd: ${item.quantidade}` : '';
     const badgeEnviado = item.enviado ? '<span class="badge-enviado">✓ ENVIADO</span>' : '';
     
@@ -1139,7 +1160,7 @@ function atualizarHeaderItem(index) {
         }
     }
 }
-
+    
         function gerarOpcoesTamanho(valorSelecionado) {
             const tamanhos = ['PP', 'P', 'M', 'G', 'GG', 'G1', 'G2', 'G3', 'G4', 'G5', 'BLPP', 'BLP', 'BLM', 'BLG', 'BLGG', 'BLG1', 'BLG2', 'BLG3', 'BLG4', 'BLG5', '1A', '2A', '4A', '6A', '8A', '10A', '12A'];
             return tamanhos.map(t => `<option value="${t}" ${t === valorSelecionado ? 'selected' : ''}>${t}</option>`).join('');
@@ -1189,7 +1210,20 @@ function atualizarRevisao() {
     } else {
         itens.forEach((item, index) => {
             const li = document.createElement('li');
-            li.innerHTML = `<strong>${index + 1}.</strong> ${item.nome || '(sem nome)'} - Nº ${item.numero || '-'} - ${item.tamCamiseta || '-'}/${item.tamCalcao || '-'} - Qtd: ${item.quantidade || '1'} (${item.tipo})`;
+            
+            // Montar tamanhos: só mostra barra se tiver os dois
+            let tamanhos = '';
+            if (item.tamCamiseta && item.tamCalcao) {
+                tamanhos = `${item.tamCamiseta}/${item.tamCalcao}`;
+            } else if (item.tamCamiseta) {
+                tamanhos = `Cam: ${item.tamCamiseta}`;
+            } else if (item.tamCalcao) {
+                tamanhos = `Cal: ${item.tamCalcao}`;
+            } else {
+                tamanhos = '-';
+            }
+            
+            li.innerHTML = `<strong>${index + 1}.</strong> ${item.nome || '(sem nome)'} - Nº ${item.numero || '-'} - ${tamanhos} - Qtd: ${item.quantidade || '1'} (${item.tipo})`;
             lista.appendChild(li);
         });
     }
