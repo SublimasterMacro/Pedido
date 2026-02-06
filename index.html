@@ -1050,12 +1050,16 @@ function renderizarItens() {
             <div class="accordion-content">
                 <div class="accordion-body">
                     <div class="item-edit-grid">
-                        <div class="item-edit-field" style="grid-column: 1 / -1;">
+                        <div class="item-edit-field">
                             <label>Tipo</label>
                             <select class="item-tipo" data-index="${index}">
                                 <option value="">Selecione</option>
                                 ${['1 - Linha', '2 - Goleiro', '3 - Comissão Técnica', '4 - Arbitragem', '5 - Torcedor', '6 - Regata', '7 - Tradicional', '8 - Raglan', '9 - Gola V', '10 - Gola Polo'].map(t => `<option value="${t}" ${item.tipo === t ? 'selected' : ''}>${t}</option>`).join('')}
                             </select>
+                        </div>
+                        <div class="item-edit-field">
+                            <label>Quantidade</label>
+                            <input type="number" class="item-quantidade" data-index="${index}" value="${item.quantidade}" min="1">
                         </div>
                         <div class="item-edit-field">
                             <label>Nome</label>
@@ -1078,10 +1082,6 @@ function renderizarItens() {
                                 <option value="">Selecione</option>
                                 ${gerarOpcoesTamanho(item.tamCalcao)}
                             </select>
-                        </div>
-                        <div class="item-edit-field">
-                            <label>Quantidade</label>
-                            <input type="number" class="item-quantidade" data-index="${index}" value="${item.quantidade}" min="1">
                         </div>
                     </div>
                     <button class="btn btn-remove" onclick="removerItem(${index})">🗑️ Remover</button>
