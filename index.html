@@ -996,15 +996,20 @@
         }
 
         function limparFormularioNovo() {
-            document.getElementById('novoTipo').value = '';
-            document.getElementById('novoNome').value = '';
-            document.getElementById('novoNumero').value = '';
-            document.getElementById('novoAdicional').value = '';
-            document.getElementById('novoTamCamiseta').value = '';
-            document.getElementById('novoTamCalcao').value = '';
-            document.getElementById('novoQuantidade').value = '1';
-        }   
-
+    // NÃO limpa mais o tipo - mantém o último selecionado
+    // document.getElementById('novoTipo').value = '';
+    
+    document.getElementById('novoNome').value = '';
+    document.getElementById('novoNumero').value = '';
+    document.getElementById('novoAdicional').value = '';
+    document.getElementById('novoTamCamiseta').value = '';
+    document.getElementById('novoTamCalcao').value = '';
+    document.getElementById('novoQuantidade').value = '1';
+    
+    // Foca no campo Nome
+    document.getElementById('novoNome').focus();
+}
+    
 // ==================== Função renderizarItens() ====================
 function renderizarItens() {
     const container = document.getElementById('itemsList');
@@ -1073,6 +1078,10 @@ function renderizarItens() {
                                 <option value="">Selecione</option>
                                 ${gerarOpcoesTamanho(item.tamCalcao)}
                             </select>
+                        </div>
+                        <div class="item-edit-field">
+                            <label>Quantidade</label>
+                            <input type="number" class="item-quantidade" data-index="${index}" value="${item.quantidade}" min="1">
                         </div>
                     </div>
                     <button class="btn btn-remove" onclick="removerItem(${index})">🗑️ Remover</button>
