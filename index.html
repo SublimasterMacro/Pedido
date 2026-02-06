@@ -240,16 +240,6 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        .item-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .item-actions button {
-            flex: 1;
-        }
-
         .btn {
             padding: 12px 24px;
             border: none;
@@ -506,20 +496,19 @@
             .form-grid {
                 grid-template-columns: 1fr;
             }
-
+            .item-edit-grid {
+                grid-template-columns: 1fr;
+            }
             .tab {
                 font-size: 13px;
                 padding: 15px 10px;
             }
-
             .header {
                 padding: 20px;
             }
-
             .header h1 {
                 font-size: 1.4em;
             }
-
             .tab-content {
                 padding: 20px;
             }
@@ -789,37 +778,40 @@
         </div>
     </div>
 
-    <script>
+<script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwnjScm9c2iHeLjIpqh3NBJEjLnbPNyG9lb2qCvcUjIOh0GJ0lGLbPmKQj4tlvy0R8k/exec';
-        
-        // ============ CONFIGURAÇÃO DE SENHA ============
-        const SENHA_ADMIN = '202606'; // ALTERE AQUI SUA SENHA
+        const SENHA_ADMIN = '202606';
         
         let itens = [];
         let itemDuplicadoParaAdicionar = null;
         let itemParaDeletar = null;
 
-        // ============ VALIDAÇÃO DE ACESSO ============
+        // ==================== INICIALIZAÇÃO ====================
         window.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
             const temParametros = urlParams.has('ref') || urlParams.has('referencia') || urlParams.has('nome') || urlParams.has('tel');
             
             if (temParametros) {
-                // É um link de cliente - libera acesso direto
                 document.getElementById('mainContainer').style.display = 'block';
                 carregarParametrosURL();
             } else {
-                // Sem parâmetros - pede senha
                 document.getElementById('senhaModal').style.display = 'block';
                 document.getElementById('senhaAdmin').focus();
                 
-                // Permite Enter para validar
                 document.getElementById('senhaAdmin').addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        validarSenha();
-                    }
+                    if (e.key === 'Enter') validarSenha();
                 });
             }
+
+            // Máscara de telefone
+            document.getElementById('telefone').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length <= 11) {
+                    value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+                    value = value.replace(/(\d)(\d{4})$/, '$1-$2');
+                }
+                e.target.value = value;
+            });
         });
 
         function validarSenha() {
@@ -835,52 +827,12 @@
                 document.getElementById('senhaAdmin').value = '';
                 document.getElementById('senhaAdmin').focus();
                 
-                // Adiciona shake animation
                 const modal = document.querySelector('#senhaModal .modal-content');
                 modal.style.animation = 'shake 0.5s';
-                setTimeout(() => {
-                    modal.style.animation = '';
-                }, 500);
-            }
-        }
-        
-        // ============ NAVEGAÇÃO DE ABAS ============
-        function openTab(evt, tabName) {
-            const tabContents = document.getElementsByClassName('tab-content');
-            for (let i = 0; i < tabContents.length; i++) {
-                tabContents[i].classList.remove('active');
-            }
-
-            const tabs = document.getElementsByClassName('tab');
-            for (let i = 0; i < tabs.length; i++) {
-                tabs[i].classList.remove('active');
-            }
-
-            document.getElementById(tabName).classList.add('active');
-            evt.currentTarget.classList.add('active');
-
-            if (tabName === 'revisar') {
-                atualizarRevisao();
+                setTimeout(() => modal.style.animation = '', 500);
             }
         }
 
-        // ============ ACCORDION ============
-        function toggleAccordion(header) {
-            const content = header.nextElementSibling;
-            const isActive = header.classList.contains('active');
-
-            document.querySelectorAll('.accordion-header').forEach(h => {
-                h.classList.remove('active');
-                h.nextElementSibling.classList.remove('active');
-            });
-
-            if (!isActive) {
-                header.classList.add('active');
-                content.classList.add('active');
-            }
-        }
-
-        // ============ CARREGA PARÂMETROS DA URL ============
         function carregarParametrosURL() {
             const urlParams = new URLSearchParams(window.location.search);
             
@@ -889,12 +841,9 @@
             const telefone = urlParams.get('tel') || urlParams.get('telefone') || urlParams.get('phone');
             const email = urlParams.get('email') || urlParams.get('mail');
             
-            const temParametros = referencia || nome || telefone;
-            
-            if (temParametros) {
+            if (referencia || nome || telefone) {
                 const btnGerarLink = document.querySelector('.btn-link');
                 const linkResult = document.getElementById('linkResult');
-                
                 if (btnGerarLink) btnGerarLink.style.display = 'none';
                 if (linkResult) linkResult.style.display = 'none';
             }
@@ -924,19 +873,40 @@
             }
         }
 
-        window.addEventListener('DOMContentLoaded', carregarParametrosURL);
-
-        // ============ MÁSCARA DE TELEFONE ============
-        document.getElementById('telefone').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 11) {
-                value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
-                value = value.replace(/(\d)(\d{4})$/, '$1-$2');
+        // ==================== NAVEGAÇÃO ====================
+        function openTab(evt, tabName) {
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
             }
-            e.target.value = value;
-        });
 
-        // ============ GERAR LINK ============
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+
+            if (tabName === 'revisar') atualizarRevisao();
+        }
+
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const isActive = header.classList.contains('active');
+
+            document.querySelectorAll('.accordion-header').forEach(h => {
+                h.classList.remove('active');
+                h.nextElementSibling.classList.remove('active');
+            });
+
+            if (!isActive) {
+                header.classList.add('active');
+                content.classList.add('active');
+            }
+        }
+
+        // ==================== LINK ====================
         function gerarLink() {
             const referencia = document.getElementById('referencia').value.trim();
             const nome = document.getElementById('nome').value.trim();
@@ -955,26 +925,18 @@
             });
 
             const linkCompleto = `${urlAtual}?${params.toString()}`;
-
             document.getElementById('generatedLink').textContent = linkCompleto;
             document.getElementById('linkResult').classList.add('show');
-
-            document.getElementById('linkResult').scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'nearest' 
-            });
+            document.getElementById('linkResult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
         function copiarLinkGerado() {
             const link = document.getElementById('generatedLink').textContent;
-            
             navigator.clipboard.writeText(link).then(function() {
                 const btn = document.querySelector('.btn-copy-link');
                 const textoOriginal = btn.textContent;
-                
                 btn.textContent = '✅ Link Copiado!';
                 btn.style.background = '#1e7e34';
-                
                 setTimeout(function() {
                     btn.textContent = textoOriginal;
                     btn.style.background = '#28a745';
@@ -984,28 +946,21 @@
             });
         }
 
-        // ============ VERIFICAR DUPLICATA ============
+        // ==================== ITENS ====================
         function verificarDuplicata(novoItem) {
             for (let i = 0; i < itens.length; i++) {
                 const item = itens[i];
-                
-                if (item.tipo === novoItem.tipo &&
-                    item.nome === novoItem.nome &&
-                    item.numero === novoItem.numero &&
-                    item.adicional === novoItem.adicional &&
-                    item.tamCamiseta === novoItem.tamCamiseta &&
-                    item.tamCalcao === novoItem.tamCalcao &&
-                    item.quantidade === novoItem.quantidade) {
+                if (item.tipo === novoItem.tipo && item.nome === novoItem.nome && item.numero === novoItem.numero && 
+                    item.adicional === novoItem.adicional && item.tamCamiseta === novoItem.tamCamiseta && 
+                    item.tamCalcao === novoItem.tamCalcao && item.quantidade === novoItem.quantidade) {
                     return true;
                 }
             }
             return false;
         }
 
-        // ============ ADICIONAR ITEM ============
         function adicionarItem() {
             const tipo = document.getElementById('novoTipo').value;
-            
             if (!tipo) {
                 alert('⚠️ Selecione o TIPO do item!');
                 document.getElementById('novoTipo').focus();
@@ -1050,17 +1005,11 @@
             document.getElementById('novoQuantidade').value = '1';
         }
 
-        // ============ RENDERIZAR ITENS ============
         function renderizarItens() {
             const container = document.getElementById('itemsList');
             
             if (itens.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state" style="text-align: center; padding: 40px 20px; color: #999;">
-                        <div style="font-size: 3em; margin-bottom: 10px;">📦</div>
-                        <p>Nenhum item adicionado ainda</p>
-                    </div>
-                `;
+                container.innerHTML = '<div class="empty-state" style="text-align: center; padding: 40px 20px; color: #999;"><div style="font-size: 3em; margin-bottom: 10px;">📦</div><p>Nenhum item adicionado ainda</p></div>';
                 return;
             }
 
@@ -1076,9 +1025,7 @@
                 
                 itemDiv.innerHTML = `
                     <div class="accordion-header" onclick="toggleAccordion(this)">
-                        <div>
-                            <strong>Item #${index + 1}:</strong> ${displayNome}${displayNumero} ${badgeEnviado}
-                        </div>
+                        <div><strong>Item #${index + 1}:</strong> ${displayNome}${displayNumero} ${badgeEnviado}</div>
                         <span class="accordion-icon">▼</span>
                     </div>
                     <div class="accordion-content">
@@ -1092,42 +1039,27 @@
                                 <span><strong>Calção:</strong> ${item.tamCalcao || '-'}</span>
                                 <span><strong>Qtd:</strong> ${item.quantidade || '1'}</span>
                             </div>
-
                             <hr style="border: none; border-top: 1px solid #e9ecef; margin: 15px 0;">
-
                             <div class="item-edit-grid">
                                 <div class="item-edit-field" style="grid-column: 1 / -1;">
                                     <label>Tipo</label>
                                     <select class="item-tipo" data-index="${index}">
                                         <option value="">Selecione</option>
-                                        <option value="1 - Linha" ${item.tipo === '1 - Linha' ? 'selected' : ''}>1 - Linha</option>
-                                        <option value="2 - Goleiro" ${item.tipo === '2 - Goleiro' ? 'selected' : ''}>2 - Goleiro</option>
-                                        <option value="3 - Comissão Técnica" ${item.tipo === '3 - Comissão Técnica' ? 'selected' : ''}>3 - Comissão Técnica</option>
-                                        <option value="4 - Arbitragem" ${item.tipo === '4 - Arbitragem' ? 'selected' : ''}>4 - Arbitragem</option>
-                                        <option value="5 - Torcedor" ${item.tipo === '5 - Torcedor' ? 'selected' : ''}>5 - Torcedor</option>
-                                        <option value="6 - Regata" ${item.tipo === '6 - Regata' ? 'selected' : ''}>6 - Regata</option>
-                                        <option value="7 - Tradicional" ${item.tipo === '7 - Tradicional' ? 'selected' : ''}>7 - Tradicional</option>
-                                        <option value="8 - Raglan" ${item.tipo === '8 - Raglan' ? 'selected' : ''}>8 - Raglan</option>
-                                        <option value="9 - Gola V" ${item.tipo === '9 - Gola V' ? 'selected' : ''}>9 - Gola V</option>
-                                        <option value="10 - Gola Polo" ${item.tipo === '10 - Gola Polo' ? 'selected' : ''}>10 - Gola Polo</option>
+                                        ${['1 - Linha', '2 - Goleiro', '3 - Comissão Técnica', '4 - Arbitragem', '5 - Torcedor', '6 - Regata', '7 - Tradicional', '8 - Raglan', '9 - Gola V', '10 - Gola Polo'].map(t => `<option value="${t}" ${item.tipo === t ? 'selected' : ''}>${t}</option>`).join('')}
                                     </select>
                                 </div>
-
                                 <div class="item-edit-field">
                                     <label>Nome</label>
                                     <input type="text" class="item-nome" data-index="${index}" value="${item.nome}" placeholder="Nome do jogador">
                                 </div>
-
                                 <div class="item-edit-field">
                                     <label>Número</label>
                                     <input type="text" class="item-numero" data-index="${index}" value="${item.numero}" placeholder="Nº">
                                 </div>
-
                                 <div class="item-edit-field" style="grid-column: 1 / -1;">
                                     <label>Adicional</label>
                                     <input type="text" class="item-adicional" data-index="${index}" value="${item.adicional}" placeholder="Ex: Capitão">
                                 </div>
-
                                 <div class="item-edit-field">
                                     <label>Tam. Camiseta</label>
                                     <select class="item-tam-camiseta" data-index="${index}">
@@ -1135,7 +1067,6 @@
                                         ${gerarOpcoesTamanho(item.tamCamiseta)}
                                     </select>
                                 </div>
-
                                 <div class="item-edit-field">
                                     <label>Tam. Calção</label>
                                     <select class="item-tam-calcao" data-index="${index}">
@@ -1143,77 +1074,64 @@
                                         ${gerarOpcoesTamanho(item.tamCalcao)}
                                     </select>
                                 </div>
-
                                 <div class="item-edit-field">
                                     <label>Quantidade</label>
                                     <input type="number" class="item-quantidade" data-index="${index}" value="${item.quantidade}" min="1">
                                 </div>
                             </div>
-
-                            <div class="item-actions">
-                                <button class="btn btn-remove" onclick="removerItem(${index})">🗑️ Remover</button>
-                            </div>
+                            <button class="btn btn-remove" onclick="removerItem(${index})">🗑️ Remover</button>
                         </div>
                     </div>
                 `;
-                
                 container.appendChild(itemDiv);
             });
 
-            // Adicionar event listeners para atualizar em tempo real
             adicionarEventListenersEdicao();
         }
 
         function adicionarEventListenersEdicao() {
             document.querySelectorAll('.item-tipo').forEach(select => {
                 select.addEventListener('change', function() {
-                    const index = parseInt(this.dataset.index);
-                    itens[index].tipo = this.value;
-                    atualizarHeaderItem(index);
+                    itens[parseInt(this.dataset.index)].tipo = this.value;
+                    atualizarHeaderItem(parseInt(this.dataset.index));
                 });
             });
 
             document.querySelectorAll('.item-nome').forEach(input => {
                 input.addEventListener('input', function() {
-                    const index = parseInt(this.dataset.index);
-                    itens[index].nome = this.value.trim().toUpperCase();
-                    atualizarHeaderItem(index);
+                    itens[parseInt(this.dataset.index)].nome = this.value.trim().toUpperCase();
+                    atualizarHeaderItem(parseInt(this.dataset.index));
                 });
             });
 
             document.querySelectorAll('.item-numero').forEach(input => {
                 input.addEventListener('input', function() {
-                    const index = parseInt(this.dataset.index);
-                    itens[index].numero = this.value.trim();
-                    atualizarHeaderItem(index);
+                    itens[parseInt(this.dataset.index)].numero = this.value.trim();
+                    atualizarHeaderItem(parseInt(this.dataset.index));
                 });
             });
 
             document.querySelectorAll('.item-adicional').forEach(input => {
                 input.addEventListener('input', function() {
-                    const index = parseInt(this.dataset.index);
-                    itens[index].adicional = this.value.trim().toUpperCase();
+                    itens[parseInt(this.dataset.index)].adicional = this.value.trim().toUpperCase();
                 });
             });
 
             document.querySelectorAll('.item-tam-camiseta').forEach(select => {
                 select.addEventListener('change', function() {
-                    const index = parseInt(this.dataset.index);
-                    itens[index].tamCamiseta = this.value;
+                    itens[parseInt(this.dataset.index)].tamCamiseta = this.value;
                 });
             });
 
             document.querySelectorAll('.item-tam-calcao').forEach(select => {
                 select.addEventListener('change', function() {
-                    const index = parseInt(this.dataset.index);
-                    itens[index].tamCalcao = this.value;
+                    itens[parseInt(this.dataset.index)].tamCalcao = this.value;
                 });
             });
 
             document.querySelectorAll('.item-quantidade').forEach(input => {
                 input.addEventListener('input', function() {
-                    const index = parseInt(this.dataset.index);
-                    itens[index].quantidade = this.value.trim();
+                    itens[parseInt(this.dataset.index)].quantidade = this.value.trim();
                 });
             });
         }
@@ -1234,20 +1152,14 @@
         }
 
         function gerarOpcoesTamanho(valorSelecionado) {
-            const tamanhos = ['PP', 'P', 'M', 'G', 'GG', 'G1', 'G2', 'G3', 'G4', 'G5', 
-                            'BLPP', 'BLP', 'BLM', 'BLG', 'BLGG', 'BLG1', 'BLG2', 'BLG3', 'BLG4', 'BLG5',
-                            '1A', '2A', '4A', '6A', '8A', '10A', '12A'];
-            
-            return tamanhos.map(t => 
-                `<option value="${t}" ${t === valorSelecionado ? 'selected' : ''}>${t}</option>`
-            ).join('');
+            const tamanhos = ['PP', 'P', 'M', 'G', 'GG', 'G1', 'G2', 'G3', 'G4', 'G5', 'BLPP', 'BLP', 'BLM', 'BLG', 'BLGG', 'BLG1', 'BLG2', 'BLG3', 'BLG4', 'BLG5', '1A', '2A', '4A', '6A', '8A', '10A', '12A'];
+            return tamanhos.map(t => `<option value="${t}" ${t === valorSelecionado ? 'selected' : ''}>${t}</option>`).join('');
         }
 
         function atualizarContador() {
             document.getElementById('counterBadge').textContent = itens.length;
         }
 
-        // ============ REMOVER ITEM ============
         function removerItem(index) {
             const item = itens[index];
             
@@ -1272,7 +1184,7 @@
             }
         }
 
-        // ============ ATUALIZAR REVISÃO ============
+        // ==================== REVISÃO ====================
         function atualizarRevisao() {
             document.getElementById('reviewRef').textContent = document.getElementById('referencia').value || '-';
             document.getElementById('reviewNome').textContent = document.getElementById('nome').value || '-';
@@ -1294,7 +1206,7 @@
             }
         }
 
-        // ============ ENVIAR PEDIDO ============
+        // ==================== ENVIAR PEDIDO ====================
         function enviarPedido() {
             const referencia = document.getElementById('referencia').value;
             const nome = document.getElementById('nome').value;
@@ -1334,9 +1246,7 @@
             })
             .then(response => {
                 itens.forEach(item => {
-                    if (!item.enviado) {
-                        item.enviado = true;
-                    }
+                    if (!item.enviado) item.enviado = true;
                 });
 
                 renderizarItens();
@@ -1358,7 +1268,7 @@
             });
         }
 
-        // ============ MODAL DUPLICATA ============
+        // ==================== MODAIS ====================
         function mostrarModalDuplicata(item) {
             const detalhesHTML = `
                 <div><strong>Tipo:</strong> ${item.tipo || '(vazio)'}</div>
@@ -1374,7 +1284,6 @@
             document.getElementById('duplicataModal').style.display = 'block';
         }
 
-        // ============ EVENT LISTENERS DOS MODAIS ============
         document.getElementById('btnConfirmarDuplicata').addEventListener('click', function() {
             document.getElementById('duplicataModal').style.display = 'none';
             executarAdicaoItem(itemDuplicadoParaAdicionar);
@@ -1442,15 +1351,11 @@
             const deleteModal = document.getElementById('deleteModal');
             const duplicataModal = document.getElementById('duplicataModal');
             
-            if (event.target == successModal) {
-                successModal.style.display = 'none';
-            }
-            
+            if (event.target == successModal) successModal.style.display = 'none';
             if (event.target == deleteModal) {
                 deleteModal.style.display = 'none';
                 itemParaDeletar = null;
             }
-            
             if (event.target == duplicataModal) {
                 duplicataModal.style.display = 'none';
                 itemDuplicadoParaAdicionar = null;
