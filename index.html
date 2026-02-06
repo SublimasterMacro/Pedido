@@ -84,6 +84,19 @@
             display: block;
         }
 
+        .footer-1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            margin-top: 0;
+        }
+
+        .footer-1 p {
+            margin: 3px 0;
+            font-size: 13px;
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
@@ -574,7 +587,12 @@
                 </div>
             </div>
 
-            <button class="btn btn-link" onclick="gerarLink()">🔗 Gerar Link para Cliente Preencher</button>
+            <div class="footer-1">
+            <p>© 2026 Sublimaster - Sistema de Pedidos</p>
+            <p style="font-size: 12px; opacity: 0.8;">Todos os direitos reservados</p>
+        </div>
+
+            <button class="btn btn-link" onclick="gerarLink()">🔗 Gerar Link para Cliente</button>
 
             <div id="linkResult" class="link-result">
                 <strong>📋 Link gerado com sucesso!</strong>
@@ -727,7 +745,7 @@
                 </ul>
             </div>
 
-            <button class="btn btn-primary" onclick="enviarPedido()">📤 Enviar Pedido Completo</button>
+            <button class="btn btn-primary" onclick="enviarPedido()">📤 Enviar Pedido </button>
         </div>
     </div>
 
