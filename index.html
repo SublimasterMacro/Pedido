@@ -1003,12 +1003,9 @@
             document.getElementById('novoTamCamiseta').value = '';
             document.getElementById('novoTamCalcao').value = '';
             document.getElementById('novoQuantidade').value = '1';
-        }
-    
-// ========================================
-// Função renderizarItens()
-// ========================================
+        }   
 
+// ==================== Função renderizarItens() ====================
 function renderizarItens() {
     const container = document.getElementById('itemsList');
     
@@ -1132,10 +1129,7 @@ function renderizarItens() {
             });
         }
 
-// ========================================
-// Função atualizarHeaderItem()
-// ========================================
-
+// ==================== Função atualizarHeaderItem() ====================
 function atualizarHeaderItem(index) {
     const item = itens[index];
     const displayNome = item.nome || '(sem nome)';
@@ -1185,12 +1179,9 @@ function atualizarHeaderItem(index) {
                 renderizarItens();
                 atualizarContador();
             }
-        }
-    
-/ ========================================
-// Função atualizarRevisao()
-// ========================================
+        }    
 
+// ==================== Função atualizarRevisao() ====================
 function atualizarRevisao() {
     document.getElementById('reviewRef').textContent = document.getElementById('referencia').value || '-';
     document.getElementById('reviewNome').textContent = document.getElementById('nome').value || '-';
