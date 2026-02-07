@@ -319,15 +319,28 @@
             background: linear-gradient(135deg, #fff3cd 0%, #fff9e6 100%);
             border: 2px solid #ffc107;
             border-radius: 12px;
-            padding: 20px;
+            padding: 15px;
             margin-bottom: 20px;
         }
 
         .new-item-box h3 {
             color: #856404;
-            margin-bottom: 15px;
-            font-size: 1.1em;
+            margin-bottom: 10px;
+            font-size: 1em;
         }
+
+        .new-item-box .form-group {
+    margin-bottom: 12px;
+}
+
+.new-item-box .form-grid {
+    gap: 10px;
+}
+
+.new-item-box input,
+.new-item-box select {
+    padding: 10px;
+}
 
         .items-list {
             max-height: 500px;
@@ -600,117 +613,117 @@
             <h2 style="color: #667eea; margin-bottom: 20px;">Gerenciar Itens</h2>
 
             <div class="new-item-box">
-                <h3>➕ Adicionar Novo Item</h3>
-                
-                <div class="form-group">
-                    <label>Tipo *</label>
-                    <select id="novoTipo">
-                        <option value="">Selecione o tipo</option>
-                        <option value="1 - Linha">1 - Linha</option>
-                        <option value="2 - Goleiro">2 - Goleiro</option>
-                        <option value="3 - Comissão Técnica">3 - Comissão Técnica</option>
-                        <option value="4 - Arbitragem">4 - Arbitragem</option>
-                        <option value="5 - Torcedor">5 - Torcedor</option>
-                        <option value="6 - Regata">6 - Regata</option>
-                        <option value="7 - Tradicional">7 - Tradicional</option>
-                        <option value="8 - Raglan">8 - Raglan</option>
-                        <option value="9 - Gola V">9 - Gola V</option>
-                        <option value="10 - Gola Polo">10 - Gola Polo</option>
-                    </select>
-                </div>
+    <h3>➕ Adicionar Novo Item</h3>
+    
+    <div class="form-group">
+        <label>Tipo *</label>
+        <select id="novoTipo">
+            <option value="">Selecione o tipo</option>
+            <option value="1 - Linha">1 - Linha</option>
+            <option value="2 - Goleiro">2 - Goleiro</option>
+            <option value="3 - Comissão Técnica">3 - Comissão Técnica</option>
+            <option value="4 - Arbitragem">4 - Arbitragem</option>
+            <option value="5 - Torcedor">5 - Torcedor</option>
+            <option value="6 - Regata">6 - Regata</option>
+            <option value="7 - Tradicional">7 - Tradicional</option>
+            <option value="8 - Raglan">8 - Raglan</option>
+            <option value="9 - Gola V">9 - Gola V</option>
+            <option value="10 - Gola Polo">10 - Gola Polo</option>
+        </select>
+    </div>
 
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Nome</label>
-                        <input type="text" id="novoNome" placeholder="Nome do jogador">
-                    </div>
-                    <div class="form-group">
-                        <label>Número</label>
-                        <input type="text" id="novoNumero" placeholder="Nº">
-                    </div>
-                </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Nome</label>
+            <input type="text" id="novoNome" placeholder="Nome do jogador">
+        </div>
+        <div class="form-group">
+            <label>Número</label>
+            <input type="text" id="novoNumero" placeholder="Nº">
+        </div>
+    </div>
 
-                <div class="form-group">
-                    <label>Adicional</label>
-                    <input type="text" id="novoAdicional" placeholder="Ex: Capitão">
-                </div>
+    <div class="form-group">
+        <label>Adicional</label>
+        <input type="text" id="novoAdicional" placeholder="Ex: Capitão">
+    </div>
 
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Tamanho Camiseta</label>
-                        <select id="novoTamCamiseta">
-                            <option value="">Selecione</option>
-                            <option value="PP">PP</option>
-                            <option value="P">P</option>
-                            <option value="M">M</option>
-                            <option value="G">G</option>
-                            <option value="GG">GG</option>
-                            <option value="G1">G1</option>
-                            <option value="G2">G2</option>
-                            <option value="G3">G3</option>
-                            <option value="G4">G4</option>
-                            <option value="G5">G5</option>
-                            <option value="BLPP">BLPP</option>
-                            <option value="BLP">BLP</option>
-                            <option value="BLM">BLM</option>
-                            <option value="BLG">BLG</option>
-                            <option value="BLGG">BLGG</option>
-                            <option value="BLG1">BLG1</option>
-                            <option value="BLG2">BLG2</option>
-                            <option value="BLG3">BLG3</option>
-                            <option value="BLG4">BLG4</option>
-                            <option value="BLG5">BLG5</option>
-                            <option value="1A">1A</option>
-                            <option value="2A">2A</option>
-                            <option value="4A">4A</option>
-                            <option value="6A">6A</option>
-                            <option value="8A">8A</option>
-                            <option value="10A">10A</option>
-                            <option value="12A">12A</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Tamanho Calção</label>
-                        <select id="novoTamCalcao">
-                            <option value="">Selecione</option>
-                            <option value="PP">PP</option>
-                            <option value="P">P</option>
-                            <option value="M">M</option>
-                            <option value="G">G</option>
-                            <option value="GG">GG</option>
-                            <option value="G1">G1</option>
-                            <option value="G2">G2</option>
-                            <option value="G3">G3</option>
-                            <option value="G4">G4</option>
-                            <option value="G5">G5</option>
-                            <option value="BLPP">BLPP</option>
-                            <option value="BLP">BLP</option>
-                            <option value="BLM">BLM</option>
-                            <option value="BLG">BLG</option>
-                            <option value="BLGG">BLGG</option>
-                            <option value="BLG1">BLG1</option>
-                            <option value="BLG2">BLG2</option>
-                            <option value="BLG3">BLG3</option>
-                            <option value="BLG4">BLG4</option>
-                            <option value="BLG5">BLG5</option>
-                            <option value="1A">1A</option>
-                            <option value="2A">2A</option>
-                            <option value="4A">4A</option>
-                            <option value="6A">6A</option>
-                            <option value="8A">8A</option>
-                            <option value="10A">10A</option>
-                            <option value="12A">12A</option>
-                        </select>
-                    </div>
-                </div>
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Tamanho Camiseta</label>
+            <select id="novoTamCamiseta">
+                <option value="">Selecione</option>
+                <option value="PP">PP</option>
+                <option value="P">P</option>
+                <option value="M">M</option>
+                <option value="G">G</option>
+                <option value="GG">GG</option>
+                <option value="G1">G1</option>
+                <option value="G2">G2</option>
+                <option value="G3">G3</option>
+                <option value="G4">G4</option>
+                <option value="G5">G5</option>
+                <option value="BLPP">BLPP</option>
+                <option value="BLP">BLP</option>
+                <option value="BLM">BLM</option>
+                <option value="BLG">BLG</option>
+                <option value="BLGG">BLGG</option>
+                <option value="BLG1">BLG1</option>
+                <option value="BLG2">BLG2</option>
+                <option value="BLG3">BLG3</option>
+                <option value="BLG4">BLG4</option>
+                <option value="BLG5">BLG5</option>
+                <option value="1A">1A</option>
+                <option value="2A">2A</option>
+                <option value="4A">4A</option>
+                <option value="6A">6A</option>
+                <option value="8A">8A</option>
+                <option value="10A">10A</option>
+                <option value="12A">12A</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Tamanho Calção</label>
+            <select id="novoTamCalcao">
+                <option value="">Selecione</option>
+                <option value="PP">PP</option>
+                <option value="P">P</option>
+                <option value="M">M</option>
+                <option value="G">G</option>
+                <option value="GG">GG</option>
+                <option value="G1">G1</option>
+                <option value="G2">G2</option>
+                <option value="G3">G3</option>
+                <option value="G4">G4</option>
+                <option value="G5">G5</option>
+                <option value="BLPP">BLPP</option>
+                <option value="BLP">BLP</option>
+                <option value="BLM">BLM</option>
+                <option value="BLG">BLG</option>
+                <option value="BLGG">BLGG</option>
+                <option value="BLG1">BLG1</option>
+                <option value="BLG2">BLG2</option>
+                <option value="BLG3">BLG3</option>
+                <option value="BLG4">BLG4</option>
+                <option value="BLG5">BLG5</option>
+                <option value="1A">1A</option>
+                <option value="2A">2A</option>
+                <option value="4A">4A</option>
+                <option value="6A">6A</option>
+                <option value="8A">8A</option>
+                <option value="10A">10A</option>
+                <option value="12A">12A</option>
+            </select>
+        </div>
+    </div>
 
-                <div class="form-group">
-                    <label>Quantidade</label>
-                    <input type="number" id="novoQuantidade" value="1" min="1">
-                </div>
+    <div class="form-group">
+        <label>Quantidade</label>
+        <input type="number" id="novoQuantidade" value="1" min="1">
+    </div>
 
-                <button class="btn btn-add" onclick="adicionarItem()">✅ Adicionar à Lista</button>
-            </div>
+    <button class="btn btn-add" onclick="adicionarItem()">✅ Adicionar à Lista</button>
+</div>
 
             <h3 style="color: #333; margin: 25px 0 15px 0;">📋 Itens Adicionados</h3>
 
