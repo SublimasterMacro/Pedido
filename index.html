@@ -150,8 +150,8 @@
     font-size: 13px;
     line-height: 1.3;
 }
-        .item-review {
-    margin-bottom: 8px;
+     .item-review {
+    margin-bottom: 10px;
     border-left: 3px solid #667eea;
     padding-left: 12px;
 }
@@ -160,14 +160,14 @@
     font-size: 14px;
     font-weight: 600;
     color: #667eea;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
     line-height: 1.3;
 }
 
 .item-details {
     font-size: 13px;
     color: #555;
-    line-height: 1.3;
+    line-height: 1.4;
 }
 
         .accordion-item:hover {
@@ -1318,11 +1318,12 @@ function atualizarRevisao() {
                 tamanhos = '-';
             }
             
+            const numero = item.numero ? `Nº ${item.numero}` : '-';
             const adicional = item.adicional ? ` | ${item.adicional}` : '';
             
             li.innerHTML = `
                 <div class="item-header">Item ${index + 1} → ${tipoLimpo}</div>
-                <div class="item-details">👤 ${item.nome || '(sem nome)'} | Nº ${item.numero || '-'} | ${tamanhos} | Qtd: ${item.quantidade || '1'}${adicional}</div>
+                <div class="item-details">👤 ${item.nome || '(sem nome)'} | ${numero} | ${tamanhos} | Qtd: ${item.quantidade || '1'}${adicional}</div>
             `;
             lista.appendChild(li);
         });
