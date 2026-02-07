@@ -822,20 +822,11 @@ body {
 
 <script>
 const scriptURL = 'https://script.google.com/macros/s/AKfycbwnjScm9c2iHeLjIpqh3NBJEjLnbPNyG9lb2qCvcUjIOh0GJ0lGLbPmKQj4tlvy0R8k/exec';
-const SENHA_HASH = '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92';
+const SENHA_OFUSCADA = 'MjAyNjA2';
 
 let itens = [];
 let itemDuplicadoParaAdicionar = null;
 let itemParaDeletar = null;
-
-// ==================== FUNÇÃO PARA GERAR HASH SHA-256 ====================
-async function gerarHashSHA256(texto) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(texto);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
 
         // ==================== INICIALIZAÇÃO ====================
         window.addEventListener('DOMContentLoaded', function() {
@@ -866,14 +857,12 @@ if (temParametroCriptografado || temParametrosAntigos) {
             });
         });
 
-        async function validarSenha() {
+function validarSenha() {
     const senhaDigitada = document.getElementById('senhaAdmin').value;
     const senhaErro = document.getElementById('senhaErro');
     
-    // Gerar hash da senha digitada
-    const hashDigitado = await gerarHashSHA256(senhaDigitada);
-    
-    if (hashDigitado === SENHA_HASH) {
+    // Comparar senha ofuscada
+    if (btoa(senhaDigitada) === SENHA_OFUSCADA) {
         document.getElementById('senhaModal').style.display = 'none';
         document.getElementById('mainContainer').style.display = 'block';
         senhaErro.textContent = '';
