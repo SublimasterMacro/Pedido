@@ -1282,7 +1282,7 @@ function atualizarRevisao() {
                 tamanhos = '-';
             }
             
-            li.innerHTML = `<strong>${index + 1}.</strong> ${item.nome || '(sem nome)'} - Nº ${item.numero || '-'} - ${tamanhos} - Qtd: ${item.quantidade || '1'} (${item.tipo})`;
+            li.innerHTML = `<strong>${index + 1}.</strong> ${item.nome || '(sem nome)'} - Nº ${item.numero || '-'} - ${tamanhos} - Qtd: ${item.quantidade || '1'} - (${item.tipo})`;
             lista.appendChild(li);
         });
     }
