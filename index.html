@@ -821,19 +821,29 @@ body {
     </div>
 
 <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbwnjScm9c2iHeLjIpqh3NBJEjLnbPNyG9lb2qCvcUjIOh0GJ0lGLbPmKQj4tlvy0R8k/exec';
-        const SENHA_ADMIN = '202606';
-        
-        let itens = [];
-        let itemDuplicadoParaAdicionar = null;
-        let itemParaDeletar = null;
+const scriptURL = 'https://script.google.com/macros/s/AKfycbwnjScm9c2iHeLjIpqh3NBJEjLnbPNyG9lb2qCvcUjIOh0GJ0lGLbPmKQj4tlvy0R8k/exec';
+const SENHA_HASH = 'b8c3f81e5c24e0e3d4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7';
+
+let itens = [];
+let itemDuplicadoParaAdicionar = null;
+let itemParaDeletar = null;
+
+// ==================== FUNÇÃO PARA GERAR HASH SHA-256 ====================
+async function gerarHashSHA256(texto) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(texto);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
         // ==================== INICIALIZAÇÃO ====================
         window.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
-            const temParametros = urlParams.has('ref') || urlParams.has('referencia') || urlParams.has('nome') || urlParams.has('tel');
-            
-            if (temParametros) {
+           const temParametroCriptografado = urlParams.has('data');
+const temParametrosAntigos = urlParams.has('ref') || urlParams.has('referencia') || urlParams.has('nome') || urlParams.has('tel');
+
+if (temParametroCriptografado || temParametrosAntigos) {
                 document.getElementById('mainContainer').style.display = 'block';
                 carregarParametrosURL();
             } else {
@@ -856,64 +866,90 @@ body {
             });
         });
 
-        function validarSenha() {
-            const senhaDigitada = document.getElementById('senhaAdmin').value;
-            const senhaErro = document.getElementById('senhaErro');
-            
-            if (senhaDigitada === SENHA_ADMIN) {
-                document.getElementById('senhaModal').style.display = 'none';
-                document.getElementById('mainContainer').style.display = 'block';
-                senhaErro.textContent = '';
-            } else {
-                senhaErro.textContent = '❌ Senha incorreta! Tente novamente.';
-                document.getElementById('senhaAdmin').value = '';
-                document.getElementById('senhaAdmin').focus();
-                
-                const modal = document.querySelector('#senhaModal .modal-content');
-                modal.style.animation = 'shake 0.5s';
-                setTimeout(() => modal.style.animation = '', 500);
-            }
-        }
+        async function validarSenha() {
+    const senhaDigitada = document.getElementById('senhaAdmin').value;
+    const senhaErro = document.getElementById('senhaErro');
+    
+    // Gerar hash da senha digitada
+    const hashDigitado = await gerarHashSHA256(senhaDigitada);
+    
+    if (hashDigitado === SENHA_HASH) {
+        document.getElementById('senhaModal').style.display = 'none';
+        document.getElementById('mainContainer').style.display = 'block';
+        senhaErro.textContent = '';
+    } else {
+        senhaErro.textContent = '❌ Senha incorreta! Tente novamente.';
+        document.getElementById('senhaAdmin').value = '';
+        document.getElementById('senhaAdmin').focus();
+        
+        const modal = document.querySelector('#senhaModal .modal-content');
+        modal.style.animation = 'shake 0.5s';
+        setTimeout(() => modal.style.animation = '', 500);
+    }
+}
 
         function carregarParametrosURL() {
-            const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(window.location.search);
+    
+    let referencia, nome, telefone, email;
+    
+    // Tentar carregar do parâmetro criptografado primeiro
+    const dadosCriptografados = urlParams.get('data');
+    
+    if (dadosCriptografados) {
+        try {
+            // Decodificar Base64
+            const dadosDecodificados = atob(dadosCriptografados);
+            const partes = dadosDecodificados.split('|');
             
-            const referencia = urlParams.get('ref') || urlParams.get('referencia');
-            const nome = urlParams.get('nome') || urlParams.get('name');
-            const telefone = urlParams.get('tel') || urlParams.get('telefone') || urlParams.get('phone');
-            const email = urlParams.get('email') || urlParams.get('mail');
-            
-            if (referencia || nome || telefone) {
-                const btnGerarLink = document.querySelector('.btn-link');
-                const linkResult = document.getElementById('linkResult');
-                if (btnGerarLink) btnGerarLink.style.display = 'none';
-                if (linkResult) linkResult.style.display = 'none';
-            }
-            
-            if (referencia) {
-                document.getElementById('referencia').value = referencia;
-                document.getElementById('referencia').readOnly = true;
-                document.getElementById('referencia').style.backgroundColor = '#f0f0f0';
-            }
-            
-            if (nome) {
-                document.getElementById('nome').value = decodeURIComponent(nome);
-                document.getElementById('nome').readOnly = true;
-                document.getElementById('nome').style.backgroundColor = '#f0f0f0';
-            }
-            
-            if (telefone) {
-                document.getElementById('telefone').value = telefone;
-                document.getElementById('telefone').readOnly = true;
-                document.getElementById('telefone').style.backgroundColor = '#f0f0f0';
-            }
-            
-            if (email) {
-                document.getElementById('email').value = decodeURIComponent(email);
-                document.getElementById('email').readOnly = true;
-                document.getElementById('email').style.backgroundColor = '#f0f0f0';
-            }
+            referencia = partes[0] || '';
+            nome = partes[1] || '';
+            telefone = partes[2] || '';
+            email = partes[3] || '';
+        } catch (error) {
+            console.error('Erro ao decodificar link:', error);
+            alert('⚠️ Link inválido ou corrompido!');
+            return;
         }
+    } else {
+        // Fallback para parâmetros antigos (compatibilidade)
+        referencia = urlParams.get('ref') || urlParams.get('referencia');
+        nome = urlParams.get('nome') || urlParams.get('name');
+        telefone = urlParams.get('tel') || urlParams.get('telefone') || urlParams.get('phone');
+        email = urlParams.get('email') || urlParams.get('mail');
+    }
+    
+    if (referencia || nome || telefone) {
+        const btnGerarLink = document.querySelector('.btn-link');
+        const linkResult = document.getElementById('linkResult');
+        if (btnGerarLink) btnGerarLink.style.display = 'none';
+        if (linkResult) linkResult.style.display = 'none';
+    }
+    
+    if (referencia) {
+        document.getElementById('referencia').value = referencia;
+        document.getElementById('referencia').readOnly = true;
+        document.getElementById('referencia').style.backgroundColor = '#f0f0f0';
+    }
+    
+    if (nome) {
+        document.getElementById('nome').value = nome;
+        document.getElementById('nome').readOnly = true;
+        document.getElementById('nome').style.backgroundColor = '#f0f0f0';
+    }
+    
+    if (telefone) {
+        document.getElementById('telefone').value = telefone;
+        document.getElementById('telefone').readOnly = true;
+        document.getElementById('telefone').style.backgroundColor = '#f0f0f0';
+    }
+    
+    if (email) {
+        document.getElementById('email').value = email;
+        document.getElementById('email').readOnly = true;
+        document.getElementById('email').style.backgroundColor = '#f0f0f0';
+    }
+}
 
         // ==================== NAVEGAÇÃO ====================
         function openTab(evt, tabName) {
@@ -949,28 +985,30 @@ body {
         }
 
         // ==================== LINK ====================
-        function gerarLink() {
-            const referencia = document.getElementById('referencia').value.trim();
-            const nome = document.getElementById('nome').value.trim();
-            const telefone = document.getElementById('telefone').value.trim();
+       function gerarLink() {
+    const referencia = document.getElementById('referencia').value.trim();
+    const nome = document.getElementById('nome').value.trim();
+    const telefone = document.getElementById('telefone').value.trim();
+    const email = document.getElementById('email').value.trim();
 
-            if (!referencia || !nome || !telefone) {
-                alert('⚠️ Preencha Referência, Nome e Telefone para gerar o link!');
-                return;
-            }
+    if (!referencia || !nome || !telefone) {
+        alert('⚠️ Preencha Referência, Nome e Telefone para gerar o link!');
+        return;
+    }
 
-            const urlAtual = window.location.href.split('?')[0];
-            const params = new URLSearchParams({
-                ref: referencia,
-                nome: nome,
-                tel: telefone.replace(/\D/g, '')
-            });
-
-            const linkCompleto = `${urlAtual}?${params.toString()}`;
-            document.getElementById('generatedLink').textContent = linkCompleto;
-            document.getElementById('linkResult').classList.add('show');
-            document.getElementById('linkResult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
+    // Criar string com dados separados por pipe |
+    const dadosParaCriptografar = `${referencia}|${nome}|${telefone.replace(/\D/g, '')}|${email}`;
+    
+    // Codificar em Base64
+    const dadosCriptografados = btoa(dadosParaCriptografar);
+    
+    const urlAtual = window.location.href.split('?')[0];
+    const linkCompleto = `${urlAtual}?data=${dadosCriptografados}`;
+    
+    document.getElementById('generatedLink').textContent = linkCompleto;
+    document.getElementById('linkResult').classList.add('show');
+    document.getElementById('linkResult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
 
         function copiarLinkGerado() {
             const link = document.getElementById('generatedLink').textContent;
