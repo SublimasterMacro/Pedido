@@ -1078,14 +1078,10 @@ function validarSenha() {
             itens.push(item);
             renderizarItens();
             limparFormularioNovo();
-            atualizarContador();
-            document.getElementById('novoTipo').focus();
+            atualizarContador();            
         }
 
-        function limparFormularioNovo() {
-    // NÃO limpa mais o tipo - mantém o último selecionado
-    // document.getElementById('novoTipo').value = '';
-    
+        function limparFormularioNovo() {    
     document.getElementById('novoNome').value = '';
     document.getElementById('novoNumero').value = '';
     document.getElementById('novoAdicional').value = '';
