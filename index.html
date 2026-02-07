@@ -137,13 +137,38 @@
             gap: 15px;
         }
 
-        .accordion-item {
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            margin-bottom: 12px;
-            overflow: hidden;
-            transition: all 0.3s;
-        }
+        .accordion-header {
+    background: #f8f9fa;
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    color: #333;
+    user-select: none;
+    font-size: 13px;
+    line-height: 1.3;
+}
+        .item-review {
+    margin-bottom: 8px;
+    border-left: 3px solid #667eea;
+    padding-left: 12px;
+}
+
+.item-header {
+    font-size: 14px;
+    font-weight: 600;
+    color: #667eea;
+    margin-bottom: 3px;
+    line-height: 1.3;
+}
+
+.item-details {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.3;
+}
 
         .accordion-item:hover {
             border-color: #667eea;
@@ -1075,26 +1100,29 @@ function renderizarItens() {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'accordion-item' + (item.enviado ? ' enviado' : '');
         
-        const displayNome = item.nome || '(sem nome)';
-        const displayNumero = item.numero ? ` - Nº ${item.numero}` : '';
-        const displayAdicional = item.adicional ? ` - ${item.adicional}` : '';
+        // Extrair apenas o nome do tipo (sem o número)
+        const tipoLimpo = item.tipo.replace(/^\d+\s*-\s*/, '');
         
-        // Montar tamanhos: só mostra barra se tiver os dois
+        const displayNome = item.nome || '(sem nome)';
+        const displayNumero = item.numero ? ` | Nº ${item.numero}` : '';
+        const displayAdicional = item.adicional ? ` | ${item.adicional}` : '';
+        
+        // Montar tamanhos
         let displayTamanhos = '';
         if (item.tamCamiseta && item.tamCalcao) {
-            displayTamanhos = ` - ${item.tamCamiseta}/${item.tamCalcao}`;
+            displayTamanhos = ` | ${item.tamCamiseta}/${item.tamCalcao}`;
         } else if (item.tamCamiseta) {
-            displayTamanhos = ` - Cam: ${item.tamCamiseta}`;
+            displayTamanhos = ` | Cam: ${item.tamCamiseta}`;
         } else if (item.tamCalcao) {
-            displayTamanhos = ` - Cal: ${item.tamCalcao}`;
+            displayTamanhos = ` | Cal: ${item.tamCalcao}`;
         }
         
-        const displayQuantidade = item.quantidade ? ` - Qtd: ${item.quantidade}` : '';
+        const displayQuantidade = item.quantidade ? ` | Qtd: ${item.quantidade}` : '';
         const badgeEnviado = item.enviado ? '<span class="badge-enviado">✓ ENVIADO</span>' : '';
         
         itemDiv.innerHTML = `
             <div class="accordion-header" onclick="toggleAccordion(this)">
-                <div><strong>Item #${index + 1}:</strong> ${item.tipo} - ${displayNome}${displayNumero}${displayAdicional}${displayTamanhos}${displayQuantidade} ${badgeEnviado}</div>
+                <div><strong>${index + 1}:</strong> ${tipoLimpo} → ${displayNome}${displayNumero}${displayAdicional}${displayTamanhos}${displayQuantidade} ${badgeEnviado}</div>
                 <span class="accordion-icon">▼</span>
             </div>
             <div class="accordion-content">
@@ -1194,28 +1222,32 @@ function renderizarItens() {
 // ==================== Função atualizarHeaderItem() ====================
 function atualizarHeaderItem(index) {
     const item = itens[index];
-    const displayNome = item.nome || '(sem nome)';
-    const displayNumero = item.numero ? ` - Nº ${item.numero}` : '';
-    const displayAdicional = item.adicional ? ` - ${item.adicional}` : '';
     
-    // Montar tamanhos: só mostra barra se tiver os dois
+    // Extrair apenas o nome do tipo (sem o número)
+    const tipoLimpo = item.tipo.replace(/^\d+\s*-\s*/, '');
+    
+    const displayNome = item.nome || '(sem nome)';
+    const displayNumero = item.numero ? ` | Nº ${item.numero}` : '';
+    const displayAdicional = item.adicional ? ` | ${item.adicional}` : '';
+    
+    // Montar tamanhos
     let displayTamanhos = '';
     if (item.tamCamiseta && item.tamCalcao) {
-        displayTamanhos = ` - ${item.tamCamiseta}/${item.tamCalcao}`;
+        displayTamanhos = ` | ${item.tamCamiseta}/${item.tamCalcao}`;
     } else if (item.tamCamiseta) {
-        displayTamanhos = ` - Cam: ${item.tamCamiseta}`;
+        displayTamanhos = ` | Cam: ${item.tamCamiseta}`;
     } else if (item.tamCalcao) {
-        displayTamanhos = ` - Cal: ${item.tamCalcao}`;
+        displayTamanhos = ` | Cal: ${item.tamCalcao}`;
     }
     
-    const displayQuantidade = item.quantidade ? ` - Qtd: ${item.quantidade}` : '';
+    const displayQuantidade = item.quantidade ? ` | Qtd: ${item.quantidade}` : '';
     const badgeEnviado = item.enviado ? '<span class="badge-enviado">✓ ENVIADO</span>' : '';
     
     const accordionItems = document.querySelectorAll('.accordion-item');
     if (accordionItems[index]) {
         const header = accordionItems[index].querySelector('.accordion-header > div');
         if (header) {
-            header.innerHTML = `<strong>Item #${index + 1}:</strong> ${item.tipo} - ${displayNome}${displayNumero}${displayAdicional}${displayTamanhos}${displayQuantidade} ${badgeEnviado}`;
+            header.innerHTML = `<strong>${index + 1}:</strong> ${tipoLimpo} → ${displayNome}${displayNumero}${displayAdicional}${displayTamanhos}${displayQuantidade} ${badgeEnviado}`;
         }
     }
 }
@@ -1269,8 +1301,12 @@ function atualizarRevisao() {
     } else {
         itens.forEach((item, index) => {
             const li = document.createElement('li');
+            li.className = 'item-review';
             
-            // Montar tamanhos: só mostra barra se tiver os dois
+            // Extrair apenas o nome do tipo (sem o número)
+            const tipoLimpo = item.tipo.replace(/^\d+\s*-\s*/, '');
+            
+            // Montar tamanhos
             let tamanhos = '';
             if (item.tamCamiseta && item.tamCalcao) {
                 tamanhos = `${item.tamCamiseta}/${item.tamCalcao}`;
@@ -1282,7 +1318,12 @@ function atualizarRevisao() {
                 tamanhos = '-';
             }
             
-            li.innerHTML = `<strong>${index + 1}.</strong> ${item.nome || '(sem nome)'} - Nº ${item.numero || '-'} - ${tamanhos} - Qtd: ${item.quantidade || '1'} - (${item.tipo})`;
+            const adicional = item.adicional ? ` | ${item.adicional}` : '';
+            
+            li.innerHTML = `
+                <div class="item-header">Item ${index + 1} → ${tipoLimpo}</div>
+                <div class="item-details">👤 ${item.nome || '(sem nome)'} | Nº ${item.numero || '-'} | ${tamanhos} | Qtd: ${item.quantidade || '1'}${adicional}</div>
+            `;
             lista.appendChild(li);
         });
     }
