@@ -1391,7 +1391,7 @@ body {
 </div>
 
 <script>
-const scriptURL = 'https://script.google.com/macros/s/AKfycbw9G0RNVtbAtVwvhnWGrcTQBOqvmJekC7FQdU6oi3JrNJ7bvX5a_lc05XHffHfv_mXVww/exec';    
+const scriptURL = 'https://script.google.com/macros/s/AKfycbwnjScm9c2iHeLjIpqh3NBJEjLnbPNyG9lb2qCvcUjIOh0GJ0lGLbPmKQj4tlvy0R8k/exec';
 const SENHA_OFUSCADA = 'MjAyNjA2';
 
 let itens = [];
@@ -2066,27 +2066,25 @@ function atualizarRevisao() {
         });
 
         window.onclick = function(event) {
-    const successModal = document.getElementById('successModal');
-    const deleteModal = document.getElementById('deleteModal');
-    const duplicataModal = document.getElementById('duplicataModal');
-    
-    if (event.target == successModal) successModal.style.display = 'none';
-    if (event.target == deleteModal) {
-        deleteModal.style.display = 'none';
-        itemParaDeletar = null;
-    }
-    if (event.target == duplicataModal) {
-        duplicataModal.style.display = 'none';
-        itemDuplicadoParaAdicionar = null;
-    }
-}
-
-// ==================== HISTÓRICO ====================
+            const successModal = document.getElementById('successModal');
+            const deleteModal = document.getElementById('deleteModal');
+            const duplicataModal = document.getElementById('duplicataModal');
+            
+            if (event.target == successModal) successModal.style.display = 'none';
+            if (event.target == deleteModal) {
+                deleteModal.style.display = 'none';
+                itemParaDeletar = null;
+            }
+            if (event.target == duplicataModal) {
+                duplicataModal.style.display = 'none';
+                itemDuplicadoParaAdicionar = null;
+            }
+        }
 // Cache local para evitar múltiplas chamadas
-let cachePedidosHistorico = null;  
+let cachePedidosHistorico = null;
 
 // ==================== ABRIR HISTÓRICO ====================
-async function abrirHistorico() {
+function abrirHistorico() {
     const modal = document.getElementById('modalHistorico');
     modal.style.display = 'block';
     voltarLista();
@@ -2102,43 +2100,59 @@ async function abrirHistorico() {
     document.getElementById('cardsContainer').innerHTML = '';
     document.getElementById('emptyState').style.display = 'none';
     
-    try {
-        console.log('📡 Buscando histórico...');
+    // ✅ USAR JSONP PARA CONTORNAR CORS
+    const callbackName = 'jsonpCallback_' + Date.now();
+    const timeoutId = setTimeout(function() {
+        console.error('❌ Timeout ao carregar histórico');
+        document.getElementById('loadingLista').style.display = 'none';
+        alert('❌ Timeout: Não foi possível carregar o histórico.\n\nVerifique:\n1. URL do script está correta\n2. Script está publicado como Web App\n3. Permissões configuradas corretamente');
         
-        // ✅ USAR FETCH MODERNO - SEM JSONP!
-        const url = scriptURL + '?action=buscarPedidos&t=' + Date.now();
-        console.log('URL:', url);
-        
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error('HTTP ' + response.status + ': ' + response.statusText);
-        }
-        
-        const pedidos = await response.json();
-        
-        console.log('✅ Pedidos recebidos:', pedidos);
+        // Limpar
+        delete window[callbackName];
+        const script = document.getElementById(callbackName);
+        if (script) script.remove();
+    }, 15000); // 15 segundos de timeout
+    
+    window[callbackName] = function(pedidos) {
+        clearTimeout(timeoutId);
+        console.log('✅ Pedidos recebidos via JSONP:', pedidos);
         
         // Verificar se é um array válido
         if (!Array.isArray(pedidos)) {
             console.error('❌ Resposta inválida:', pedidos);
-            throw new Error('Resposta não é um array');
+            document.getElementById('loadingLista').style.display = 'none';
+            alert('❌ Erro: Resposta inválida do servidor');
+            return;
         }
         
         cachePedidosHistorico = pedidos;
         preencherListaPedidos(pedidos);
         
-    } catch (error) {
-        console.error('❌ Erro ao carregar histórico:', error);
-        document.getElementById('loadingLista').style.display = 'none';
+        // Limpar callback global
+        delete window[callbackName];
         
-        alert('❌ Erro ao carregar histórico:\n\n' + error.message + '\n\nVerifique:\n1. URL do script está correta\n2. Script publicado como Web App\n3. Permissões: "Anyone" com acesso');
-    }
+        // Remover script tag
+        const script = document.getElementById(callbackName);
+        if (script) script.remove();
+    };
+    
+    // Criar script tag para JSONP
+    const script = document.createElement('script');
+    script.id = callbackName;
+    script.src = scriptURL + '?action=buscarPedidos&callback=' + callbackName + '&t=' + Date.now();
+    script.onerror = function() {
+        clearTimeout(timeoutId);
+        document.getElementById('loadingLista').style.display = 'none';
+        console.error('❌ Erro ao carregar script JSONP');
+        alert('❌ Erro ao carregar histórico.\n\nVerifique:\n1. URL do Google Apps Script\n2. Deploy como Web App\n3. Console do navegador (F12) para mais detalhes');
+        
+        delete window[callbackName];
+        const scriptEl = document.getElementById(callbackName);
+        if (scriptEl) scriptEl.remove();
+    };
+    
+    console.log('📡 Carregando histórico via:', script.src);
+    document.body.appendChild(script);
 }
     
 // ==================== FECHAR HISTÓRICO ====================
@@ -2238,7 +2252,7 @@ function buscarPedidosLocal() {
 }
 
 // ==================== VER DETALHES DO PEDIDO ====================
-async function verDetalhes(referencia) {
+function verDetalhes(referencia) {
     // Trocar para view de detalhes
     document.getElementById('viewLista').style.display = 'none';
     document.getElementById('viewDetalhes').style.display = 'block';
@@ -2249,35 +2263,33 @@ async function verDetalhes(referencia) {
     document.getElementById('loadingDetalhes').style.display = 'block';
     document.getElementById('detalhesContent').style.display = 'none';
     
-    try {
-        console.log('📡 Buscando detalhes de:', referencia);
-        
-        // ✅ USAR FETCH MODERNO
-        const url = scriptURL + '?action=buscarDetalhes&referencia=' + encodeURIComponent(referencia) + '&t=' + Date.now();
-        
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error('HTTP ' + response.status);
-        }
-        
-        const dados = await response.json();
-        
-        console.log('✅ Detalhes recebidos:', dados);
+    // ✅ USAR JSONP
+    const callbackName = 'jsonpDetalhes_' + Date.now();
+    
+    window[callbackName] = function(dados) {
+        console.log('✅ Detalhes recebidos via JSONP:', dados);
         
         preencherDetalhesPedido(dados);
         
-    } catch (error) {
-        console.error('❌ Erro ao carregar detalhes:', error);
+        // Limpar
+        delete window[callbackName];
+        const script = document.getElementById(callbackName);
+        if (script) script.remove();
+    };
+    
+    const script = document.createElement('script');
+    script.id = callbackName;
+    script.src = scriptURL + '?action=buscarDetalhes&referencia=' + encodeURIComponent(referencia) + '&callback=' + callbackName;
+    script.onerror = function() {
         document.getElementById('loadingDetalhes').style.display = 'none';
-        alert('❌ Erro ao carregar detalhes:\n\n' + error.message);
+        console.error('❌ Erro ao carregar detalhes');
+        alert('❌ Erro ao carregar detalhes: ' + referencia);
         voltarLista();
-    }
+        
+        delete window[callbackName];
+    };
+    
+    document.body.appendChild(script);
 }
     
 // ==================== PREENCHER DETALHES DO PEDIDO ====================
