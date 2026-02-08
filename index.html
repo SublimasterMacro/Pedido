@@ -2100,38 +2100,36 @@ function abrirHistorico() {
     document.getElementById('cardsContainer').innerHTML = '';
     document.getElementById('emptyState').style.display = 'none';
     
-    // ✅ FETCH CORRETO PARA GOOGLE APPS SCRIPT
-    fetch(scriptURL + '?action=buscarPedidos', {
-        method: 'GET',
-        redirect: 'follow'  // ✅ CRÍTICO para Apps Script
-    })
-    .then(response => {
-        console.log('Response status:', response.status);
-        console.log('Response headers:', response.headers);
+    // ✅ USAR JSONP PARA CONTORNAR CORS
+    const callbackName = 'jsonpCallback_' + Date.now();
+    
+    window[callbackName] = function(pedidos) {
+        console.log('✅ Pedidos recebidos via JSONP:', pedidos);
         
-        if (!response.ok) {
-            throw new Error('HTTP error! status: ' + response.status);
-        }
+        cachePedidosHistorico = pedidos;
+        preencherListaPedidos(pedidos);
         
-        return response.text(); // ✅ Ler como texto primeiro
-    })
-    .then(text => {
-        console.log('Response text:', text);
+        // Limpar callback global
+        delete window[callbackName];
         
-        try {
-            const pedidos = JSON.parse(text);
-            cachePedidosHistorico = pedidos;
-            preencherListaPedidos(pedidos);
-        } catch (e) {
-            console.error('Erro ao parsear JSON:', e);
-            throw new Error('Resposta não é JSON válido');
-        }
-    })
-    .catch(erro => {
+        // Remover script tag
+        const script = document.getElementById(callbackName);
+        if (script) script.remove();
+    };
+    
+    // Criar script tag para JSONP
+    const script = document.createElement('script');
+    script.id = callbackName;
+    script.src = scriptURL + '?action=buscarPedidos&callback=' + callbackName;
+    script.onerror = function() {
         document.getElementById('loadingLista').style.display = 'none';
-        console.error('❌ Erro completo:', erro);
-        alert('❌ Erro ao carregar histórico: ' + erro.message + '\n\nAbra o console (F12) para mais detalhes.');
-    });
+        console.error('❌ Erro ao carregar script JSONP');
+        alert('❌ Erro ao carregar histórico. Verifique o console (F12).');
+        
+        delete window[callbackName];
+    };
+    
+    document.body.appendChild(script);
 }
     
 // ==================== FECHAR HISTÓRICO ====================
