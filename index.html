@@ -2092,21 +2092,23 @@ function abrirHistorico() {
     if (cachePedidosHistorico !== null) {
         preencherListaPedidos(cachePedidosHistorico);
     } else {
-        // Buscar do servidor
+        // Buscar do servidor via fetch
         document.getElementById('loadingLista').style.display = 'block';
         document.getElementById('cardsContainer').innerHTML = '';
         document.getElementById('emptyState').style.display = 'none';
         
-        google.script.run
-            .withSuccessHandler(function(pedidos) {
+        // USAR FETCH AO INVÉS DE google.script.run
+        fetch(scriptURL + '?action=buscarPedidos')
+            .then(response => response.json())
+            .then(pedidos => {
                 cachePedidosHistorico = pedidos;
                 preencherListaPedidos(pedidos);
             })
-            .withFailureHandler(function(erro) {
+            .catch(erro => {
                 document.getElementById('loadingLista').style.display = 'none';
-                alert('❌ Erro ao carregar histórico: ' + erro.message);
-            })
-            .buscarTodosPedidos();
+                console.error('Erro:', erro);
+                alert('❌ Erro ao carregar histórico. Verifique o console (F12).');
+            });
     }
 }
 
@@ -2198,7 +2200,8 @@ function buscarPedidosLocal() {
     // Mostrar empty state se não encontrou nada
     if (encontrados === 0 && termo !== '') {
         document.getElementById('emptyState').style.display = 'block';
-        document.getElementById('emptyState').querySelector('p').textContent = 'Nenhum pedido encontrado com "' + termo + '"';
+        const emptyP = document.getElementById('emptyState').querySelectorAll('p')[0];
+        if (emptyP) emptyP.textContent = 'Nenhum pedido encontrado com "' + termo + '"';
     } else {
         document.getElementById('emptyState').style.display = 'none';
     }
@@ -2216,17 +2219,18 @@ function verDetalhes(referencia) {
     document.getElementById('loadingDetalhes').style.display = 'block';
     document.getElementById('detalhesContent').style.display = 'none';
     
-    // Buscar detalhes do servidor
-    google.script.run
-        .withSuccessHandler(function(dados) {
+    // Buscar detalhes do servidor via fetch
+    fetch(scriptURL + '?action=buscarDetalhes&referencia=' + encodeURIComponent(referencia))
+        .then(response => response.json())
+        .then(dados => {
             preencherDetalhesPedido(dados);
         })
-        .withFailureHandler(function(erro) {
+        .catch(erro => {
             document.getElementById('loadingDetalhes').style.display = 'none';
-            alert('❌ Erro ao carregar detalhes: ' + erro.message);
+            console.error('Erro:', erro);
+            alert('❌ Erro ao carregar detalhes. Verifique o console (F12).');
             voltarLista();
-        })
-        .buscarDetalhesPedido(referencia);
+        });
 }
 
 // ==================== PREENCHER DETALHES DO PEDIDO ====================
@@ -2284,10 +2288,10 @@ function imprimirDetalhes() {
 }
 
 // ==================== FECHAR MODAL AO CLICAR FORA ====================
-// Adicionar ao window.onclick existente
+// Modificar o window.onclick existente para incluir modal histórico
 var windowOnClickOriginal = window.onclick;
 window.onclick = function(event) {
-    // Chamar função original
+    // Chamar função original se existir
     if (windowOnClickOriginal) {
         windowOnClickOriginal(event);
     }
@@ -2297,7 +2301,7 @@ window.onclick = function(event) {
     if (event.target === modalHistorico) {
         fecharHistorico();
     }
-}    
+}
     </script>
 </body>
 </html>
