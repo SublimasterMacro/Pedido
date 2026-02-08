@@ -2240,31 +2240,35 @@ function verDetalhes(referencia) {
     document.getElementById('loadingDetalhes').style.display = 'block';
     document.getElementById('detalhesContent').style.display = 'none';
     
-    // ✅ FETCH CORRETO
-    fetch(scriptURL + '?action=buscarDetalhes&referencia=' + encodeURIComponent(referencia), {
-        method: 'GET',
-        redirect: 'follow'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('HTTP error! status: ' + response.status);
-        }
-        return response.text();
-    })
-    .then(text => {
-        console.log('Detalhes recebidos:', text);
+    // ✅ USAR JSONP
+    const callbackName = 'jsonpDetalhes_' + Date.now();
+    
+    window[callbackName] = function(dados) {
+        console.log('✅ Detalhes recebidos via JSONP:', dados);
         
-        const dados = JSON.parse(text);
         preencherDetalhesPedido(dados);
-    })
-    .catch(erro => {
+        
+        // Limpar
+        delete window[callbackName];
+        const script = document.getElementById(callbackName);
+        if (script) script.remove();
+    };
+    
+    const script = document.createElement('script');
+    script.id = callbackName;
+    script.src = scriptURL + '?action=buscarDetalhes&referencia=' + encodeURIComponent(referencia) + '&callback=' + callbackName;
+    script.onerror = function() {
         document.getElementById('loadingDetalhes').style.display = 'none';
-        console.error('❌ Erro:', erro);
-        alert('❌ Erro ao carregar detalhes: ' + erro.message);
+        console.error('❌ Erro ao carregar detalhes');
+        alert('❌ Erro ao carregar detalhes: ' + referencia);
         voltarLista();
-    });
+        
+        delete window[callbackName];
+    };
+    
+    document.body.appendChild(script);
 }
-
+    
 // ==================== PREENCHER DETALHES DO PEDIDO ====================
 function preencherDetalhesPedido(dados) {
     document.getElementById('loadingDetalhes').style.display = 'none';
