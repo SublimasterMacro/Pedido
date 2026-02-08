@@ -2192,34 +2192,33 @@ function preencherListaPedidos(pedidos) {
         card.dataset.nome = pedido.nome;
         card.dataset.telefone = pedido.telefone;
         
-        card.innerHTML = `
-            <div class="pedido-header">
-                <div class="pedido-ref">${pedido.referencia}</div>
-                <div class="pedido-data">${pedido.data}</div>
-            </div>
-            <div class="pedido-info">
-                <div class="pedido-info-item">
-                    <span class="pedido-info-label">Cliente:</span>
-                    <span>${pedido.nome}</span>
-                </div>
-                <div class="pedido-info-item">
-                    <span class="pedido-info-label">Telefone:</span>
-                    <span>${pedido.telefone}</span>
-                </div>
-                <div class="pedido-info-item">
-                    <span class="pedido-info-label">E-mail:</span>
-                    <span>${pedido.email || '-'}</span>
-                </div>
-                <div class="pedido-info-item">
-                    <span class="pedido-info-label">Itens:</span>
-                    <span>${pedido.totalItens} unidades</span>
-                </div>
-            </div>
-            <div class="pedido-actions">
-                <button class="btn-action btn-ver" onclick="verDetalhes('${pedido.referencia}')">👁️ Ver Detalhes</button>
-                <button class="btn-action btn-imprimir" onclick="imprimirPedidoHistorico('${pedido.referencia}')">🖨️ Reimprimir</button>
-            </div>
-        `;
+       card.innerHTML = `
+    <div class="pedido-header">
+        <div class="pedido-ref">${pedido.referencia}</div>
+        <div class="pedido-data">${pedido.data}</div>
+    </div>
+    <div class="pedido-info">
+        <div class="pedido-info-item">
+            <span class="pedido-info-label">Cliente:</span>
+            <span>${pedido.nome}</span>
+        </div>
+        <div class="pedido-info-item">
+            <span class="pedido-info-label">Telefone:</span>
+            <span>${pedido.telefone}</span>
+        </div>
+        <div class="pedido-info-item">
+            <span class="pedido-info-label">E-mail:</span>
+            <span>${pedido.email || '-'}</span>
+        </div>
+        <div class="pedido-info-item">
+            <span class="pedido-info-label">Itens:</span>
+            <span>${pedido.totalItens} unidades</span>
+        </div>
+    </div>
+    <div class="pedido-actions">
+        <button class="btn-action btn-ver" onclick="verDetalhes('${pedido.referencia.replace(/'/g, "\\'")}')">👁️ Ver Detalhes</button>
+    </div>
+`;
         
         container.appendChild(card);
     });
@@ -2253,6 +2252,13 @@ function buscarPedidosLocal() {
 
 // ==================== VER DETALHES DO PEDIDO ====================
 function verDetalhes(referencia) {
+    console.log('🔍 Abrindo detalhes de:', referencia);
+    
+    if (!referencia) {
+        alert('❌ Erro: Referência inválida!');
+        return;
+    }
+    
     // Trocar para view de detalhes
     document.getElementById('viewLista').style.display = 'none';
     document.getElementById('viewDetalhes').style.display = 'block';
@@ -2263,13 +2269,31 @@ function verDetalhes(referencia) {
     document.getElementById('loadingDetalhes').style.display = 'block';
     document.getElementById('detalhesContent').style.display = 'none';
     
-    // ✅ USAR JSONP
+    // ✅ USAR JSONP COM TIMEOUT
     const callbackName = 'jsonpDetalhes_' + Date.now();
+    const timeoutDuration = 10000; // 10 segundos
+    
+    const timeoutId = setTimeout(function() {
+        console.error('❌ Timeout ao buscar detalhes');
+        document.getElementById('loadingDetalhes').style.display = 'none';
+        alert('❌ Timeout: Não foi possível carregar os detalhes.\n\nTente novamente.');
+        voltarLista();
+        
+        delete window[callbackName];
+        const script = document.getElementById(callbackName);
+        if (script) script.remove();
+    }, timeoutDuration);
     
     window[callbackName] = function(dados) {
+        clearTimeout(timeoutId);
         console.log('✅ Detalhes recebidos via JSONP:', dados);
         
-        preencherDetalhesPedido(dados);
+        if (dados && dados.referencia) {
+            preencherDetalhesPedido(dados);
+        } else {
+            alert('❌ Erro: Dados inválidos recebidos do servidor');
+            voltarLista();
+        }
         
         // Limpar
         delete window[callbackName];
@@ -2279,16 +2303,23 @@ function verDetalhes(referencia) {
     
     const script = document.createElement('script');
     script.id = callbackName;
-    script.src = scriptURL + '?action=buscarDetalhes&referencia=' + encodeURIComponent(referencia) + '&callback=' + callbackName;
+    // ✅ IMPORTANTE: Escapar a referência para URL
+    script.src = scriptURL + '?action=buscarDetalhes&referencia=' + 
+                 encodeURIComponent(referencia) + 
+                 '&callback=' + callbackName + 
+                 '&t=' + Date.now();
+    
     script.onerror = function() {
+        clearTimeout(timeoutId);
         document.getElementById('loadingDetalhes').style.display = 'none';
-        console.error('❌ Erro ao carregar detalhes');
-        alert('❌ Erro ao carregar detalhes: ' + referencia);
+        console.error('❌ Erro ao carregar script JSONP');
+        alert('❌ Erro ao carregar detalhes da referência: ' + referencia);
         voltarLista();
         
         delete window[callbackName];
     };
     
+    console.log('📡 Carregando detalhes via:', script.src);
     document.body.appendChild(script);
 }
     
