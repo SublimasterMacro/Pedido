@@ -2085,39 +2085,62 @@ let cachePedidosHistorico = null;
 
 // ==================== ABRIR HISTÓRICO ====================
 function abrirHistorico() {
-    document.getElementById('modalHistorico').classList.add('show');
+    const modal = document.getElementById('modalHistorico');
+    modal.style.display = 'block';
     voltarLista();
     
     // Se já tem cache, usar
     if (cachePedidosHistorico !== null) {
         preencherListaPedidos(cachePedidosHistorico);
-    } else {
-        // Buscar do servidor via fetch
-        document.getElementById('loadingLista').style.display = 'block';
-        document.getElementById('cardsContainer').innerHTML = '';
-        document.getElementById('emptyState').style.display = 'none';
-        
-        // USAR FETCH AO INVÉS DE google.script.run
-        fetch(scriptURL + '?action=buscarPedidos')
-            .then(response => response.json())
-            .then(pedidos => {
-                cachePedidosHistorico = pedidos;
-                preencherListaPedidos(pedidos);
-            })
-            .catch(erro => {
-                document.getElementById('loadingLista').style.display = 'none';
-                console.error('Erro:', erro);
-                alert('❌ Erro ao carregar histórico. Verifique o console (F12).');
-            });
+        return;
     }
+    
+    // Mostrar loading
+    document.getElementById('loadingLista').style.display = 'block';
+    document.getElementById('cardsContainer').innerHTML = '';
+    document.getElementById('emptyState').style.display = 'none';
+    
+    // ✅ FETCH CORRETO PARA GOOGLE APPS SCRIPT
+    fetch(scriptURL + '?action=buscarPedidos', {
+        method: 'GET',
+        redirect: 'follow'  // ✅ CRÍTICO para Apps Script
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+        
+        if (!response.ok) {
+            throw new Error('HTTP error! status: ' + response.status);
+        }
+        
+        return response.text(); // ✅ Ler como texto primeiro
+    })
+    .then(text => {
+        console.log('Response text:', text);
+        
+        try {
+            const pedidos = JSON.parse(text);
+            cachePedidosHistorico = pedidos;
+            preencherListaPedidos(pedidos);
+        } catch (e) {
+            console.error('Erro ao parsear JSON:', e);
+            throw new Error('Resposta não é JSON válido');
+        }
+    })
+    .catch(erro => {
+        document.getElementById('loadingLista').style.display = 'none';
+        console.error('❌ Erro completo:', erro);
+        alert('❌ Erro ao carregar histórico: ' + erro.message + '\n\nAbra o console (F12) para mais detalhes.');
+    });
 }
-
+    
 // ==================== FECHAR HISTÓRICO ====================
 function fecharHistorico() {
-    document.getElementById('modalHistorico').classList.remove('show');
+    const modal = document.getElementById('modalHistorico');
+    modal.style.display = 'none'; // ✅ Usar .style.display ao invés de .classList
     voltarLista();
 }
-
+    
 // ==================== VOLTAR PARA LISTA ====================
 function voltarLista() {
     document.getElementById('viewLista').style.display = 'block';
@@ -2219,18 +2242,29 @@ function verDetalhes(referencia) {
     document.getElementById('loadingDetalhes').style.display = 'block';
     document.getElementById('detalhesContent').style.display = 'none';
     
-    // Buscar detalhes do servidor via fetch
-    fetch(scriptURL + '?action=buscarDetalhes&referencia=' + encodeURIComponent(referencia))
-        .then(response => response.json())
-        .then(dados => {
-            preencherDetalhesPedido(dados);
-        })
-        .catch(erro => {
-            document.getElementById('loadingDetalhes').style.display = 'none';
-            console.error('Erro:', erro);
-            alert('❌ Erro ao carregar detalhes. Verifique o console (F12).');
-            voltarLista();
-        });
+    // ✅ FETCH CORRETO
+    fetch(scriptURL + '?action=buscarDetalhes&referencia=' + encodeURIComponent(referencia), {
+        method: 'GET',
+        redirect: 'follow'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('HTTP error! status: ' + response.status);
+        }
+        return response.text();
+    })
+    .then(text => {
+        console.log('Detalhes recebidos:', text);
+        
+        const dados = JSON.parse(text);
+        preencherDetalhesPedido(dados);
+    })
+    .catch(erro => {
+        document.getElementById('loadingDetalhes').style.display = 'none';
+        console.error('❌ Erro:', erro);
+        alert('❌ Erro ao carregar detalhes: ' + erro.message);
+        voltarLista();
+    });
 }
 
 // ==================== PREENCHER DETALHES DO PEDIDO ====================
