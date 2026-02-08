@@ -2066,22 +2066,24 @@ function atualizarRevisao() {
         });
 
         window.onclick = function(event) {
-            const successModal = document.getElementById('successModal');
-            const deleteModal = document.getElementById('deleteModal');
-            const duplicataModal = document.getElementById('duplicataModal');
-            
-            if (event.target == successModal) successModal.style.display = 'none';
-            if (event.target == deleteModal) {
-                deleteModal.style.display = 'none';
-                itemParaDeletar = null;
-            }
-            if (event.target == duplicataModal) {
-                duplicataModal.style.display = 'none';
-                itemDuplicadoParaAdicionar = null;
-            }
-        }
+    const successModal = document.getElementById('successModal');
+    const deleteModal = document.getElementById('deleteModal');
+    const duplicataModal = document.getElementById('duplicataModal');
+    
+    if (event.target == successModal) successModal.style.display = 'none';
+    if (event.target == deleteModal) {
+        deleteModal.style.display = 'none';
+        itemParaDeletar = null;
+    }
+    if (event.target == duplicataModal) {
+        duplicataModal.style.display = 'none';
+        itemDuplicadoParaAdicionar = null;
+    }
+}
+
+// ==================== HISTÓRICO ====================
 // Cache local para evitar múltiplas chamadas
-let cachePedidosHistorico = null;
+let cachePedidosHistorico = null;  
 
 // ==================== ABRIR HISTÓRICO ====================
 async function abrirHistorico() {
