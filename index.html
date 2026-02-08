@@ -2102,9 +2102,28 @@ function abrirHistorico() {
     
     // ✅ USAR JSONP PARA CONTORNAR CORS
     const callbackName = 'jsonpCallback_' + Date.now();
+    const timeoutId = setTimeout(function() {
+        console.error('❌ Timeout ao carregar histórico');
+        document.getElementById('loadingLista').style.display = 'none';
+        alert('❌ Timeout: Não foi possível carregar o histórico.\n\nVerifique:\n1. URL do script está correta\n2. Script está publicado como Web App\n3. Permissões configuradas corretamente');
+        
+        // Limpar
+        delete window[callbackName];
+        const script = document.getElementById(callbackName);
+        if (script) script.remove();
+    }, 15000); // 15 segundos de timeout
     
     window[callbackName] = function(pedidos) {
+        clearTimeout(timeoutId);
         console.log('✅ Pedidos recebidos via JSONP:', pedidos);
+        
+        // Verificar se é um array válido
+        if (!Array.isArray(pedidos)) {
+            console.error('❌ Resposta inválida:', pedidos);
+            document.getElementById('loadingLista').style.display = 'none';
+            alert('❌ Erro: Resposta inválida do servidor');
+            return;
+        }
         
         cachePedidosHistorico = pedidos;
         preencherListaPedidos(pedidos);
@@ -2120,15 +2139,19 @@ function abrirHistorico() {
     // Criar script tag para JSONP
     const script = document.createElement('script');
     script.id = callbackName;
-    script.src = scriptURL + '?action=buscarPedidos&callback=' + callbackName;
+    script.src = scriptURL + '?action=buscarPedidos&callback=' + callbackName + '&t=' + Date.now();
     script.onerror = function() {
+        clearTimeout(timeoutId);
         document.getElementById('loadingLista').style.display = 'none';
         console.error('❌ Erro ao carregar script JSONP');
-        alert('❌ Erro ao carregar histórico. Verifique o console (F12).');
+        alert('❌ Erro ao carregar histórico.\n\nVerifique:\n1. URL do Google Apps Script\n2. Deploy como Web App\n3. Console do navegador (F12) para mais detalhes');
         
         delete window[callbackName];
+        const scriptEl = document.getElementById(callbackName);
+        if (scriptEl) scriptEl.remove();
     };
     
+    console.log('📡 Carregando histórico via:', script.src);
     document.body.appendChild(script);
 }
     
