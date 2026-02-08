@@ -2084,10 +2084,6 @@ function atualizarRevisao() {
 let cachePedidosHistorico = null;
 
 // ==================== ABRIR HISTÓRICO ====================
-// Cache local para evitar múltiplas chamadas
-let cachePedidosHistorico = null;
-
-// ==================== ABRIR HISTÓRICO ====================
 function abrirHistorico() {
     const modal = document.getElementById('modalHistorico');
     modal.style.display = 'block';
@@ -2104,16 +2100,30 @@ function abrirHistorico() {
     document.getElementById('cardsContainer').innerHTML = '';
     document.getElementById('emptyState').style.display = 'none';
     
-    // ✅ USAR JSONP COM TIMEOUT E RETRY
+    // ✅ USAR JSONP PARA CONTORNAR CORS
     const callbackName = 'jsonpCallback_' + Date.now();
-    let scriptCarregado = false;
-    let timeoutId;
+    const timeoutId = setTimeout(function() {
+        console.error('❌ Timeout ao carregar histórico');
+        document.getElementById('loadingLista').style.display = 'none';
+        alert('❌ Timeout: Não foi possível carregar o histórico.\n\nVerifique:\n1. URL do script está correta\n2. Script está publicado como Web App\n3. Permissões configuradas corretamente');
+        
+        // Limpar
+        delete window[callbackName];
+        const script = document.getElementById(callbackName);
+        if (script) script.remove();
+    }, 15000); // 15 segundos de timeout
     
     window[callbackName] = function(pedidos) {
-        scriptCarregado = true;
         clearTimeout(timeoutId);
-        
         console.log('✅ Pedidos recebidos via JSONP:', pedidos);
+        
+        // Verificar se é um array válido
+        if (!Array.isArray(pedidos)) {
+            console.error('❌ Resposta inválida:', pedidos);
+            document.getElementById('loadingLista').style.display = 'none';
+            alert('❌ Erro: Resposta inválida do servidor');
+            return;
+        }
         
         cachePedidosHistorico = pedidos;
         preencherListaPedidos(pedidos);
@@ -2126,45 +2136,22 @@ function abrirHistorico() {
         if (script) script.remove();
     };
     
-    // ✅ TIMEOUT DE 10 SEGUNDOS
-    timeoutId = setTimeout(function() {
-        if (!scriptCarregado) {
-            document.getElementById('loadingLista').style.display = 'none';
-            console.error('❌ Timeout ao carregar histórico (10s)');
-            alert('⏱️ Tempo esgotado ao carregar histórico.\n\nTente novamente ou verifique sua conexão.');
-            
-            delete window[callbackName];
-            const script = document.getElementById(callbackName);
-            if (script) script.remove();
-            
-            fecharHistorico();
-        }
-    }, 10000); // 10 segundos
-    
     // Criar script tag para JSONP
     const script = document.createElement('script');
     script.id = callbackName;
-    script.type = 'text/javascript';
-    script.async = true;
-    
-    // ✅ ADICIONAR CACHE BUSTER para Chrome
-    const cacheBuster = '&_=' + Date.now();
-    script.src = scriptURL + '?action=buscarPedidos&callback=' + callbackName + cacheBuster;
-    
-    script.onerror = function(e) {
+    script.src = scriptURL + '?action=buscarPedidos&callback=' + callbackName + '&t=' + Date.now();
+    script.onerror = function() {
         clearTimeout(timeoutId);
         document.getElementById('loadingLista').style.display = 'none';
-        
-        console.error('❌ Erro ao carregar script JSONP:', e);
-        console.error('URL tentada:', script.src);
-        
-        alert('❌ Erro ao carregar histórico.\n\nVerifique:\n1. Conexão com internet\n2. URL do script está correta\n3. Console do navegador (F12) para mais detalhes');
+        console.error('❌ Erro ao carregar script JSONP');
+        alert('❌ Erro ao carregar histórico.\n\nVerifique:\n1. URL do Google Apps Script\n2. Deploy como Web App\n3. Console do navegador (F12) para mais detalhes');
         
         delete window[callbackName];
-        fecharHistorico();
+        const scriptEl = document.getElementById(callbackName);
+        if (scriptEl) scriptEl.remove();
     };
     
-    console.log('📡 Carregando JSONP:', script.src);
+    console.log('📡 Carregando histórico via:', script.src);
     document.body.appendChild(script);
 }
     
@@ -2276,15 +2263,10 @@ function verDetalhes(referencia) {
     document.getElementById('loadingDetalhes').style.display = 'block';
     document.getElementById('detalhesContent').style.display = 'none';
     
-    // ✅ USAR JSONP COM TIMEOUT
+    // ✅ USAR JSONP
     const callbackName = 'jsonpDetalhes_' + Date.now();
-    let scriptCarregado = false;
-    let timeoutId;
     
     window[callbackName] = function(dados) {
-        scriptCarregado = true;
-        clearTimeout(timeoutId);
-        
         console.log('✅ Detalhes recebidos via JSONP:', dados);
         
         preencherDetalhesPedido(dados);
@@ -2295,36 +2277,18 @@ function verDetalhes(referencia) {
         if (script) script.remove();
     };
     
-    // Timeout de 10 segundos
-    timeoutId = setTimeout(function() {
-        if (!scriptCarregado) {
-            document.getElementById('loadingDetalhes').style.display = 'none';
-            console.error('❌ Timeout ao carregar detalhes');
-            alert('⏱️ Tempo esgotado ao carregar detalhes.');
-            voltarLista();
-            delete window[callbackName];
-        }
-    }, 10000);
-    
     const script = document.createElement('script');
     script.id = callbackName;
-    script.type = 'text/javascript';
-    script.async = true;
-    
-    // Cache buster para Chrome
-    const cacheBuster = '&_=' + Date.now();
-    script.src = scriptURL + '?action=buscarDetalhes&referencia=' + encodeURIComponent(referencia) + '&callback=' + callbackName + cacheBuster;
-    
+    script.src = scriptURL + '?action=buscarDetalhes&referencia=' + encodeURIComponent(referencia) + '&callback=' + callbackName;
     script.onerror = function() {
-        clearTimeout(timeoutId);
         document.getElementById('loadingDetalhes').style.display = 'none';
         console.error('❌ Erro ao carregar detalhes');
         alert('❌ Erro ao carregar detalhes: ' + referencia);
         voltarLista();
+        
         delete window[callbackName];
     };
     
-    console.log('📡 Carregando detalhes:', script.src);
     document.body.appendChild(script);
 }
     
