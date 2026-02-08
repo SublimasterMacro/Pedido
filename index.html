@@ -633,6 +633,385 @@ body {
         color: #333 !important;
     }
 }
+        .btn-historico {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 10px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-historico:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Modal Histórico */
+.modal-historico {
+    background: white;
+    margin: 3% auto;
+    padding: 0;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideDown 0.3s;
+}
+
+.modal-historico-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px 30px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-historico-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.btn-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+}
+
+.btn-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+.modal-historico-busca {
+    padding: 20px 30px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.search-box {
+    position: relative;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px 40px 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+}
+
+.modal-historico-body {
+    padding: 20px 30px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Cards de Pedidos */
+.pedido-card {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: all 0.3s;
+}
+
+.pedido-card:hover {
+    border-color: #667eea;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+}
+
+.pedido-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.pedido-ref {
+    font-size: 16px;
+    font-weight: 600;
+    color: #667eea;
+}
+
+.pedido-data {
+    font-size: 12px;
+    color: #999;
+}
+
+.pedido-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: #555;
+}
+
+.pedido-info-item {
+    display: flex;
+    gap: 5px;
+}
+
+.pedido-info-label {
+    font-weight: 600;
+}
+
+.pedido-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-action {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-ver {
+    background: #667eea;
+    color: white;
+}
+
+.btn-ver:hover {
+    background: #764ba2;
+}
+
+.btn-voltar {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-voltar:hover {
+    background: #5a6268;
+}
+
+/* Views do Modal */
+.view-lista {
+    display: block;
+}
+
+.view-detalhes {
+    display: none;
+}
+
+/* Detalhes do Pedido */
+.detalhes-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.detalhes-header h3 {
+    font-size: 1.3em;
+    margin-bottom: 8px;
+}
+
+.detalhes-header p {
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+.detalhes-section {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.detalhes-section h4 {
+    color: #667eea;
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-row.full-width {
+    grid-column: 1 / -1;
+}
+
+.info-label {
+    font-size: 12px;
+    color: #999;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.info-value {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Tabela de Itens */
+.itens-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.itens-table thead {
+    background: #667eea;
+    color: white;
+}
+
+.itens-table th {
+    padding: 12px 10px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.itens-table tbody tr {
+    border-bottom: 1px solid #e9ecef;
+}
+
+.itens-table tbody tr:hover {
+    background: #f1f3f5;
+}
+
+.itens-table td {
+    padding: 10px;
+    font-size: 13px;
+    color: #555;
+}
+
+.item-tipo {
+    font-weight: 600;
+    color: #667eea;
+}
+
+.item-tamanho {
+    display: inline-block;
+    background: #e9ecef;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.detalhes-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.empty-state-historico {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+
+.empty-state-historico-icon {
+    font-size: 4em;
+    margin-bottom: 15px;
+    opacity: 0.3;
+}
+
+.loading-historico {
+    text-align: center;
+    padding: 40px;
+    color: #667eea;
+}
+
+.loading-spinner-historico {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .modal-historico {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+
+    .modal-historico-header {
+        border-radius: 0;
+    }
+
+    .pedido-info,
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-historico {
+        position: static;
+        display: block;
+        margin-top: 15px;
+        width: 100%;
+    }
+
+    .itens-table {
+        font-size: 12px;
+    }
+
+    .itens-table th,
+    .itens-table td {
+        padding: 8px 5px;
+    }
+}
     </style>
 </head>
 <body>
@@ -654,9 +1033,13 @@ body {
 
     <div class="container" id="mainContainer" style="display: none;">
         <div class="header">
-            <h1>📋 Sublimaster | Pedido</h1>
-            <p>Crie seu pedido em 3 passos</p>
-        </div>
+    <h1>📋 Sublimaster | Pedido</h1>
+    <p>Crie seu pedido em 3 passos</p>
+    
+    <!-- ===== NOVO: Botão Histórico ===== -->
+    <button class="btn-historico" onclick="abrirHistorico()">📊 Histórico</button>
+    <!-- ================================== -->
+</div>
 
         <div class="tabs">
             <button class="tab active" onclick="openTab(event, 'dados')">
@@ -910,6 +1293,102 @@ body {
             </div>
         </div>
     </div>
+
+    <div id="modalHistorico" class="modal">
+    <div class="modal-historico">
+        <div class="modal-historico-header">
+            <h2 id="modalTitulo">📊 Histórico de Pedidos</h2>
+            <button class="btn-close" onclick="fecharHistorico()">×</button>
+        </div>
+
+        <div class="modal-historico-busca" id="buscaArea">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar por referência, cliente ou telefone..." oninput="buscarPedidosLocal()">
+                <span class="search-icon">🔍</span>
+            </div>
+        </div>
+
+        <div class="modal-historico-body" id="listaPedidos">
+            <!-- VIEW LISTA -->
+            <div id="viewLista" class="view-lista">
+                <!-- Loading inicial -->
+                <div class="loading-historico" id="loadingLista">
+                    <div class="loading-spinner-historico"></div>
+                    <p>Carregando pedidos...</p>
+                </div>
+
+                <!-- Container dos cards (preenchido dinamicamente) -->
+                <div id="cardsContainer"></div>
+
+                <!-- Estado vazio (quando não há pedidos) -->
+                <div class="empty-state-historico" id="emptyState" style="display: none;">
+                    <div class="empty-state-historico-icon">📋</div>
+                    <p style="font-size: 16px; font-weight: 600; margin-bottom: 5px;">Nenhum pedido encontrado</p>
+                    <p style="font-size: 14px;">Tente buscar com outros termos ou crie seu primeiro pedido</p>
+                </div>
+            </div>
+
+            <!-- VIEW DETALHES -->
+            <div id="viewDetalhes" class="view-detalhes">
+                <!-- Loading detalhes -->
+                <div class="loading-historico" id="loadingDetalhes">
+                    <div class="loading-spinner-historico"></div>
+                    <p>Carregando detalhes...</p>
+                </div>
+
+                <!-- Container dos detalhes (preenchido dinamicamente) -->
+                <div id="detalhesContent" style="display: none;">
+                    <div class="detalhes-header">
+                        <h3 id="detalhesPedidoRef">-</h3>
+                        <p id="detalhesPedidoData">-</p>
+                    </div>
+
+                    <div class="detalhes-section">
+                        <h4>👤 Informações do Cliente</h4>
+                        <div class="info-grid">
+                            <div class="info-row">
+                                <span class="info-label">Nome Completo</span>
+                                <span class="info-value" id="detalhesNome">-</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Telefone</span>
+                                <span class="info-value" id="detalhesTelefone">-</span>
+                            </div>
+                            <div class="info-row full-width">
+                                <span class="info-label">E-mail</span>
+                                <span class="info-value" id="detalhesEmail">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detalhes-section">
+                        <h4>📦 Itens do Pedido</h4>
+                        <table class="itens-table">
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Nome</th>
+                                    <th>Número</th>
+                                    <th>Tam. Camiseta</th>
+                                    <th>Tam. Calção</th>
+                                    <th style="text-align: center;">Qtd</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detalhesItensBody">
+                                <!-- Preenchido dinamicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="detalhes-actions">
+                        <button class="btn-action btn-voltar" onclick="voltarLista()">⬅️ Voltar</button>
+                        <button class="btn-action btn-imprimir" onclick="imprimirDetalhes()">🖨️ Imprimir Pedido</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
 const scriptURL = 'https://script.google.com/macros/s/AKfycbwnjScm9c2iHeLjIpqh3NBJEjLnbPNyG9lb2qCvcUjIOh0GJ0lGLbPmKQj4tlvy0R8k/exec';
@@ -1601,6 +2080,224 @@ function atualizarRevisao() {
                 itemDuplicadoParaAdicionar = null;
             }
         }
+// Cache local para evitar múltiplas chamadas
+let cachePedidosHistorico = null;
+
+// ==================== ABRIR HISTÓRICO ====================
+function abrirHistorico() {
+    document.getElementById('modalHistorico').classList.add('show');
+    voltarLista();
+    
+    // Se já tem cache, usar
+    if (cachePedidosHistorico !== null) {
+        preencherListaPedidos(cachePedidosHistorico);
+    } else {
+        // Buscar do servidor
+        document.getElementById('loadingLista').style.display = 'block';
+        document.getElementById('cardsContainer').innerHTML = '';
+        document.getElementById('emptyState').style.display = 'none';
+        
+        google.script.run
+            .withSuccessHandler(function(pedidos) {
+                cachePedidosHistorico = pedidos;
+                preencherListaPedidos(pedidos);
+            })
+            .withFailureHandler(function(erro) {
+                document.getElementById('loadingLista').style.display = 'none';
+                alert('❌ Erro ao carregar histórico: ' + erro.message);
+            })
+            .buscarTodosPedidos();
+    }
+}
+
+// ==================== FECHAR HISTÓRICO ====================
+function fecharHistorico() {
+    document.getElementById('modalHistorico').classList.remove('show');
+    voltarLista();
+}
+
+// ==================== VOLTAR PARA LISTA ====================
+function voltarLista() {
+    document.getElementById('viewLista').style.display = 'block';
+    document.getElementById('viewDetalhes').style.display = 'none';
+    document.getElementById('buscaArea').style.display = 'block';
+    document.getElementById('modalTitulo').textContent = '📊 Histórico de Pedidos';
+}
+
+// ==================== PREENCHER LISTA DE PEDIDOS ====================
+function preencherListaPedidos(pedidos) {
+    document.getElementById('loadingLista').style.display = 'none';
+    
+    const container = document.getElementById('cardsContainer');
+    container.innerHTML = '';
+    
+    if (!pedidos || pedidos.length === 0) {
+        document.getElementById('emptyState').style.display = 'block';
+        return;
+    }
+    
+    document.getElementById('emptyState').style.display = 'none';
+    
+    // Criar card para cada pedido
+    pedidos.forEach(function(pedido) {
+        const card = document.createElement('div');
+        card.className = 'pedido-card';
+        card.dataset.referencia = pedido.referencia;
+        card.dataset.nome = pedido.nome;
+        card.dataset.telefone = pedido.telefone;
+        
+        card.innerHTML = `
+            <div class="pedido-header">
+                <div class="pedido-ref">${pedido.referencia}</div>
+                <div class="pedido-data">${pedido.data}</div>
+            </div>
+            <div class="pedido-info">
+                <div class="pedido-info-item">
+                    <span class="pedido-info-label">Cliente:</span>
+                    <span>${pedido.nome}</span>
+                </div>
+                <div class="pedido-info-item">
+                    <span class="pedido-info-label">Telefone:</span>
+                    <span>${pedido.telefone}</span>
+                </div>
+                <div class="pedido-info-item">
+                    <span class="pedido-info-label">E-mail:</span>
+                    <span>${pedido.email || '-'}</span>
+                </div>
+                <div class="pedido-info-item">
+                    <span class="pedido-info-label">Itens:</span>
+                    <span>${pedido.totalItens} unidades</span>
+                </div>
+            </div>
+            <div class="pedido-actions">
+                <button class="btn-action btn-ver" onclick="verDetalhes('${pedido.referencia}')">👁️ Ver Detalhes</button>
+                <button class="btn-action btn-imprimir" onclick="imprimirPedidoHistorico('${pedido.referencia}')">🖨️ Reimprimir</button>
+            </div>
+        `;
+        
+        container.appendChild(card);
+    });
+}
+
+// ==================== BUSCAR PEDIDOS LOCALMENTE (FILTRO CLIENT-SIDE) ====================
+function buscarPedidosLocal() {
+    const termo = document.getElementById('searchInput').value.toLowerCase();
+    const cards = document.querySelectorAll('.pedido-card');
+    let encontrados = 0;
+    
+    cards.forEach(function(card) {
+        const texto = card.textContent.toLowerCase();
+        if (texto.includes(termo)) {
+            card.style.display = 'block';
+            encontrados++;
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    
+    // Mostrar empty state se não encontrou nada
+    if (encontrados === 0 && termo !== '') {
+        document.getElementById('emptyState').style.display = 'block';
+        document.getElementById('emptyState').querySelector('p').textContent = 'Nenhum pedido encontrado com "' + termo + '"';
+    } else {
+        document.getElementById('emptyState').style.display = 'none';
+    }
+}
+
+// ==================== VER DETALHES DO PEDIDO ====================
+function verDetalhes(referencia) {
+    // Trocar para view de detalhes
+    document.getElementById('viewLista').style.display = 'none';
+    document.getElementById('viewDetalhes').style.display = 'block';
+    document.getElementById('buscaArea').style.display = 'none';
+    document.getElementById('modalTitulo').textContent = '📄 Detalhes do Pedido';
+    
+    // Mostrar loading
+    document.getElementById('loadingDetalhes').style.display = 'block';
+    document.getElementById('detalhesContent').style.display = 'none';
+    
+    // Buscar detalhes do servidor
+    google.script.run
+        .withSuccessHandler(function(dados) {
+            preencherDetalhesPedido(dados);
+        })
+        .withFailureHandler(function(erro) {
+            document.getElementById('loadingDetalhes').style.display = 'none';
+            alert('❌ Erro ao carregar detalhes: ' + erro.message);
+            voltarLista();
+        })
+        .buscarDetalhesPedido(referencia);
+}
+
+// ==================== PREENCHER DETALHES DO PEDIDO ====================
+function preencherDetalhesPedido(dados) {
+    document.getElementById('loadingDetalhes').style.display = 'none';
+    document.getElementById('detalhesContent').style.display = 'block';
+    
+    // Preencher cabeçalho
+    document.getElementById('detalhesPedidoRef').textContent = dados.referencia;
+    document.getElementById('detalhesPedidoData').textContent = 'Criado em ' + dados.data;
+    
+    // Preencher dados do cliente
+    document.getElementById('detalhesNome').textContent = dados.nome;
+    document.getElementById('detalhesTelefone').textContent = dados.telefone;
+    document.getElementById('detalhesEmail').textContent = dados.email || '-';
+    
+    // Preencher tabela de itens
+    const tbody = document.getElementById('detalhesItensBody');
+    tbody.innerHTML = '';
+    
+    if (!dados.itens || dados.itens.length === 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="6" style="text-align: center; color: #999;">Nenhum item encontrado</td>';
+        tbody.appendChild(tr);
+        return;
+    }
+    
+    dados.itens.forEach(function(item) {
+        // Extrair apenas o nome do tipo (sem o número)
+        const tipoLimpo = item.tipo.replace(/^\d+\s*-\s*/, '');
+        
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="item-tipo">${tipoLimpo}</td>
+            <td>${item.nome || '-'}</td>
+            <td style="text-align: center;">${item.numero || '-'}</td>
+            <td><span class="item-tamanho">${item.tamCamiseta || '-'}</span></td>
+            <td><span class="item-tamanho">${item.tamCalcao || '-'}</span></td>
+            <td style="text-align: center;">${item.quantidade || 1}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// ==================== IMPRIMIR PEDIDO DO HISTÓRICO ====================
+function imprimirPedidoHistorico(referencia) {
+    alert('🖨️ Função de impressão será implementada!\n\nReferência: ' + referencia);
+    // TODO: Implementar impressão específica
+}
+
+// ==================== IMPRIMIR DETALHES (quando está na view de detalhes) ====================
+function imprimirDetalhes() {
+    alert('🖨️ Função de impressão será implementada!');
+    // TODO: Implementar impressão da view de detalhes
+}
+
+// ==================== FECHAR MODAL AO CLICAR FORA ====================
+// Adicionar ao window.onclick existente
+var windowOnClickOriginal = window.onclick;
+window.onclick = function(event) {
+    // Chamar função original
+    if (windowOnClickOriginal) {
+        windowOnClickOriginal(event);
+    }
+    
+    // Adicionar comportamento do modal histórico
+    const modalHistorico = document.getElementById('modalHistorico');
+    if (event.target === modalHistorico) {
+        fecharHistorico();
+    }
+}    
     </script>
 </body>
 </html>
