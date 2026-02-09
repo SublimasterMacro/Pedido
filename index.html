@@ -1093,13 +1093,31 @@ body {
         width: 100%;
     }
 
+    /* ===== TABELA COM SCROLL HORIZONTAL ===== */
+    .detalhes-section {
+        overflow-x: auto; /* Permite scroll horizontal */
+        -webkit-overflow-scrolling: touch; /* Scroll suave no iOS */
+    }
+
     .itens-table {
-        font-size: 12px;
+        min-width: 600px; /* Largura mínima da tabela */
+        font-size: 11px;
     }
 
     .itens-table th,
     .itens-table td {
-        padding: 8px 5px;
+        padding: 8px 6px;
+        white-space: nowrap; /* Impede quebra de linha */
+    }
+
+    .item-tamanho {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+    
+    /* Botões de ação empilhados */
+    .detalhes-actions {
+        grid-template-columns: 1fr !important;
     }
 }
     </style>
