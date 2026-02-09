@@ -1508,32 +1508,36 @@ let itemParaDeletar = null;
 
         // ==================== INICIALIZAÇÃO ====================
         window.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-           const temParametroCriptografado = urlParams.has('data');
-const temParametrosAntigos = urlParams.has('ref') || urlParams.has('referencia') || urlParams.has('nome') || urlParams.has('tel');
+    const urlParams = new URLSearchParams(window.location.search);
+    const temParametroCriptografado = urlParams.has('data');
+    const temParametrosAntigos = urlParams.has('ref') || urlParams.has('referencia') || urlParams.has('nome') || urlParams.has('tel');
 
-if (temParametroCriptografado || temParametrosAntigos) {
-                document.getElementById('mainContainer').style.display = 'block';
-                carregarParametrosURL();
-            } else {
-                document.getElementById('senhaModal').style.display = 'block';
-                document.getElementById('senhaAdmin').focus();
-                
-                document.getElementById('senhaAdmin').addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') validarSenha();
-                });
-            }
-
-            // Máscara de telefone
-            document.getElementById('telefone').addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length <= 11) {
-                    value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
-                    value = value.replace(/(\d)(\d{4})$/, '$1-$2');
-                }
-                e.target.value = value;
-            });
+    if (temParametroCriptografado || temParametrosAntigos) {
+        document.getElementById('mainContainer').style.display = 'block';
+        carregarParametrosURL();
+    } else {
+        document.getElementById('senhaModal').style.display = 'block';
+        document.getElementById('senhaAdmin').focus();
+        
+        document.getElementById('senhaAdmin').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') validarSenha();
         });
+    }
+
+    // Máscara de telefone
+    document.getElementById('telefone').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length <= 11) {
+            value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+            value = value.replace(/(\d)(\d{4})$/, '$1-$2');
+        }
+        e.target.value = value;
+    });
+    
+    // Carregar histórico em background ao iniciar
+    console.log('🔄 Pré-carregando histórico em background...');
+    carregarHistoricoBackground();
+});
 
 function validarSenha() {
     const senhaDigitada = document.getElementById('senhaAdmin').value;
@@ -2049,25 +2053,30 @@ function atualizarRevisao() {
             btnSubmit.textContent = '⏳ Enviando...';
 
             fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            })
-            .then(response => {
-                itens.forEach(item => {
-                    if (!item.enviado) item.enviado = true;
-                });
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(formData)
+})
+.then(response => {
+    itens.forEach(item => {
+        if (!item.enviado) item.enviado = true;
+    });
 
-                renderizarItens();
-                
-                document.getElementById('modalMessage').innerHTML = 
-                    `<strong>📋 Referência:</strong> ${referencia}<br>` +
-                    `<strong>👤 Cliente:</strong> ${nome}<br>` +
-                    `<strong>📦 Itens Enviados:</strong> ${itensParaEnviar.length}<br><br>` +
-                    `<em>✅ Planilha atualizada com sucesso!</em>`;
-                document.getElementById('successModal').style.display = 'block';
-            })
+    renderizarItens();
+    
+    // ✅ RECARREGAR HISTÓRICO EM BACKGROUND
+    console.log('🔄 Recarregando histórico após envio...');
+    cachePedidosHistorico = null;
+    carregarHistoricoBackground();
+    
+    document.getElementById('modalMessage').innerHTML = 
+        `<strong>📋 Referência:</strong> ${referencia}<br>` +
+        `<strong>👤 Cliente:</strong> ${nome}<br>` +
+        `<strong>📦 Itens Enviados:</strong> ${itensParaEnviar.length}<br><br>` +
+        `<em>✅ Planilha atualizada com sucesso!</em>`;
+    document.getElementById('successModal').style.display = 'block';
+})
             .catch(error => {
                 alert('❌ Erro: ' + error.message);
                 console.error('Erro:', error);
@@ -2145,17 +2154,22 @@ function atualizarRevisao() {
                 body: JSON.stringify(dadosParaDeletar)
             })
             .then(() => {
-                itens.splice(itemParaDeletar, 1);
-                renderizarItens();
-                atualizarContador();
-                
-                const modalMsg = document.getElementById('modalMessage');
-                modalMsg.innerHTML = 
-                    `<strong style="color: #28a745;">✅ Item Deletado com Sucesso!</strong><br><br>` +
-                    `O item foi removido do formulário e da planilha.<br>` +
-                    `O resumo foi atualizado automaticamente.`;
-                document.getElementById('successModal').style.display = 'block';
-            })
+    itens.splice(itemParaDeletar, 1);
+    renderizarItens();
+    atualizarContador();
+    
+    // ✅ RECARREGAR HISTÓRICO EM BACKGROUND
+    console.log('🔄 Recarregando histórico após deleção...');
+    cachePedidosHistorico = null;
+    carregarHistoricoBackground();
+    
+    const modalMsg = document.getElementById('modalMessage');
+    modalMsg.innerHTML = 
+        `<strong style="color: #28a745;">✅ Item Deletado com Sucesso!</strong><br><br>` +
+        `O item foi removido do formulário e da planilha.<br>` +
+        `O resumo foi atualizado automaticamente.`;
+    document.getElementById('successModal').style.display = 'block';
+})
             .catch(error => {
                 alert('❌ Erro ao deletar da planilha: ' + error.message);
                 console.error('Erro:', error);
@@ -2214,38 +2228,82 @@ function formatarDataBrasileira(dataString) {
     }
 }
 
+    // ==================== CARREGAR HISTÓRICO EM BACKGROUND ====================
+function carregarHistoricoBackground() {
+    const callbackName = 'jsonpBackground_' + Date.now();
+    
+    const timeoutId = setTimeout(function() {
+        console.warn('⚠️ Timeout ao pré-carregar histórico (isso não afeta o sistema)');
+        delete window[callbackName];
+        const script = document.getElementById(callbackName);
+        if (script) script.remove();
+    }, 15000);
+    
+    window[callbackName] = function(pedidos) {
+        clearTimeout(timeoutId);
+        
+        if (Array.isArray(pedidos)) {
+            cachePedidosHistorico = pedidos;
+            console.log('✅ Histórico pré-carregado:', pedidos.length, 'pedidos em cache');
+        } else {
+            console.error('❌ Resposta inválida ao pré-carregar:', pedidos);
+        }
+        
+        delete window[callbackName];
+        const script = document.getElementById(callbackName);
+        if (script) script.remove();
+    };
+    
+    const script = document.createElement('script');
+    script.id = callbackName;
+    script.src = scriptURL + '?action=buscarPedidos&callback=' + callbackName + '&t=' + Date.now();
+    script.onerror = function() {
+        clearTimeout(timeoutId);
+        console.warn('⚠️ Erro ao pré-carregar histórico (não crítico)');
+        delete window[callbackName];
+    };
+    
+    document.body.appendChild(script);
+}
+
+// ==================== ABRIR HISTÓRICO ====================
 // ==================== ABRIR HISTÓRICO ====================
 function abrirHistorico() {
     const modal = document.getElementById('modalHistorico');
     modal.style.display = 'block';
     voltarLista();
     
-    // ✅ SEMPRE LIMPAR CACHE E RECARREGAR
-    cachePedidosHistorico = null;
+    // ✅ SE JÁ TEM CACHE, USAR IMEDIATAMENTE
+    if (cachePedidosHistorico !== null && Array.isArray(cachePedidosHistorico)) {
+        console.log('✅ Usando histórico do cache (instantâneo)');
+        document.getElementById('loadingLista').style.display = 'none';
+        preencherListaPedidos(cachePedidosHistorico);
+        return;
+    }
+    
+    // ⚠️ SE NÃO TEM CACHE, BUSCAR AGORA
+    console.log('⚠️ Cache vazio, carregando histórico...');
     
     // Mostrar loading
     document.getElementById('loadingLista').style.display = 'block';
     document.getElementById('cardsContainer').innerHTML = '';
     document.getElementById('emptyState').style.display = 'none';
     
-    // ✅ USAR JSONP PARA CONTORNAR CORS
     const callbackName = 'jsonpCallback_' + Date.now();
     const timeoutId = setTimeout(function() {
         console.error('❌ Timeout ao carregar histórico');
         document.getElementById('loadingLista').style.display = 'none';
         alert('❌ Timeout: Não foi possível carregar o histórico.\n\nVerifique:\n1. URL do script está correta\n2. Script está publicado como Web App\n3. Permissões configuradas corretamente');
         
-        // Limpar
         delete window[callbackName];
         const script = document.getElementById(callbackName);
         if (script) script.remove();
-    }, 15000); // 15 segundos de timeout
+    }, 15000);
     
     window[callbackName] = function(pedidos) {
         clearTimeout(timeoutId);
         console.log('✅ Pedidos recebidos via JSONP:', pedidos);
         
-        // Verificar se é um array válido
         if (!Array.isArray(pedidos)) {
             console.error('❌ Resposta inválida:', pedidos);
             document.getElementById('loadingLista').style.display = 'none';
@@ -2256,15 +2314,11 @@ function abrirHistorico() {
         cachePedidosHistorico = pedidos;
         preencherListaPedidos(pedidos);
         
-        // Limpar callback global
         delete window[callbackName];
-        
-        // Remover script tag
         const script = document.getElementById(callbackName);
         if (script) script.remove();
     };
     
-    // Criar script tag para JSONP
     const script = document.createElement('script');
     script.id = callbackName;
     script.src = scriptURL + '?action=buscarPedidos&callback=' + callbackName + '&t=' + Date.now();
