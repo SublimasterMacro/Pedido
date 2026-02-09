@@ -2393,13 +2393,28 @@ function verDetalhes(referencia) {
     document.getElementById('buscaArea').style.display = 'none';
     document.getElementById('modalTitulo').textContent = '📄 Detalhes do Pedido';
     
+    // ✅ BUSCAR DADOS DO CACHE (JÁ CARREGADO)
+    if (cachePedidosHistorico && Array.isArray(cachePedidosHistorico)) {
+        const pedido = cachePedidosHistorico.find(p => p.referencia === referencia);
+        
+        if (pedido) {
+            // ✅ MOSTRAR IMEDIATAMENTE (SEM LOADING)
+            document.getElementById('loadingDetalhes').style.display = 'none';
+            preencherDetalhesPedido(pedido);
+            return;
+        }
+    }
+    
+    // ⚠️ FALLBACK: Se não encontrou no cache, buscar novamente
+    console.warn('⚠️ Pedido não encontrado no cache, buscando novamente...');
+    
     // Mostrar loading
     document.getElementById('loadingDetalhes').style.display = 'block';
     document.getElementById('detalhesContent').style.display = 'none';
     
-    // ✅ USAR JSONP COM TIMEOUT
+    // Buscar via JSONP
     const callbackName = 'jsonpDetalhes_' + Date.now();
-    const timeoutDuration = 10000; // 10 segundos
+    const timeoutDuration = 10000;
     
     const timeoutId = setTimeout(function() {
         console.error('❌ Timeout ao buscar detalhes');
@@ -2423,7 +2438,6 @@ function verDetalhes(referencia) {
             voltarLista();
         }
         
-        // Limpar
         delete window[callbackName];
         const script = document.getElementById(callbackName);
         if (script) script.remove();
@@ -2431,7 +2445,6 @@ function verDetalhes(referencia) {
     
     const script = document.createElement('script');
     script.id = callbackName;
-    // ✅ IMPORTANTE: Escapar a referência para URL
     script.src = scriptURL + '?action=buscarDetalhes&referencia=' + 
                  encodeURIComponent(referencia) + 
                  '&callback=' + callbackName + 
