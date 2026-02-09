@@ -2202,11 +2202,8 @@ function abrirHistorico() {
     modal.style.display = 'block';
     voltarLista();
     
-    // Se já tem cache, usar
-    if (cachePedidosHistorico !== null) {
-        preencherListaPedidos(cachePedidosHistorico);
-        return;
-    }
+    // ✅ SEMPRE LIMPAR CACHE E RECARREGAR
+    cachePedidosHistorico = null;
     
     // Mostrar loading
     document.getElementById('loadingLista').style.display = 'block';
