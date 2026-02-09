@@ -1602,6 +1602,10 @@ function validarSenha() {
         const linkResult = document.getElementById('linkResult');
         if (btnGerarLink) btnGerarLink.style.display = 'none';
         if (linkResult) linkResult.style.display = 'none';
+        
+        // ✅ OCULTAR BOTÃO HISTÓRICO NO MODO CLIENTE
+        const btnHistorico = document.querySelector('.btn-historico');
+        if (btnHistorico) btnHistorico.style.display = 'none';
     }
     
     if (referencia) {
