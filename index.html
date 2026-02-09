@@ -1505,6 +1505,7 @@ const SENHA_OFUSCADA = 'MjAyNjA2';
 let itens = [];
 let itemDuplicadoParaAdicionar = null;
 let itemParaDeletar = null;
+let modoAdmin = false;
 
         // ==================== INICIALIZAÇÃO ====================
         window.addEventListener('DOMContentLoaded', function() {
@@ -1546,6 +1547,9 @@ function validarSenha() {
         document.getElementById('senhaModal').style.display = 'none';
         document.getElementById('mainContainer').style.display = 'block';
         senhaErro.textContent = '';
+        
+        // ✅ MARCAR COMO MODO ADMIN
+        modoAdmin = true;
         
         // ✅ CARREGAR HISTÓRICO APENAS APÓS LOGIN ADMIN
         console.log('🔄 Pré-carregando histórico em background...');
@@ -2068,10 +2072,12 @@ function atualizarRevisao() {
 
     renderizarItens();
     
-    // ✅ RECARREGAR HISTÓRICO EM BACKGROUND
-    console.log('🔄 Recarregando histórico após envio...');
-    cachePedidosHistorico = null;
-    carregarHistoricoBackground();
+    // ✅ RECARREGAR HISTÓRICO APENAS SE FOR ADMIN
+    if (modoAdmin) {
+        console.log('🔄 Recarregando histórico após envio...');
+        cachePedidosHistorico = null;
+        carregarHistoricoBackground();
+    }
     
     document.getElementById('modalMessage').innerHTML = 
         `<strong>📋 Referência:</strong> ${referencia}<br>` +
@@ -2161,10 +2167,12 @@ function atualizarRevisao() {
     renderizarItens();
     atualizarContador();
     
-    // ✅ RECARREGAR HISTÓRICO EM BACKGROUND
-    console.log('🔄 Recarregando histórico após deleção...');
-    cachePedidosHistorico = null;
-    carregarHistoricoBackground();
+    // ✅ RECARREGAR HISTÓRICO APENAS SE FOR ADMIN
+    if (modoAdmin) {
+        console.log('🔄 Recarregando histórico após deleção...');
+        cachePedidosHistorico = null;
+        carregarHistoricoBackground();
+    }
     
     const modalMsg = document.getElementById('modalMessage');
     modalMsg.innerHTML = 
