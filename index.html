@@ -2448,8 +2448,8 @@ function preencherDetalhesPedido(dados) {
     document.getElementById('detalhesContent').style.display = 'block';
     
     // Preencher cabeçalho
-document.getElementById('detalhesPedidoRef').textContent = dados.referencia;
-document.getElementById('detalhesPedidoData').textContent = 'Criado em ' + formatarDataBrasileira(dados.data);
+    document.getElementById('detalhesPedidoRef').textContent = dados.referencia;
+    document.getElementById('detalhesPedidoData').textContent = 'Criado em ' + formatarDataBrasileira(dados.data);
     
     // Preencher dados do cliente
     document.getElementById('detalhesNome').textContent = dados.nome;
@@ -2468,32 +2468,22 @@ document.getElementById('detalhesPedidoData').textContent = 'Criado em ' + forma
     }
     
     dados.itens.forEach(function(item) {
-        // ... código existente ...
+        // Extrair apenas o nome do tipo (sem o número)
+        const tipoLimpo = item.tipo.replace(/^\d+\s*-\s*/, '');
+        
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="item-tipo">${tipoLimpo}</td>
+            <td>${item.nome || '-'}</td>
+            <td style="text-align: center;">${item.numero || '-'}</td>
+            <td><span class="item-tamanho">${item.tamCamiseta || '-'}</span></td>
+            <td><span class="item-tamanho">${item.tamCalcao || '-'}</span></td>
+            <td style="text-align: center;">${item.quantidade || 1}</td>
+        `;
         tbody.appendChild(tr);
     });
-    
-    // Adicionar rodapé de impressão (se não existir)
-    let rodapeImpressao = document.querySelector('.detalhes-print-footer');
-    if (!rodapeImpressao) {
-        rodapeImpressao = document.createElement('div');
-        rodapeImpressao.className = 'detalhes-print-footer';
-        document.getElementById('detalhesContent').appendChild(rodapeImpressao);
-    }
-    
-    const dataImpressao = new Date().toLocaleString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-    
-    rodapeImpressao.innerHTML = `
-        <p>Documento impresso em: ${dataImpressao}</p>
-        <p>© 2026 Sublimaster - Sistema de Pedidos</p>
-    `;
 }
-
+    
 // ==================== IMPRIMIR DETALHES (quando está na view de detalhes) ====================
 function imprimirDetalhes() {
     // Verificar se há conteúdo para imprimir
