@@ -1517,18 +1517,14 @@ let itemParaDeletar = null;
         document.getElementById('mainContainer').style.display = 'block';
         carregarParametrosURL();
     } else {
-        // ✅ MODO ADMIN (com senha) - CARREGAR histórico
-        document.getElementById('senhaModal').style.display = 'block';
-        document.getElementById('senhaAdmin').focus();
-        
-        document.getElementById('senhaAdmin').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') validarSenha();
-        });
-        
-        // 🔄 Carregar histórico em background APENAS NO MODO ADMIN
-        console.log('🔄 Pré-carregando histórico em background...');
-        carregarHistoricoBackground();
-    }
+    // ✅ MODO ADMIN (com senha)
+    document.getElementById('senhaModal').style.display = 'block';
+    document.getElementById('senhaAdmin').focus();
+    
+    document.getElementById('senhaAdmin').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') validarSenha();
+    });
+}
 
     // Máscara de telefone
     document.getElementById('telefone').addEventListener('input', function(e) {
@@ -1550,6 +1546,11 @@ function validarSenha() {
         document.getElementById('senhaModal').style.display = 'none';
         document.getElementById('mainContainer').style.display = 'block';
         senhaErro.textContent = '';
+        
+        // ✅ CARREGAR HISTÓRICO APENAS APÓS LOGIN ADMIN
+        console.log('🔄 Pré-carregando histórico em background...');
+        carregarHistoricoBackground();
+        
     } else {
         senhaErro.textContent = '❌ Senha incorreta! Tente novamente.';
         document.getElementById('senhaAdmin').value = '';
