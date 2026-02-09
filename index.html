@@ -1513,15 +1513,21 @@ let itemParaDeletar = null;
     const temParametrosAntigos = urlParams.has('ref') || urlParams.has('referencia') || urlParams.has('nome') || urlParams.has('tel');
 
     if (temParametroCriptografado || temParametrosAntigos) {
+        // ✅ MODO CLIENTE (via link) - NÃO carregar histórico
         document.getElementById('mainContainer').style.display = 'block';
         carregarParametrosURL();
     } else {
+        // ✅ MODO ADMIN (com senha) - CARREGAR histórico
         document.getElementById('senhaModal').style.display = 'block';
         document.getElementById('senhaAdmin').focus();
         
         document.getElementById('senhaAdmin').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') validarSenha();
         });
+        
+        // 🔄 Carregar histórico em background APENAS NO MODO ADMIN
+        console.log('🔄 Pré-carregando histórico em background...');
+        carregarHistoricoBackground();
     }
 
     // Máscara de telefone
@@ -1533,10 +1539,6 @@ let itemParaDeletar = null;
         }
         e.target.value = value;
     });
-    
-    // Carregar histórico em background ao iniciar
-    console.log('🔄 Pré-carregando histórico em background...');
-    carregarHistoricoBackground();
 });
 
 function validarSenha() {
