@@ -579,80 +579,44 @@ body {
     display: none;
 }
 
+.detalhes-print-footer {
+    display: none;
+}
+
 @media print {
+    /* ========== REGRAS GERAIS ========== */
     body {
         background: white;
         padding: 0;
     }
 
-    .container {
-        box-shadow: none;
-        border-radius: 0;
-        max-width: 100%;
-    }
-
-    .header {
-        background: white !important;
-        color: #333 !important;
-        border-bottom: 2px solid #333;
-    }
-
-    .tabs,
-    .btn-group,
-    .footer-1,
-    .no-print {
-        display: none !important;
-    }
-
-    .tab-content {
-        display: block !important;
-        padding: 20px;
-    }
-
-    .tab-content:not(#revisar) {
-        display: none !important;
-    }
-
-    .item-review {
-        background: white;
-        border: 1px solid #ddd;
-        page-break-inside: avoid;
-    }
-
-    .print-only {
-        display: block !important;
-        text-align: center;
-        padding: 20px 0;
-        border-top: 2px solid #ddd;
-        margin-top: 30px;
-        font-size: 12px;
-        color: #666;
-    }
-
     h1, h2, h3 {
         color: #333 !important;
     }
-}
 
-        /* ========== IMPRESSÃO DO MODAL HISTÓRICO ========== */
-@media print {
-    /* Ocultar tudo exceto detalhes */
-    .modal-historico-header,
-    .modal-historico-busca,
-    .detalhes-actions,
-    .btn-close,
-    #viewLista {
+    /* ========== IMPRESSÃO DO MODAL HISTÓRICO ========== */
+    /* Quando modal histórico estiver aberto */
+    body:has(#modalHistorico[style*="display: block"]) .container {
         display: none !important;
     }
     
-    /* Modal ocupa página inteira */
-    #modalHistorico {
+    body:has(#modalHistorico[style*="display: block"]) #modalHistorico {
         display: block !important;
         position: static;
         background: white;
     }
     
-    .modal-historico {
+    /* Ocultar elementos do modal */
+    body:has(#modalHistorico[style*="display: block"]) .modal-historico-header,
+    body:has(#modalHistorico[style*="display: block"]) .modal-historico-busca,
+    body:has(#modalHistorico[style*="display: block"]) .detalhes-actions,
+    body:has(#modalHistorico[style*="display: block"]) .btn-close,
+    body:has(#modalHistorico[style*="display: block"]) #viewLista {
+        display: none !important;
+    }
+    
+    /* Modal ocupa página inteira */
+    body:has(#modalHistorico[style*="display: block"]) .modal-historico {
         margin: 0;
         padding: 0;
         max-width: 100%;
@@ -661,59 +625,94 @@ body {
         border-radius: 0;
     }
     
-    .modal-historico-body {
+    body:has(#modalHistorico[style*="display: block"]) .modal-historico-body {
         padding: 20px;
         overflow: visible;
     }
     
-    #viewDetalhes {
+    body:has(#modalHistorico[style*="display: block"]) #viewDetalhes {
         display: block !important;
     }
     
     /* Estilizar cabeçalho para impressão */
-    .detalhes-header {
+    body:has(#modalHistorico[style*="display: block"]) .detalhes-header {
         background: white !important;
         color: #333 !important;
         border-bottom: 2px solid #333;
     }
     
-    .detalhes-header h3,
-    .detalhes-header p {
+    body:has(#modalHistorico[style*="display: block"]) .detalhes-header h3,
+    body:has(#modalHistorico[style*="display: block"]) .detalhes-header p {
         color: #333 !important;
     }
     
     /* Estilizar seções */
-    .detalhes-section {
+    body:has(#modalHistorico[style*="display: block"]) .detalhes-section {
         background: white;
         border: 1px solid #ddd;
         page-break-inside: avoid;
     }
     
-    .detalhes-section h4 {
+    body:has(#modalHistorico[style*="display: block"]) .detalhes-section h4 {
         color: #333 !important;
     }
     
     /* Tabela de itens */
-    .itens-table {
+    body:has(#modalHistorico[style*="display: block"]) .itens-table {
         border-collapse: collapse;
     }
     
-    .itens-table thead {
+    body:has(#modalHistorico[style*="display: block"]) .itens-table thead {
         background: #f0f0f0 !important;
         color: #333 !important;
     }
     
-    .itens-table th,
-    .itens-table td {
+    body:has(#modalHistorico[style*="display: block"]) .itens-table th,
+    body:has(#modalHistorico[style*="display: block"]) .itens-table td {
         border: 1px solid #ddd !important;
     }
     
-    .item-tipo {
+    body:has(#modalHistorico[style*="display: block"]) .item-tipo {
         color: #333 !important;
     }
-    
-    /* Rodapé de impressão */
-    .detalhes-print-footer {
+
+    /* ========== IMPRESSÃO DA ABA REVISAR (PÁGINA PRINCIPAL) ========== */
+    /* Aplicar APENAS quando modal NÃO está aberto */
+    body:not(:has(#modalHistorico[style*="display: block"])) .container {
+        box-shadow: none;
+        border-radius: 0;
+        max-width: 100%;
+    }
+
+    body:not(:has(#modalHistorico[style*="display: block"])) .header {
+        background: white !important;
+        color: #333 !important;
+        border-bottom: 2px solid #333;
+    }
+
+    body:not(:has(#modalHistorico[style*="display: block"])) .tabs,
+    body:not(:has(#modalHistorico[style*="display: block"])) .btn-group,
+    body:not(:has(#modalHistorico[style*="display: block"])) .footer-1,
+    body:not(:has(#modalHistorico[style*="display: block"])) .no-print {
+        display: none !important;
+    }
+
+    body:not(:has(#modalHistorico[style*="display: block"])) .tab-content {
+        display: block !important;
+        padding: 20px;
+    }
+
+    body:not(:has(#modalHistorico[style*="display: block"])) .tab-content:not(#revisar) {
+        display: none !important;
+    }
+
+    body:not(:has(#modalHistorico[style*="display: block"])) .item-review {
+        background: white;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
+
+    body:not(:has(#modalHistorico[style*="display: block"])) .print-only {
         display: block !important;
         text-align: center;
         padding: 20px 0;
@@ -722,11 +721,6 @@ body {
         font-size: 12px;
         color: #666;
     }
-}
-
-/* Rodapé oculto na tela, visível na impressão */
-.detalhes-print-footer {
-    display: none;
 }
         
         .btn-historico {
