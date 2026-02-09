@@ -633,6 +633,102 @@ body {
         color: #333 !important;
     }
 }
+
+        /* ========== IMPRESSÃO DO MODAL HISTÓRICO ========== */
+@media print {
+    /* Ocultar tudo exceto detalhes */
+    .modal-historico-header,
+    .modal-historico-busca,
+    .detalhes-actions,
+    .btn-close,
+    #viewLista {
+        display: none !important;
+    }
+    
+    /* Modal ocupa página inteira */
+    #modalHistorico {
+        display: block !important;
+        position: static;
+        background: white;
+    }
+    
+    .modal-historico {
+        margin: 0;
+        padding: 0;
+        max-width: 100%;
+        max-height: none;
+        box-shadow: none;
+        border-radius: 0;
+    }
+    
+    .modal-historico-body {
+        padding: 20px;
+        overflow: visible;
+    }
+    
+    #viewDetalhes {
+        display: block !important;
+    }
+    
+    /* Estilizar cabeçalho para impressão */
+    .detalhes-header {
+        background: white !important;
+        color: #333 !important;
+        border-bottom: 2px solid #333;
+    }
+    
+    .detalhes-header h3,
+    .detalhes-header p {
+        color: #333 !important;
+    }
+    
+    /* Estilizar seções */
+    .detalhes-section {
+        background: white;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+    }
+    
+    .detalhes-section h4 {
+        color: #333 !important;
+    }
+    
+    /* Tabela de itens */
+    .itens-table {
+        border-collapse: collapse;
+    }
+    
+    .itens-table thead {
+        background: #f0f0f0 !important;
+        color: #333 !important;
+    }
+    
+    .itens-table th,
+    .itens-table td {
+        border: 1px solid #ddd !important;
+    }
+    
+    .item-tipo {
+        color: #333 !important;
+    }
+    
+    /* Rodapé de impressão */
+    .detalhes-print-footer {
+        display: block !important;
+        text-align: center;
+        padding: 20px 0;
+        border-top: 2px solid #ddd;
+        margin-top: 30px;
+        font-size: 12px;
+        color: #666;
+    }
+}
+
+/* Rodapé oculto na tela, visível na impressão */
+.detalhes-print-footer {
+    display: none;
+}
+        
         .btn-historico {
     position: absolute;
     top: 30px;
@@ -2083,6 +2179,29 @@ function atualizarRevisao() {
 // Cache local para evitar múltiplas chamadas
 let cachePedidosHistorico = null;
 
+// ==================== FORMATAR DATA BRASILEIRA ====================
+function formatarDataBrasileira(dataString) {
+    try {
+        const data = new Date(dataString);
+        
+        // Verificar se é data válida
+        if (isNaN(data.getTime())) {
+            return dataString; // Retornar original se inválida
+        }
+        
+        return data.toLocaleString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    } catch (error) {
+        console.error('Erro ao formatar data:', error);
+        return dataString;
+    }
+}
+
 // ==================== ABRIR HISTÓRICO ====================
 function abrirHistorico() {
     const modal = document.getElementById('modalHistorico');
@@ -2192,10 +2311,10 @@ function preencherListaPedidos(pedidos) {
         card.dataset.nome = pedido.nome;
         card.dataset.telefone = pedido.telefone;
         
-       card.innerHTML = `
+      card.innerHTML = `
     <div class="pedido-header">
         <div class="pedido-ref">${pedido.referencia}</div>
-        <div class="pedido-data">${pedido.data}</div>
+        <div class="pedido-data">${formatarDataBrasileira(pedido.data)}</div>
     </div>
     <div class="pedido-info">
         <div class="pedido-info-item">
@@ -2329,8 +2448,8 @@ function preencherDetalhesPedido(dados) {
     document.getElementById('detalhesContent').style.display = 'block';
     
     // Preencher cabeçalho
-    document.getElementById('detalhesPedidoRef').textContent = dados.referencia;
-    //document.getElementById('detalhesPedidoData').textContent = 'Criado em ' + dados.data;
+document.getElementById('detalhesPedidoRef').textContent = dados.referencia;
+document.getElementById('detalhesPedidoData').textContent = 'Criado em ' + formatarDataBrasileira(dados.data);
     
     // Preencher dados do cliente
     document.getElementById('detalhesNome').textContent = dados.nome;
@@ -2349,32 +2468,43 @@ function preencherDetalhesPedido(dados) {
     }
     
     dados.itens.forEach(function(item) {
-        // Extrair apenas o nome do tipo (sem o número)
-        const tipoLimpo = item.tipo.replace(/^\d+\s*-\s*/, '');
-        
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td class="item-tipo">${tipoLimpo}</td>
-            <td>${item.nome || '-'}</td>
-            <td style="text-align: center;">${item.numero || '-'}</td>
-            <td><span class="item-tamanho">${item.tamCamiseta || '-'}</span></td>
-            <td><span class="item-tamanho">${item.tamCalcao || '-'}</span></td>
-            <td style="text-align: center;">${item.quantidade || 1}</td>
-        `;
+        // ... código existente ...
         tbody.appendChild(tr);
     });
-}
-
-// ==================== IMPRIMIR PEDIDO DO HISTÓRICO ====================
-function imprimirPedidoHistorico(referencia) {
-    alert('🖨️ Função de impressão será implementada!\n\nReferência: ' + referencia);
-    // TODO: Implementar impressão específica
+    
+    // Adicionar rodapé de impressão (se não existir)
+    let rodapeImpressao = document.querySelector('.detalhes-print-footer');
+    if (!rodapeImpressao) {
+        rodapeImpressao = document.createElement('div');
+        rodapeImpressao.className = 'detalhes-print-footer';
+        document.getElementById('detalhesContent').appendChild(rodapeImpressao);
+    }
+    
+    const dataImpressao = new Date().toLocaleString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    
+    rodapeImpressao.innerHTML = `
+        <p>Documento impresso em: ${dataImpressao}</p>
+        <p>© 2026 Sublimaster - Sistema de Pedidos</p>
+    `;
 }
 
 // ==================== IMPRIMIR DETALHES (quando está na view de detalhes) ====================
 function imprimirDetalhes() {
-    alert('🖨️ Função de impressão será implementada!');
-    // TODO: Implementar impressão da view de detalhes
+    // Verificar se há conteúdo para imprimir
+    const detalhesContent = document.getElementById('detalhesContent');
+    if (!detalhesContent || detalhesContent.style.display === 'none') {
+        alert('⚠️ Nenhum pedido carregado para imprimir!');
+        return;
+    }
+    
+    // Abrir diálogo de impressão
+    window.print();
 }
 
 // ==================== FECHAR MODAL AO CLICAR FORA ====================
