@@ -1076,6 +1076,56 @@ body {
     margin: 0 auto 15px;
 }
 
+.loading-spinner-historico {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+/* ===== ESTILOS PARA STATUS ===== */
+.status-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 2px solid;
+}
+
+.status-pendente {
+    background: #fff3cd;
+    color: #856404;
+    border-color: #ffc107;
+}
+
+.status-producao {
+    background: #d4e7f7;
+    color: #004085;
+    border-color: #2196F3;
+}
+
+.status-entregue {
+    background: #d4edda;
+    color: #155724;
+    border-color: #4caf50;
+}
+
+.status-dropdown {
+    padding: 8px 12px;
+    border: 2px solid #667eea;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    background: white;
+    color: #667eea;
+    width: 100%;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .modal-historico {
@@ -2437,10 +2487,28 @@ function preencherListaPedidos(pedidos) {
         card.dataset.nome = pedido.nome;
         card.dataset.telefone = pedido.telefone;
         
-      card.innerHTML = `
+      // Configuração do status
+var statusClass = 'status-pendente';
+var statusEmoji = '🟡';
+var statusTexto = 'Pendente';
+        
+if (pedido.status && pedido.status.includes('Produção')) {
+    statusClass = 'status-producao';
+    statusEmoji = '🔵';
+    statusTexto = 'Em Produção';
+} else if (pedido.status && pedido.status.includes('Entregue')) {
+    statusClass = 'status-entregue';
+    statusEmoji = '🟢';
+    statusTexto = 'Entregue';
+}
+
+card.innerHTML = `
     <div class="pedido-header">
         <div class="pedido-ref">${pedido.referencia}</div>
         <div class="pedido-data">${formatarDataBrasileira(pedido.data)}</div>
+    </div>
+    <div style="margin-bottom: 15px;">
+        <span class="status-badge ${statusClass}">${statusEmoji} ${statusTexto}</span>
     </div>
     <div class="pedido-info">
         <div class="pedido-info-item">
@@ -2460,9 +2528,14 @@ function preencherListaPedidos(pedidos) {
             <span>${pedido.totalItens} unidades</span>
         </div>
     </div>
-    <div class="pedido-actions">
-        <button class="btn-action btn-ver" onclick="verDetalhes('${pedido.referencia.replace(/'/g, "\\'")}')">👁️ Ver Detalhes</button>
-    </div>
+    <div class="pedido-actions" style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+    <select class="status-dropdown" onchange="alterarStatus('${pedido.referencia.replace(/'/g, "\\'")}', this.value)">
+        <option value="🟡 Pendente" ${pedido.status && pedido.status.includes('Pendente') ? 'selected' : ''}>🟡 Pendente</option>
+        <option value="🔵 Em Produção" ${pedido.status && pedido.status.includes('Produção') ? 'selected' : ''}>🔵 Em Produção</option>
+        <option value="🟢 Entregue" ${pedido.status && pedido.status.includes('Entregue') ? 'selected' : ''}>🟢 Entregue</option>
+    </select>
+    <button class="btn-action btn-ver" onclick="verDetalhes('${pedido.referencia.replace(/'/g, "\\'")}')">👁️ Ver Detalhes</button>
+</div>
 `;
         
         container.appendChild(card);
@@ -2679,6 +2752,60 @@ function copiarLinkPlanilha() {
     }).catch(function(err) {
         alert('❌ Erro ao copiar: ' + err);
     });
+}
+
+    // ==================== ALTERAR STATUS ====================
+function alterarStatus(referencia, novoStatus) {
+    if (!referencia || !novoStatus) {
+        alert('❌ Erro: Dados inválidos!');
+        return;
+    }
+    
+    console.log('🔄 Alterando status:', referencia, '→', novoStatus);
+    
+    // Chamar via JSONP
+    const callbackName = 'jsonpStatus_' + Date.now();
+    
+    window[callbackName] = function(resultado) {
+        console.log('✅ Resposta recebida:', resultado);
+        
+        if (resultado && resultado.status === 'success') {
+            // Atualizar cache
+            if (cachePedidosHistorico && Array.isArray(cachePedidosHistorico)) {
+                const pedido = cachePedidosHistorico.find(p => p.referencia === referencia);
+                if (pedido) {
+                    pedido.status = novoStatus;
+                }
+            }
+            
+            // Recarregar lista
+            preencherListaPedidos(cachePedidosHistorico);
+            
+            alert('✅ Status atualizado com sucesso!');
+        } else {
+            alert('❌ Erro ao atualizar status!');
+        }
+        
+        delete window[callbackName];
+        const script = document.getElementById(callbackName);
+        if (script) script.remove();
+    };
+    
+    const script = document.createElement('script');
+    script.id = callbackName;
+    script.src = scriptURL + 
+                 '?action=atualizarStatus' +
+                 '&referencia=' + encodeURIComponent(referencia) +
+                 '&status=' + encodeURIComponent(novoStatus) +
+                 '&callback=' + callbackName +
+                 '&t=' + Date.now();
+    
+    script.onerror = function() {
+        alert('❌ Erro ao conectar com o servidor!');
+        delete window[callbackName];
+    };
+    
+    document.body.appendChild(script);
 }
     
 // ==================== IMPRIMIR DETALHES (quando está na view de detalhes) ====================
