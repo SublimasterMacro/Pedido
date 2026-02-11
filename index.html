@@ -1173,10 +1173,16 @@ body {
         <div id="dados" class="tab-content active">
             <h2 style="color: #667eea; margin-bottom: 20px;">Informações do Pedido</h2>
             
-            <div class="form-group">
-                <label>📝 Referência do Pedido *</label>
-                <input type="text" id="referencia" placeholder="Ex: PED-2026-001" required>
-            </div>
+           <div class="form-grid">
+    <div class="form-group">
+        <label>📝 Referência do Pedido *</label>
+        <input type="text" id="referencia" placeholder="Ex: PED-2026-001" required>
+    </div>
+    <div class="form-group">
+        <label>📅 Data de Entrega</label>
+        <input type="date" id="dataEntrega">
+    </div>
+</div>
 
             <div class="form-group">
                 <label>👤 Nome Completo *</label>
@@ -1338,6 +1344,7 @@ body {
                 <p><strong>Cliente:</strong> <span id="reviewNome">-</span></p>
                 <p><strong>Telefone:</strong> <span id="reviewTel">-</span></p>
                 <p><strong>E-mail:</strong> <span id="reviewEmail">-</span></p>
+                <p><strong>Data de Entrega:</strong> <span id="reviewDataEntrega">-</span></p>
             </div>
 
             <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 25px;">
@@ -1475,6 +1482,10 @@ body {
                                 <span class="info-label">E-mail</span>
                                 <span class="info-value" id="detalhesEmail">-</span>
                             </div>
+                            <div class="info-row">
+                                <span class="info-label">Data de Entrega</span>
+                                <span class="info-value" id="detalhesDataEntrega">-</span>
+                           </div>
                         </div>
                     </div>
 
@@ -1579,22 +1590,23 @@ function validarSenha() {
         function carregarParametrosURL() {
     const urlParams = new URLSearchParams(window.location.search);
     
-    let referencia, nome, telefone, email;
+    let referencia, nome, telefone, email, dataEntrega;
     
     // Tentar carregar do parâmetro criptografado primeiro
     const dadosCriptografados = urlParams.get('data');
     
     if (dadosCriptografados) {
-        try {
-            // Decodificar Base64
-            const dadosDecodificados = atob(dadosCriptografados);
-            const partes = dadosDecodificados.split('|');
-            
-            referencia = partes[0] || '';
-            nome = partes[1] || '';
-            telefone = partes[2] || '';
-            email = partes[3] || '';
-        } catch (error) {
+    try {
+        // Decodificar Base64
+        const dadosDecodificados = atob(dadosCriptografados);
+        const partes = dadosDecodificados.split('|');
+        
+        referencia = partes[0] || '';
+        nome = partes[1] || '';
+        telefone = partes[2] || '';
+        email = partes[3] || '';
+        dataEntrega = partes[4] || '';
+    } catch (error) {
             console.error('Erro ao decodificar link:', error);
             alert('⚠️ Link inválido ou corrompido!');
             return;
@@ -1641,6 +1653,12 @@ function validarSenha() {
         document.getElementById('email').readOnly = true;
         document.getElementById('email').style.backgroundColor = '#f0f0f0';
     }
+            
+    if (dataEntrega) {
+        document.getElementById('dataEntrega').value = dataEntrega;
+        document.getElementById('dataEntrega').readOnly = true;
+        document.getElementById('dataEntrega').style.backgroundColor = '#f0f0f0';
+    }
 }
 
         // ==================== NAVEGAÇÃO ====================
@@ -1682,6 +1700,7 @@ function validarSenha() {
     const nome = document.getElementById('nome').value.trim();
     const telefone = document.getElementById('telefone').value.trim();
     const email = document.getElementById('email').value.trim();
+    const dataEntrega = document.getElementById('dataEntrega').value.trim();
 
     if (!referencia || !nome || !telefone) {
         alert('⚠️ Preencha Referência, Nome e Telefone para gerar o link!');
@@ -1689,7 +1708,7 @@ function validarSenha() {
     }
 
     // Criar string com dados separados por pipe |
-    const dadosParaCriptografar = `${referencia}|${nome}|${telefone.replace(/\D/g, '')}|${email}`;
+    const dadosParaCriptografar = `${referencia}|${nome}|${telefone.replace(/\D/g, '')}|${email}|${dataEntrega}`;
     
     // Codificar em Base64
     const dadosCriptografados = btoa(dadosParaCriptografar);
@@ -2002,6 +2021,13 @@ function atualizarRevisao() {
     document.getElementById('reviewNome').textContent = document.getElementById('nome').value || '-';
     document.getElementById('reviewTel').textContent = document.getElementById('telefone').value || '-';
     document.getElementById('reviewEmail').textContent = document.getElementById('email').value || '-';
+    let dataEntregaFormatada = '-';
+const dataEntregaValue = document.getElementById('dataEntrega').value;
+if (dataEntregaValue) {
+    const [ano, mes, dia] = dataEntregaValue.split('-');
+    dataEntregaFormatada = `${dia}/${mes}/${ano}`;
+}
+document.getElementById('reviewDataEntrega').textContent = dataEntregaFormatada;
     document.getElementById('reviewTotal').textContent = itens.length;
     
     const lista = document.getElementById('reviewList');
@@ -2060,14 +2086,26 @@ function atualizarRevisao() {
                 return;
             }
 
-            const formData = {
-                referencia: referencia,
-                nome: nome,
-                telefone: telefone,
-                email: email,
-                itens: itensParaEnviar
-            };
+            let dataEntrega = document.getElementById('dataEntrega').value.trim();
 
+// Se não preencheu, usar data atual (sem hora)
+if (!dataEntrega) {
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+    const dia = String(hoje.getDate()).padStart(2, '0');
+    dataEntrega = `${ano}-${mes}-${dia}`;
+}
+
+const formData = {
+    referencia: referencia,
+    nome: nome,
+    telefone: telefone,
+    email: email,
+    dataEntrega: dataEntrega,
+    itens: itensParaEnviar
+};
+            
             const btnSubmit = document.querySelector('.btn-primary');
             const textoOriginal = btnSubmit.textContent;
             btnSubmit.disabled = true;
@@ -2556,6 +2594,19 @@ function preencherDetalhesPedido(dados) {
     document.getElementById('detalhesNome').textContent = dados.nome;
     document.getElementById('detalhesTelefone').textContent = dados.telefone;
     document.getElementById('detalhesEmail').textContent = dados.email || '-';
+
+    // ✅ Formatar data de entrega
+let dataEntregaFormatada = '-';
+if (dados.dataEntrega) {
+    // Se vier no formato YYYY-MM-DD, converter para DD/MM/YYYY
+    if (dados.dataEntrega.includes('-')) {
+        const [ano, mes, dia] = dados.dataEntrega.split('-');
+        dataEntregaFormatada = `${dia}/${mes}/${ano}`;
+    } else {
+        dataEntregaFormatada = dados.dataEntrega;
+    }
+}
+document.getElementById('detalhesDataEntrega').textContent = dataEntregaFormatada;
     
     // Preencher tabela de itens
     const tbody = document.getElementById('detalhesItensBody');
