@@ -1563,41 +1563,44 @@ input[type="date"] {
     </div>
 
     <div id="modalHistorico" class="modal">
-    <div class="modal-historico">
-        <div class="modal-historico-header">
-            <h2 id="modalTitulo">📊 Histórico de Pedidos</h2>
-            <button class="btn-close" onclick="fecharHistorico()">×</button>
-        </div>
-
-        <div class="modal-historico-busca" id="buscaArea">
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="🔍 Buscar por referência, cliente ou telefone..." oninput="buscarPedidosLocal()">
-                <span class="search-icon">🔍</span>
+        <div class="modal-historico">
+            <div class="modal-historico-header">
+                <h2 id="modalTitulo">📊 Histórico de Pedidos</h2>
+                <button class="btn-close" onclick="fecharHistorico()">×</button>
             </div>
-        </div>
 
-        <div class="modal-historico-body" id="listaPedidos">
-            <div id="viewLista" class="view-lista">
-                <div class="loading-historico" id="loadingLista">
+            <div class="modal-historico-busca" id="buscaArea">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="🔍 Buscar por referência, cliente ou telefone..." oninput="buscarPedidosLocal()">
+                    <span class="search-icon">🔍</span>
+                </div>
+            </div>
+
+            <div class="modal-historico-body" id="listaPedidos">
+                <div id="viewLista" class="view-lista">
+                    <div class="loading-historico" id="loadingLista">
+                        <div class="loading-spinner-historico"></div>
+                        <p>Carregando pedidos...</p>
+                    </div>
+                    <div id="cardsContainer"></div>
+                    <div class="empty-state-historico" id="emptyState" style="display: none;">
+                        <div class="empty-state-historico-icon">📋</div>
+                        <p style="font-size: 16px; font-weight: 600; margin-bottom: 5px;">Nenhum pedido encontrado</p>
+                        <p style="font-size: 14px;">Tente buscar com outros termos ou crie seu primeiro pedido</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="viewDetalhes" class="view-detalhes">
+                <div class="loading-historico" id="loadingDetalhes">
                     <div class="loading-spinner-historico"></div>
-                    <p>Carregando pedidos...</p>
+                    <p>Carregando detalhes...</p>
                 </div>
-                <div id="cardsContainer"></div>
-                <div class="empty-state-historico" id="emptyState" style="display: none;">
-                    <div class="empty-state-historico-icon">📋</div>
-                    <p style="font-size: 16px; font-weight: 600; margin-bottom: 5px;">Nenhum pedido encontrado</p>
-                    <p style="font-size: 14px;">Tente buscar com outros termos ou crie seu primeiro pedido</p>
-                </div>
+                <div id="detalhesContent" style="display: none;"></div>
             </div>
-        </div>
 
-        <div id="viewDetalhes" class="view-detalhes">
-            <div class="loading-historico" id="loadingDetalhes">
-                <div class="loading-spinner-historico"></div>
-                <p>Carregando detalhes...</p>
-            </div>
-            <div id="detalhesContent" style="display: none;"></div>
         </div>
+    </div>
 
                 <!-- Container dos detalhes (preenchido dinamicamente) -->
                 <div id="detalhesContent" style="display: none;">
