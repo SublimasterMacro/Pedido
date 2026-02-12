@@ -1179,6 +1179,93 @@ body {
         grid-template-columns: 1fr !important;
     }
 }
+    /* ===== MODAL HISTÓRICO COM FOOTER FIXO ===== */
+.modal-historico {
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh;
+}
+
+.modal-historico-body {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Container de scroll para detalhes */
+.detalhes-scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+}
+
+/* Footer fixo nos detalhes */
+.detalhes-footer {
+    background: white;
+    padding: 20px 30px;
+    border-top: 2px solid #e9ecef;
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.detalhes-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+}
+
+.btn-action {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-voltar {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-voltar:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+.btn-copiar-link {
+    background: #28a745;
+    color: white;
+}
+
+.btn-copiar-link:hover {
+    background: #218838;
+    transform: translateY(-2px);
+}
+
+.btn-imprimir {
+    background: #667eea;
+    color: white;
+}
+
+.btn-imprimir:hover {
+    background: #764ba2;
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .detalhes-actions {
+        grid-template-columns: 1fr !important;
+    }
+}
     </style>
 </head>
 <body>
@@ -2659,56 +2746,107 @@ function preencherDetalhesPedido(dados) {
     document.getElementById('loadingDetalhes').style.display = 'none';
     document.getElementById('detalhesContent').style.display = 'block';
     
-    // Preencher cabeçalho
-    document.getElementById('detalhesPedidoRef').textContent = dados.referencia;
-    document.getElementById('detalhesPedidoData').textContent = 'Criado em ' + formatarDataBrasileira(dados.data);
-    
-    // Preencher dados do cliente
-    document.getElementById('detalhesNome').textContent = dados.nome;
-    document.getElementById('detalhesTelefone').textContent = dados.telefone;
-    document.getElementById('detalhesEmail').textContent = dados.email || '-';
+    // ✅ CRIAR ESTRUTURA COM SCROLL CONTAINER E FOOTER FIXO
+    document.getElementById('detalhesContent').innerHTML = `
+        <div class="detalhes-scroll-container">
+            <div class="detalhes-header">
+                <h3 id="detalhesPedidoRef">${dados.referencia}</h3>
+                <p id="detalhesPedidoData">Criado em ${formatarDataBrasileira(dados.data)}</p>
+            </div>
 
-    // ✅ Formatar data de entrega
-let dataEntregaFormatada = '-';
-if (dados.dataEntrega) {
-    // Se vier no formato YYYY-MM-DD, converter para DD/MM/YYYY
-    if (dados.dataEntrega.includes('-')) {
-        const [ano, mes, dia] = dados.dataEntrega.split('-');
-        dataEntregaFormatada = `${dia}/${mes}/${ano}`;
-    } else {
-        dataEntregaFormatada = dados.dataEntrega;
-    }
+            <div class="detalhes-section">
+                <h4>👤 Informações do Cliente</h4>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <span class="info-label">Nome Completo</span>
+                        <span class="info-value">${dados.nome}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Telefone</span>
+                        <span class="info-value">${dados.telefone}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">E-mail</span>
+                        <span class="info-value">${dados.email || '-'}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Data de Entrega</span>
+                        <span class="info-value">${formatarDataEntrega(dados.dataEntrega)}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detalhes-section">
+                <h4>📦 Itens do Pedido</h4>
+                <table class="itens-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Nome</th>
+                            <th>Número</th>
+                            <th>Tam. Camiseta</th>
+                            <th>Tam. Calção</th>
+                            <th style="text-align: center;">Qtd</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${gerarLinhasItens(dados.itens)}
+                    </tbody>
+                </table>
+            </div>
+
+            <p style="text-align: center; color: #999; padding: 20px;">
+                ⬆️ Role para cima ou para baixo - os botões permanecem sempre visíveis! ⬆️
+            </p>
+        </div>
+
+        <div class="detalhes-footer">
+            <div class="detalhes-actions">
+                <button class="btn-action btn-voltar" onclick="voltarLista()">
+                    ⬅️ Voltar
+                </button>
+                <button class="btn-action btn-copiar-link" onclick="copiarLinkPlanilha()">
+                    📋 Copiar Link
+                </button>
+                <button class="btn-action btn-imprimir" onclick="imprimirDetalhes()">
+                    🖨️ Imprimir
+                </button>
+            </div>
+        </div>
+    `;
 }
-document.getElementById('detalhesDataEntrega').textContent = dataEntregaFormatada;
+
+// ==================== FUNÇÕES AUXILIARES ====================
+function formatarDataEntrega(dataEntrega) {
+    if (!dataEntrega) return '-';
     
-    // Preencher tabela de itens
-    const tbody = document.getElementById('detalhesItensBody');
-    tbody.innerHTML = '';
-    
-    if (!dados.itens || dados.itens.length === 0) {
-        const tr = document.createElement('tr');
-        tr.innerHTML = '<td colspan="6" style="text-align: center; color: #999;">Nenhum item encontrado</td>';
-        tbody.appendChild(tr);
-        return;
+    if (dataEntrega.includes('-')) {
+        const [ano, mes, dia] = dataEntrega.split('-');
+        return `${dia}/${mes}/${ano}`;
+    }
+    return dataEntrega;
+}
+
+function gerarLinhasItens(itens) {
+    if (!itens || itens.length === 0) {
+        return '<tr><td colspan="6" style="text-align: center; color: #999;">Nenhum item encontrado</td></tr>';
     }
     
-    dados.itens.forEach(function(item) {
-        // Extrair apenas o nome do tipo (sem o número)
+    return itens.map(function(item) {
         const tipoLimpo = item.tipo.replace(/^\d+\s*-\s*/, '');
-        
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td class="item-tipo">${tipoLimpo}</td>
-            <td>${item.nome || '-'}</td>
-            <td style="text-align: center;">${item.numero || '-'}</td>
-            <td><span class="item-tamanho">${item.tamCamiseta || '-'}</span></td>
-            <td><span class="item-tamanho">${item.tamCalcao || '-'}</span></td>
-            <td style="text-align: center;">${item.quantidade || 1}</td>
+        return `
+            <tr>
+                <td class="item-tipo">${tipoLimpo}</td>
+                <td>${item.nome || '-'}</td>
+                <td style="text-align: center;">${item.numero || '-'}</td>
+                <td><span class="item-tamanho">${item.tamCamiseta || '-'}</span></td>
+                <td><span class="item-tamanho">${item.tamCalcao || '-'}</span></td>
+                <td style="text-align: center;">${item.quantidade || 1}</td>
+            </tr>
         `;
-        tbody.appendChild(tr);
-    });
+    }).join('');
 }
-
+    
 // ==================== COPIAR LINK DA PLANILHA ====================
 function copiarLinkPlanilha() {
     const referencia = document.getElementById('detalhesPedidoRef').textContent;
@@ -2779,11 +2917,7 @@ function alterarStatus(referencia, novoStatus) {
             }
             
             // Recarregar lista
-            preencherListaPedidos(cachePedidosHistorico);
-            
-            alert('✅ Status atualizado com sucesso!');
-        } else {
-            alert('❌ Erro ao atualizar status!');
+            preencherListaPedidos(cachePedidosHistorico);            
         }
         
         delete window[callbackName];
