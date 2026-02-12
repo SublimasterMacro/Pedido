@@ -2752,8 +2752,7 @@ function verDetalhes(referencia) {
 function preencherDetalhesPedido(dados) {
     document.getElementById('loadingDetalhes').style.display = 'none';
     document.getElementById('detalhesContent').style.display = 'block';
-    
-    // ✅ CRIAR ESTRUTURA COM SCROLL CONTAINER E FOOTER FIXO
+
     document.getElementById('detalhesContent').innerHTML = `
         <div class="detalhes-scroll-container">
             <div class="detalhes-header">
@@ -2801,10 +2800,6 @@ function preencherDetalhesPedido(dados) {
                     </tbody>
                 </table>
             </div>
-
-            <p style="text-align: center; color: #999; padding: 20px;">
-                ⬆️ Role para cima ou para baixo - os botões permanecem sempre visíveis! ⬆️
-            </p>
         </div>
 
         <div class="detalhes-footer">
