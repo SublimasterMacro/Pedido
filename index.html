@@ -1577,32 +1577,27 @@ input[type="date"] {
         </div>
 
         <div class="modal-historico-body" id="listaPedidos">
-            <!-- VIEW LISTA -->
             <div id="viewLista" class="view-lista">
-                <!-- Loading inicial -->
                 <div class="loading-historico" id="loadingLista">
                     <div class="loading-spinner-historico"></div>
                     <p>Carregando pedidos...</p>
                 </div>
-
-                <!-- Container dos cards (preenchido dinamicamente) -->
                 <div id="cardsContainer"></div>
-
-                <!-- Estado vazio (quando não há pedidos) -->
                 <div class="empty-state-historico" id="emptyState" style="display: none;">
                     <div class="empty-state-historico-icon">📋</div>
                     <p style="font-size: 16px; font-weight: 600; margin-bottom: 5px;">Nenhum pedido encontrado</p>
                     <p style="font-size: 14px;">Tente buscar com outros termos ou crie seu primeiro pedido</p>
                 </div>
             </div>
+        </div>
 
-            <!-- VIEW DETALHES -->
-            <div id="viewDetalhes" class="view-detalhes">
-                <!-- Loading detalhes -->
-                <div class="loading-historico" id="loadingDetalhes">
-                    <div class="loading-spinner-historico"></div>
-                    <p>Carregando detalhes...</p>
-                </div>
+        <div id="viewDetalhes" class="view-detalhes">
+            <div class="loading-historico" id="loadingDetalhes">
+                <div class="loading-spinner-historico"></div>
+                <p>Carregando detalhes...</p>
+            </div>
+            <div id="detalhesContent" style="display: none;"></div>
+        </div>
 
                 <!-- Container dos detalhes (preenchido dinamicamente) -->
                 <div id="detalhesContent" style="display: none;">
