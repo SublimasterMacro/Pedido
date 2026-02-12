@@ -552,11 +552,17 @@ body {
         grid-template-columns: 1fr;
     }
     
-    /* ===== FIX CAMPO DATA NO MOBILE ===== */
+    /* ===== FIX CAMPO DATA NO iOS ===== */
     .form-group input[type="date"] {
-        max-width: 100%;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        min-height: 44px; /* Tamanho mínimo do iOS */
+        font-size: 16px; /* Previne zoom automático no iOS */
+        padding: 12px;
         width: 100%;
-        font-size: 14px;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 }
         
