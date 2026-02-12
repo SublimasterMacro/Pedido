@@ -528,13 +528,6 @@ body {
     75% { transform: translateX(10px); }
 }
 
-/* Fix para inputs de data não estourarem o grid */
-input[type="date"] {
-    min-width: 0;
-    width: 100%;
-    box-sizing: border-box;
-}
-
 @media (max-width: 600px) {
     .form-grid {
         grid-template-columns: 1fr;
@@ -750,25 +743,27 @@ input[type="date"] {
     transform: translateY(-2px);
 }
 
-/* Modal Histórico */
+/* ===== MODAL HISTÓRICO - ESTRUTURA FLEX ===== */
 .modal-historico {
     background: white;
-    margin: 3% auto;
-    padding: 0;
-    border-radius: 12px;
+    margin: 2% auto;
     width: 90%;
-    max-width: 800px;
-    max-height: 85vh;
+    max-width: 900px;
+    max-height: 90vh;
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
     animation: slideDown 0.3s;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }
 
+/* CABEÇALHO FIXO */
 .modal-historico-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     padding: 20px 30px;
-    border-radius: 12px 12px 0 0;
+    flex-shrink: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -799,9 +794,12 @@ input[type="date"] {
     transform: rotate(90deg);
 }
 
+/* BUSCA FIXA */
 .modal-historico-busca {
     padding: 20px 30px;
     border-bottom: 1px solid #e9ecef;
+    flex-shrink: 0;
+    background: white;
 }
 
 .search-box {
@@ -830,10 +828,11 @@ input[type="date"] {
     color: #999;
 }
 
+/* CORPO ROLÁVEL */
 .modal-historico-body {
-    padding: 20px 30px;
-    overflow-y: auto;
     flex: 1;
+    overflow-y: auto;
+    padding: 20px 30px;
 }
 
 /* Cards de Pedidos */
@@ -938,13 +937,21 @@ input[type="date"] {
     display: none;
 }
 
-/* Detalhes do Pedido */
+/* ===== DETALHES DO PEDIDO - ESTRUTURA FLEX ===== */
+#detalhesContent {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* CABEÇALHO DOS DETALHES */
 .detalhes-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 20px;
+    flex-shrink: 0;
 }
 
 .detalhes-header h3 {
@@ -957,12 +964,14 @@ input[type="date"] {
     opacity: 0.9;
 }
 
+/* SEÇÕES DE INFO */
 .detalhes-section {
     background: #f8f9fa;
     border: 1px solid #e9ecef;
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 15px;
+    flex-shrink: 0;
 }
 
 .detalhes-section h4 {
@@ -1049,10 +1058,44 @@ input[type="date"] {
     font-weight: 600;
 }
 
+/* ===== BOTÕES FIXOS NO RODAPÉ ===== */
 .detalhes-actions {
-    display: flex;
+    background: white;
+    padding: 20px 0;
+    margin-top: auto;
+    border-top: 2px solid #e9ecef;
+    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.detalhes-actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 10px;
-    margin-top: 20px;
+}
+
+.btn-imprimir {
+    background: #667eea;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-imprimir:hover {
+    background: #764ba2;
+    transform: translateY(-2px);
 }
 
 .empty-state-historico {
@@ -1071,16 +1114,6 @@ input[type="date"] {
     text-align: center;
     padding: 40px;
     color: #667eea;
-}
-
-.loading-spinner-historico {
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #667eea;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 15px;
 }
 
 .loading-spinner-historico {
@@ -1161,116 +1194,24 @@ input[type="date"] {
 
     /* ===== TABELA COM SCROLL HORIZONTAL ===== */
     .detalhes-section {
-        overflow-x: auto; /* Permite scroll horizontal */
-        -webkit-overflow-scrolling: touch; /* Scroll suave no iOS */
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .itens-table {
-        min-width: 600px; /* Largura mínima da tabela */
+        min-width: 600px;
         font-size: 11px;
     }
 
     .itens-table th,
     .itens-table td {
         padding: 8px 6px;
-        white-space: nowrap; /* Impede quebra de linha */
+        white-space: nowrap;
     }
 
     .item-tamanho {
         font-size: 10px;
         padding: 2px 6px;
-    }
-    
-    /* Botões de ação empilhados */
-    .detalhes-actions {
-        grid-template-columns: 1fr !important;
-    }
-}
-    /* ===== MODAL HISTÓRICO COM FOOTER FIXO ===== */
-.modal-historico {
-    display: flex;
-    flex-direction: column;
-    max-height: 85vh;
-}
-
-.modal-historico-body {
-    flex: 1;
-    overflow-y: auto;
-}
-
-/* Container de scroll para detalhes */
-.detalhes-scroll-container {
-    flex: 1;
-    overflow-y: auto;
-    padding: 0;
-}
-
-/* Footer fixo nos detalhes */
-.detalhes-footer {
-    background: white;
-    padding: 20px 30px;
-    border-top: 2px solid #e9ecef;
-    flex-shrink: 0;
-    position: sticky;
-    bottom: 0;
-    z-index: 10;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.detalhes-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
-}
-
-.btn-action {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.btn-voltar {
-    background: #6c757d;
-    color: white;
-}
-
-.btn-voltar:hover {
-    background: #5a6268;
-    transform: translateY(-2px);
-}
-
-.btn-copiar-link {
-    background: #28a745;
-    color: white;
-}
-
-.btn-copiar-link:hover {
-    background: #218838;
-    transform: translateY(-2px);
-}
-
-.btn-imprimir {
-    background: #667eea;
-    color: white;
-}
-
-.btn-imprimir:hover {
-    background: #764ba2;
-    transform: translateY(-2px);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .detalhes-actions {
-        grid-template-columns: 1fr !important;
     }
 }
     </style>
@@ -1563,98 +1504,101 @@ input[type="date"] {
     </div>
 
     <div id="modalHistorico" class="modal">
-        <div class="modal-historico">
-            <div class="modal-historico-header">
-                <h2 id="modalTitulo">📊 Histórico de Pedidos</h2>
-                <button class="btn-close" onclick="fecharHistorico()">×</button>
-            </div>
-
-            <div class="modal-historico-busca" id="buscaArea">
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="🔍 Buscar por referência, cliente ou telefone..." oninput="buscarPedidosLocal()">
-                    <span class="search-icon">🔍</span>
-                </div>
-            </div>
-
-            <div class="modal-historico-body" id="listaPedidos">
-                <div id="viewLista" class="view-lista">
-                    <div class="loading-historico" id="loadingLista">
-                        <div class="loading-spinner-historico"></div>
-                        <p>Carregando pedidos...</p>
-                    </div>
-                    <div id="cardsContainer"></div>
-                    <div class="empty-state-historico" id="emptyState" style="display: none;">
-                        <div class="empty-state-historico-icon">📋</div>
-                        <p style="font-size: 16px; font-weight: 600; margin-bottom: 5px;">Nenhum pedido encontrado</p>
-                        <p style="font-size: 14px;">Tente buscar com outros termos ou crie seu primeiro pedido</p>
-                    </div>
-                </div>
-            </div>
-
-            <div id="viewDetalhes" class="view-detalhes">
-                <div class="loading-historico" id="loadingDetalhes">
-                    <div class="loading-spinner-historico"></div>
-                    <p>Carregando detalhes...</p>
-                </div>
-                <div id="detalhesContent" style="display: none;"></div>
-            </div>
-
+    <div class="modal-historico">
+        <div class="modal-historico-header">
+            <h2 id="modalTitulo">📊 Histórico de Pedidos</h2>
+            <button class="btn-close" onclick="fecharHistorico()">×</button>
         </div>
+
+        <div class="modal-historico-busca" id="buscaArea">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar por referência, cliente ou telefone..." oninput="buscarPedidosLocal()">
+                <span class="search-icon">🔍</span>
+            </div>
+        </div>
+
+        <div class="modal-historico-body" id="listaPedidos">
+            <!-- VIEW LISTA -->
+            <div id="viewLista" class="view-lista">
+                <!-- Loading inicial -->
+                <div class="loading-historico" id="loadingLista">
+                    <div class="loading-spinner-historico"></div>
+                    <p>Carregando pedidos...</p>
+                </div>
+
+                <!-- Container dos cards (preenchido dinamicamente) -->
+                <div id="cardsContainer"></div>
+
+                <!-- Estado vazio (quando não há pedidos) -->
+                <div class="empty-state-historico" id="emptyState" style="display: none;">
+                    <div class="empty-state-historico-icon">📋</div>
+                    <p style="font-size: 16px; font-weight: 600; margin-bottom: 5px;">Nenhum pedido encontrado</p>
+                    <p style="font-size: 14px;">Tente buscar com outros termos ou crie seu primeiro pedido</p>
+                </div>
+            </div>
+
+            <!-- VIEW DETALHES -->
+            <div id="viewDetalhes" class="view-detalhes">
+    <!-- Loading detalhes -->
+    <div class="loading-historico" id="loadingDetalhes">
+        <div class="loading-spinner-historico"></div>
+        <p>Carregando detalhes...</p>
     </div>
 
-     <div id="detalhesContent" style="display: none;">
-                    <div class="detalhes-header">
-                        <h3 id="detalhesPedidoRef">-</h3>
-                        <p id="detalhesPedidoData">-</p>
-                    </div>
+    <!-- Container dos detalhes (preenchido dinamicamente) -->
+    <div id="detalhesContent" style="display: none;">
+        <div class="detalhes-header">
+            <h3 id="detalhesPedidoRef">-</h3>
+            <p id="detalhesPedidoData">-</p>
+        </div>
 
-                    <div class="detalhes-section">
-                        <h4>👤 Informações do Cliente</h4>
-                        <div class="info-grid">
-                            <div class="info-row">
-                                <span class="info-label">Nome Completo</span>
-                                <span class="info-value" id="detalhesNome">-</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Telefone</span>
-                                <span class="info-value" id="detalhesTelefone">-</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">E-mail</span>
-                                <span class="info-value" id="detalhesEmail">-</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Data de Entrega</span>
-                                <span class="info-value" id="detalhesDataEntrega">-</span>
-                           </div>
-                        </div>
-                    </div>
-
-                    <div class="detalhes-section">
-                        <h4>📦 Itens do Pedido</h4>
-                        <table class="itens-table">
-                            <thead>
-                                <tr>
-                                    <th>Tipo</th>
-                                    <th>Nome</th>
-                                    <th>Número</th>
-                                    <th>Tam. Camiseta</th>
-                                    <th>Tam. Calção</th>
-                                    <th style="text-align: center;">Qtd</th>
-                                </tr>
-                            </thead>
-                            <tbody id="detalhesItensBody">
-                                <!-- Preenchido dinamicamente -->
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="detalhes-actions">
-                        <button class="btn-action btn-voltar" onclick="voltarLista()">⬅️ Voltar</button>
-                        <button class="btn-action btn-copiar-link" onclick="copiarLinkPlanilha()">📋 Copiar Link</button>
-                        <button class="btn-action btn-imprimir" onclick="imprimirDetalhes()">🖨️ Imprimir Pedido</button>
-                    </div>
+        <div class="detalhes-section">
+            <h4>👤 Informações do Cliente</h4>
+            <div class="info-grid">
+                <div class="info-row">
+                    <span class="info-label">Nome Completo</span>
+                    <span class="info-value" id="detalhesNome">-</span>
                 </div>
+                <div class="info-row">
+                    <span class="info-label">Telefone</span>
+                    <span class="info-value" id="detalhesTelefone">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">E-mail</span>
+                    <span class="info-value" id="detalhesEmail">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Data de Entrega</span>
+                    <span class="info-value" id="detalhesDataEntrega">-</span>
+               </div>
+            </div>
+        </div>
+
+        <div class="detalhes-section">
+            <h4>📦 Itens do Pedido</h4>
+            <table class="itens-table">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Nome</th>
+                        <th>Número</th>
+                        <th>Tam. Camiseta</th>
+                        <th>Tam. Calção</th>
+                        <th style="text-align: center;">Qtd</th>
+                    </tr>
+                </thead>
+                <tbody id="detalhesItensBody">
+                    <!-- Preenchido dinamicamente -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ===== BOTÕES FIXOS NO RODAPÉ ===== -->
+        <div class="detalhes-actions">
+            <div class="detalhes-actions-grid">
+                <button class="btn-action btn-voltar" onclick="voltarLista()">⬅️ Voltar</button>
+                <button class="btn-action btn-copiar-link" onclick="copiarLinkPlanilha()">📋 Copiar Link</button>
+                <button class="btn-action btn-imprimir" onclick="imprimirDetalhes()">🖨️ Imprimir</button>
             </div>
         </div>
     </div>
@@ -2749,103 +2693,57 @@ function verDetalhes(referencia) {
 function preencherDetalhesPedido(dados) {
     document.getElementById('loadingDetalhes').style.display = 'none';
     document.getElementById('detalhesContent').style.display = 'block';
-
-    document.getElementById('detalhesContent').innerHTML = `
-        <div class="detalhes-scroll-container">
-            <div class="detalhes-header">
-                <h3 id="detalhesPedidoRef">${dados.referencia}</h3>
-                <p id="detalhesPedidoData">Criado em ${formatarDataBrasileira(dados.data)}</p>
-            </div>
-
-            <div class="detalhes-section">
-                <h4>👤 Informações do Cliente</h4>
-                <div class="info-grid">
-                    <div class="info-row">
-                        <span class="info-label">Nome Completo</span>
-                        <span class="info-value">${dados.nome}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Telefone</span>
-                        <span class="info-value">${dados.telefone}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">E-mail</span>
-                        <span class="info-value">${dados.email || '-'}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Data de Entrega</span>
-                        <span class="info-value">${formatarDataEntrega(dados.dataEntrega)}</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="detalhes-section">
-                <h4>📦 Itens do Pedido</h4>
-                <table class="itens-table">
-                    <thead>
-                        <tr>
-                            <th>Tipo</th>
-                            <th>Nome</th>
-                            <th>Número</th>
-                            <th>Tam. Camiseta</th>
-                            <th>Tam. Calção</th>
-                            <th style="text-align: center;">Qtd</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${gerarLinhasItens(dados.itens)}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="detalhes-footer">
-            <div class="detalhes-actions">
-                <button class="btn-action btn-voltar" onclick="voltarLista()">
-                    ⬅️ Voltar
-                </button>
-                <button class="btn-action btn-copiar-link" onclick="copiarLinkPlanilha()">
-                    📋 Copiar Link
-                </button>
-                <button class="btn-action btn-imprimir" onclick="imprimirDetalhes()">
-                    🖨️ Imprimir
-                </button>
-            </div>
-        </div>
-    `;
-}
-
-// ==================== FUNÇÕES AUXILIARES ====================
-function formatarDataEntrega(dataEntrega) {
-    if (!dataEntrega) return '-';
     
-    if (dataEntrega.includes('-')) {
-        const [ano, mes, dia] = dataEntrega.split('-');
-        return `${dia}/${mes}/${ano}`;
-    }
-    return dataEntrega;
-}
+    // Preencher cabeçalho
+    document.getElementById('detalhesPedidoRef').textContent = dados.referencia;
+    document.getElementById('detalhesPedidoData').textContent = 'Criado em ' + formatarDataBrasileira(dados.data);
+    
+    // Preencher dados do cliente
+    document.getElementById('detalhesNome').textContent = dados.nome;
+    document.getElementById('detalhesTelefone').textContent = dados.telefone;
+    document.getElementById('detalhesEmail').textContent = dados.email || '-';
 
-function gerarLinhasItens(itens) {
-    if (!itens || itens.length === 0) {
-        return '<tr><td colspan="6" style="text-align: center; color: #999;">Nenhum item encontrado</td></tr>';
+    // ✅ Formatar data de entrega
+let dataEntregaFormatada = '-';
+if (dados.dataEntrega) {
+    // Se vier no formato YYYY-MM-DD, converter para DD/MM/YYYY
+    if (dados.dataEntrega.includes('-')) {
+        const [ano, mes, dia] = dados.dataEntrega.split('-');
+        dataEntregaFormatada = `${dia}/${mes}/${ano}`;
+    } else {
+        dataEntregaFormatada = dados.dataEntrega;
+    }
+}
+document.getElementById('detalhesDataEntrega').textContent = dataEntregaFormatada;
+    
+    // Preencher tabela de itens
+    const tbody = document.getElementById('detalhesItensBody');
+    tbody.innerHTML = '';
+    
+    if (!dados.itens || dados.itens.length === 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="6" style="text-align: center; color: #999;">Nenhum item encontrado</td>';
+        tbody.appendChild(tr);
+        return;
     }
     
-    return itens.map(function(item) {
+    dados.itens.forEach(function(item) {
+        // Extrair apenas o nome do tipo (sem o número)
         const tipoLimpo = item.tipo.replace(/^\d+\s*-\s*/, '');
-        return `
-            <tr>
-                <td class="item-tipo">${tipoLimpo}</td>
-                <td>${item.nome || '-'}</td>
-                <td style="text-align: center;">${item.numero || '-'}</td>
-                <td><span class="item-tamanho">${item.tamCamiseta || '-'}</span></td>
-                <td><span class="item-tamanho">${item.tamCalcao || '-'}</span></td>
-                <td style="text-align: center;">${item.quantidade || 1}</td>
-            </tr>
+        
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="item-tipo">${tipoLimpo}</td>
+            <td>${item.nome || '-'}</td>
+            <td style="text-align: center;">${item.numero || '-'}</td>
+            <td><span class="item-tamanho">${item.tamCamiseta || '-'}</span></td>
+            <td><span class="item-tamanho">${item.tamCalcao || '-'}</span></td>
+            <td style="text-align: center;">${item.quantidade || 1}</td>
         `;
-    }).join('');
+        tbody.appendChild(tr);
+    });
 }
-    
+
 // ==================== COPIAR LINK DA PLANILHA ====================
 function copiarLinkPlanilha() {
     const referencia = document.getElementById('detalhesPedidoRef').textContent;
