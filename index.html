@@ -942,6 +942,14 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
+    min-height: 0;
+}
+
+/* CORPO ROLÁVEL DOS DETALHES */
+.detalhes-body {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 20px;
 }
 
 /* CABEÇALHO DOS DETALHES */
@@ -1061,14 +1069,14 @@ body {
 /* ===== BOTÕES FIXOS NO RODAPÉ ===== */
 .detalhes-actions {
     background: white;
-    padding: 20px 0;
-    margin-top: auto;
+    padding: 20px 30px;
     border-top: 2px solid #e9ecef;
     flex-shrink: 0;
     position: sticky;
-    bottom: 0;
+    bottom: -30px;
     z-index: 10;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    margin: 0 -30px -30px -30px;
 }
 
 .detalhes-actions-grid {
@@ -1547,6 +1555,7 @@ body {
 
     <!-- Container dos detalhes (preenchido dinamicamente) -->
     <div id="detalhesContent" style="display: none;">
+    <div class="detalhes-body">
         <div class="detalhes-header">
             <h3 id="detalhesPedidoRef">-</h3>
             <p id="detalhesPedidoData">-</p>
@@ -1592,14 +1601,14 @@ body {
                 </tbody>
             </table>
         </div>
+    </div>
 
-        <!-- ===== BOTÕES FIXOS NO RODAPÉ ===== -->
-        <div class="detalhes-actions">
-            <div class="detalhes-actions-grid">
-                <button class="btn-action btn-voltar" onclick="voltarLista()">⬅️ Voltar</button>
-                <button class="btn-action btn-copiar-link" onclick="copiarLinkPlanilha()">📋 Copiar Link</button>
-                <button class="btn-action btn-imprimir" onclick="imprimirDetalhes()">🖨️ Imprimir</button>
-            </div>
+    <!-- ===== BOTÕES FIXOS NO RODAPÉ ===== -->
+    <div class="detalhes-actions">
+        <div class="detalhes-actions-grid">
+            <button class="btn-action btn-voltar" onclick="voltarLista()">⬅️ Voltar</button>
+            <button class="btn-action btn-copiar-link" onclick="copiarLinkPlanilha()">📋 Copiar Link</button>
+            <button class="btn-action btn-imprimir" onclick="imprimirDetalhes()">🖨️ Imprimir</button>
         </div>
     </div>
 </div>
