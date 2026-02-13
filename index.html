@@ -1598,8 +1598,20 @@ body:has(#modalHistorico[style*="display: block"]) .info-value {
 
     <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 25px;">
         <h3 style="color: #333; margin-bottom: 15px;">📦 Itens do Pedido</h3>
-        <ul id="reviewList" style="list-style: none; padding: 0; margin-top: 15px; font-size: 14px; color: #666; line-height: 1.8;">
-        </ul>
+        <table class="itens-table" id="reviewList">
+    <thead>
+        <tr>
+            <th>Tipo</th>
+            <th>Nome</th>
+            <th>Número</th>
+            <th>Tam. Camiseta</th>
+            <th>Tam. Calção</th>
+            <th style="text-align: center;">Qtd</th>
+        </tr>
+    </thead>
+    <tbody id="reviewListBody">
+    </tbody>
+</table>
     </div>
 
           <div class="print-only">
@@ -2265,53 +2277,40 @@ function atualizarHeaderItem(index) {
         }    
 
 // ==================== Função atualizarRevisao() ====================
+
 function atualizarRevisao() {
     document.getElementById('reviewRef').textContent = document.getElementById('referencia').value || '-';
     document.getElementById('reviewNome').textContent = document.getElementById('nome').value || '-';
     document.getElementById('reviewTel').textContent = document.getElementById('telefone').value || '-';
     document.getElementById('reviewEmail').textContent = document.getElementById('email').value || '-';
+    
     let dataEntregaFormatada = '-';
-const dataEntregaValue = document.getElementById('dataEntrega').value;
-if (dataEntregaValue) {
-    const [ano, mes, dia] = dataEntregaValue.split('-');
-    dataEntregaFormatada = `${dia}/${mes}/${ano}`;
-}
-document.getElementById('reviewDataEntrega').textContent = dataEntregaFormatada;
+    const dataEntregaValue = document.getElementById('dataEntrega').value;
+    if (dataEntregaValue) {
+        const [ano, mes, dia] = dataEntregaValue.split('-');
+        dataEntregaFormatada = `${dia}/${mes}/${ano}`;
+    }
+    document.getElementById('reviewDataEntrega').textContent = dataEntregaFormatada;
     document.getElementById('reviewTotal').textContent = itens.length;
-    
-    const lista = document.getElementById('reviewList');
-    lista.innerHTML = '';
-    
+
+    const tbody = document.getElementById('reviewListBody');
+    tbody.innerHTML = '';
+
     if (itens.length === 0) {
-        lista.innerHTML = '<li style="color: #999;">Nenhum item adicionado</li>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999;">Nenhum item adicionado</td></tr>';
     } else {
-        itens.forEach((item, index) => {
-            const li = document.createElement('li');
-            li.className = 'item-review';
-            
-            // Extrair apenas o nome do tipo (sem o número)
+        itens.forEach((item) => {
             const tipoLimpo = item.tipo.replace(/^\d+\s*-\s*/, '');
-            
-            // Montar tamanhos
-            let tamanhos = '';
-            if (item.tamCamiseta && item.tamCalcao) {
-                tamanhos = `${item.tamCamiseta}/${item.tamCalcao}`;
-            } else if (item.tamCamiseta) {
-                tamanhos = `Cam: ${item.tamCamiseta}`;
-            } else if (item.tamCalcao) {
-                tamanhos = `Cal: ${item.tamCalcao}`;
-            } else {
-                tamanhos = '-';
-            }
-            
-            const numero = item.numero ? `Nº ${item.numero}` : '-';
-            const adicional = item.adicional ? ` | ${item.adicional}` : '';
-            
-            li.innerHTML = `
-                <div class="item-header">Item ${index + 1} → ${tipoLimpo}</div>
-                <div class="item-details">👤 ${item.nome || '(sem nome)'} | ${numero} | ${tamanhos} | Qtd: ${item.quantidade || '1'}${adicional}</div>
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="item-tipo">${tipoLimpo}</td>
+                <td>${item.nome || '-'}</td>
+                <td style="text-align: center;">${item.numero || '-'}</td>
+                <td><span class="item-tamanho">${item.tamCamiseta || '-'}</span></td>
+                <td><span class="item-tamanho">${item.tamCalcao || '-'}</span></td>
+                <td style="text-align: center;">${item.quantidade || 1}</td>
             `;
-            lista.appendChild(li);
+            tbody.appendChild(tr);
         });
     }
 }
