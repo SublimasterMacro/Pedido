@@ -689,13 +689,26 @@ body {
         gap: 8px !important;
     }
     
-    body:has(#modalHistorico[style*="display: block"]) .info-label {
-        font-size: 9px !important;
-    }
-    
-    body:has(#modalHistorico[style*="display: block"]) .info-value {
-        font-size: 11px !important;
-    }
+   /* ===== INFO GRID COMPACTO ===== */
+body:has(#modalHistorico[style*="display: block"]) .info-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+}
+
+body:has(#modalHistorico[style*="display: block"]) .info-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+}
+
+body:has(#modalHistorico[style*="display: block"]) .info-label {
+    font-size: 9px !important;
+}
+
+body:has(#modalHistorico[style*="display: block"]) .info-value {
+    font-size: 11px !important;
+}
     
     /* ===== TABELA DE ITENS COMPACTA ===== */
     body:has(#modalHistorico[style*="display: block"]) .itens-table {
