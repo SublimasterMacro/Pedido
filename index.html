@@ -607,6 +607,11 @@ body {
         color: #333 !important;
     }
 
+    /* ===== OCULTAR BOTÃO HISTÓRICO EM QUALQUER SITUAÇÃO ===== */
+    .btn-historico {
+        display: none !important;
+    }
+
     /* ========== IMPRESSÃO DO MODAL HISTÓRICO ========== */
     /* Quando modal histórico estiver aberto */
     body:has(#modalHistorico[style*="display: block"]) .container {
@@ -764,6 +769,7 @@ body:has(#modalHistorico[style*="display: block"]) .info-value {
     body:not(:has(#modalHistorico[style*="display: block"])) .tabs,
     body:not(:has(#modalHistorico[style*="display: block"])) .btn-group,
     body:not(:has(#modalHistorico[style*="display: block"])) .footer-1,
+    body:not(:has(#modalHistorico[style*="display: block"])) .btn-historico,
     body:not(:has(#modalHistorico[style*="display: block"])) .no-print {
         display: none !important;
     }
