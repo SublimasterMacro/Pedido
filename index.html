@@ -841,40 +841,27 @@ body:has(#modalHistorico[style*="display: block"]) .info-value {
     }
 
     /* ===== LISTA DE ITENS ===== */
-    body:not(:has(#modalHistorico[style*="display: block"])) #reviewList {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    font-size: 11px;
-}
+    body:not(:has(#modalHistorico[style*="display: block"])) .item-review {
+        background: white !important;
+        border: 1px solid #ddd !important;
+        border-radius: 4px !important;
+        padding: 10px !important;
+        margin-bottom: 8px !important;
+        page-break-inside: avoid;
+    }
 
-body:not(:has(#modalHistorico[style*="display: block"])) #reviewList thead {
-    background: #667eea !important;
-    color: white !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-}
+    body:not(:has(#modalHistorico[style*="display: block"])) .item-header {
+        color: #667eea !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        margin-bottom: 4px !important;
+    }
 
-body:not(:has(#modalHistorico[style*="display: block"])) #reviewList th {
-    padding: 8px 6px !important;
-    text-align: left !important;
-    font-size: 10px !important;
-    font-weight: 600 !important;
-    border: 1px solid #ddd !important;
-}
-
-body:not(:has(#modalHistorico[style*="display: block"])) #reviewList td {
-    padding: 6px !important;
-    border: 1px solid #ddd !important;
-    font-size: 11px !important;
-    color: #555 !important;
-}
-
-body:not(:has(#modalHistorico[style*="display: block"])) .item-review,
-body:not(:has(#modalHistorico[style*="display: block"])) .item-header,
-body:not(:has(#modalHistorico[style*="display: block"])) .item-details {
-    display: none !important;
-}
+    body:not(:has(#modalHistorico[style*="display: block"])) .item-details {
+        color: #555 !important;
+        font-size: 11px !important;
+        line-height: 1.5 !important;
+    }
 
     /* ===== RODAPÉ DE IMPRESSÃO ===== */
     body:not(:has(#modalHistorico[style*="display: block"])) .print-only {
