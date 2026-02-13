@@ -2724,9 +2724,9 @@ card.innerHTML = `
             <span>${pedido.email || '-'}</span>
         </div>
         <div class="pedido-info-item">
-            <span class="pedido-info-label">Itens:</span>
-            <span>${pedido.totalItens} unidades</span>
-        </div>
+    <span class="pedido-info-label">Peças:</span>
+    <span>${pedido.totalItens} unidades</span>
+</div>
     </div>
     <div class="pedido-actions" style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
     <select class="status-dropdown" onchange="alterarStatus('${pedido.referencia.replace(/'/g, "\\'")}', this.value)">
