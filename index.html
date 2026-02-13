@@ -757,6 +757,7 @@ body:has(#modalHistorico[style*="display: block"]) .info-value {
         background: white !important;
         color: #333 !important;
         border-bottom: 2px solid #333;
+        padding: 20px !important;
     }
 
     body:not(:has(#modalHistorico[style*="display: block"])) .tabs,
@@ -768,46 +769,104 @@ body:has(#modalHistorico[style*="display: block"]) .info-value {
 
     body:not(:has(#modalHistorico[style*="display: block"])) .tab-content {
         display: block !important;
-        padding: 20px;
+        padding: 30px !important;
     }
 
     body:not(:has(#modalHistorico[style*="display: block"])) .tab-content:not(#revisar) {
         display: none !important;
     }
 
-    /* ===== FORÇAR GRID 2x2 NA ABA REVISAR ===== */
-    body:not(:has(#modalHistorico[style*="display: block"])) #revisar > div {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 15px !important;
+    /* ===== TÍTULO DA SEÇÃO ===== */
+    body:not(:has(#modalHistorico[style*="display: block"])) #revisar h2 {
+        color: #333 !important;
+        border-bottom: 3px solid #667eea;
+        padding-bottom: 10px;
         margin-bottom: 20px;
+        font-size: 1.3em;
     }
 
-    body:not(:has(#modalHistorico[style*="display: block"])) #revisar > div > p {
-        margin: 0 !important;
-        font-size: 13px !important;
-        display: flex !important;
-        gap: 8px !important;
+    body:not(:has(#modalHistorico[style*="display: block"])) #revisar h3 {
+        color: #667eea !important;
+        font-size: 1.1em;
+        margin-bottom: 12px;
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 8px;
     }
 
-    body:not(:has(#modalHistorico[style*="display: block"])) #revisar strong {
-        min-width: 120px;
-        font-weight: 600;
-    }
-
-    body:not(:has(#modalHistorico[style*="display: block"])) .item-review {
-        background: white;
-        border: 1px solid #ddd;
+    /* ===== BLOCOS DE INFORMAÇÃO ===== */
+    body:not(:has(#modalHistorico[style*="display: block"])) #revisar > div {
+        background: white !important;
+        border: 2px solid #e9ecef !important;
+        border-radius: 8px !important;
+        padding: 20px !important;
+        margin-bottom: 20px !important;
         page-break-inside: avoid;
     }
 
+    /* ===== GRID 2x2 PARA OS DADOS ===== */
+    body:not(:has(#modalHistorico[style*="display: block"])) #revisar > div:first-of-type {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px 20px !important;
+    }
+
+    body:not(:has(#modalHistorico[style*="display: block"])) #revisar > div:first-of-type p {
+        margin: 0 !important;
+        padding: 8px 0 !important;
+        font-size: 13px !important;
+        line-height: 1.5 !important;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    body:not(:has(#modalHistorico[style*="display: block"])) #revisar > div:first-of-type p:last-child,
+    body:not(:has(#modalHistorico[style*="display: block"])) #revisar > div:first-of-type p:nth-last-child(2) {
+        border-bottom: none;
+    }
+
+    body:not(:has(#modalHistorico[style*="display: block"])) #revisar strong {
+        color: #667eea;
+        font-weight: 600;
+        min-width: 140px;
+        display: inline-block;
+    }
+
+    body:not(:has(#modalHistorico[style*="display: block"])) #revisar span {
+        color: #333;
+        font-weight: 500;
+    }
+
+    /* ===== LISTA DE ITENS ===== */
+    body:not(:has(#modalHistorico[style*="display: block"])) .item-review {
+        background: white !important;
+        border: 1px solid #ddd !important;
+        border-left: 4px solid #667eea !important;
+        border-radius: 6px !important;
+        padding: 12px !important;
+        margin-bottom: 10px !important;
+        page-break-inside: avoid;
+    }
+
+    body:not(:has(#modalHistorico[style*="display: block"])) .item-header {
+        color: #667eea !important;
+        font-size: 14px !important;
+        font-weight: 700 !important;
+        margin-bottom: 6px !important;
+    }
+
+    body:not(:has(#modalHistorico[style*="display: block"])) .item-details {
+        color: #555 !important;
+        font-size: 12px !important;
+        line-height: 1.6 !important;
+    }
+
+    /* ===== RODAPÉ DE IMPRESSÃO ===== */
     body:not(:has(#modalHistorico[style*="display: block"])) .print-only {
         display: block !important;
         text-align: center;
         padding: 20px 0;
         border-top: 2px solid #ddd;
         margin-top: 30px;
-        font-size: 12px;
+        font-size: 11px;
         color: #666;
     }
 }
