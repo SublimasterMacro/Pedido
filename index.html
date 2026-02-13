@@ -1598,20 +1598,8 @@ body:has(#modalHistorico[style*="display: block"]) .info-value {
 
     <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 25px;">
         <h3 style="color: #333; margin-bottom: 15px;">📦 Itens do Pedido</h3>
-        <table class="itens-table" id="reviewList">
-    <thead>
-        <tr>
-            <th>Tipo</th>
-            <th>Nome</th>
-            <th>Número</th>
-            <th>Tam. Camiseta</th>
-            <th>Tam. Calção</th>
-            <th style="text-align: center;">Qtd</th>
-        </tr>
-    </thead>
-    <tbody id="reviewListBody">
-    </tbody>
-</table>
+        <ul id="reviewList" style="list-style: none; padding: 0; margin-top: 15px; font-size: 14px; color: #666; line-height: 1.8;">
+        </ul>
     </div>
 
           <div class="print-only">
@@ -2294,26 +2282,12 @@ document.getElementById('reviewDataEntrega').textContent = dataEntregaFormatada;
     const lista = document.getElementById('reviewList');
     lista.innerHTML = '';
     
-    const tbody = document.getElementById('reviewListBody');
-tbody.innerHTML = '';
-
-if (itens.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999;">Nenhum item adicionado</td></tr>';
-} else {
-    itens.forEach((item) => {
-        const tipoLimpo = item.tipo.replace(/^\d+\s*-\s*/, '');
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td class="item-tipo">${tipoLimpo}</td>
-            <td>${item.nome || '-'}</td>
-            <td style="text-align: center;">${item.numero || '-'}</td>
-            <td><span class="item-tamanho">${item.tamCamiseta || '-'}</span></td>
-            <td><span class="item-tamanho">${item.tamCalcao || '-'}</span></td>
-            <td style="text-align: center;">${item.quantidade || 1}</td>
-        `;
-        tbody.appendChild(tr);
-    });
-}
+    if (itens.length === 0) {
+        lista.innerHTML = '<li style="color: #999;">Nenhum item adicionado</li>';
+    } else {
+        itens.forEach((item, index) => {
+            const li = document.createElement('li');
+            li.className = 'item-review';
             
             // Extrair apenas o nome do tipo (sem o número)
             const tipoLimpo = item.tipo.replace(/^\d+\s*-\s*/, '');
