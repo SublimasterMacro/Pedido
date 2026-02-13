@@ -620,13 +620,14 @@ body {
     }
     
     /* Ocultar elementos do modal */
-    body:has(#modalHistorico[style*="display: block"]) .modal-historico-header,
-    body:has(#modalHistorico[style*="display: block"]) .modal-historico-busca,
-    body:has(#modalHistorico[style*="display: block"]) .detalhes-actions,
-    body:has(#modalHistorico[style*="display: block"]) .btn-close,
-    body:has(#modalHistorico[style*="display: block"]) #viewLista {
-        display: none !important;
-    }
+body:has(#modalHistorico[style*="display: block"]) .modal-historico-header,
+body:has(#modalHistorico[style*="display: block"]) .modal-historico-busca,
+body:has(#modalHistorico[style*="display: block"]) .detalhes-actions,
+body:has(#modalHistorico[style*="display: block"]) .btn-close,
+body:has(#modalHistorico[style*="display: block"]) #viewLista,
+body:has(#modalHistorico[style*="display: block"]) .btn-historico { 
+    display: none !important;
+}
     
     /* Modal ocupa página inteira */
     body:has(#modalHistorico[style*="display: block"]) .modal-historico {
