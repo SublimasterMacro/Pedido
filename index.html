@@ -775,19 +775,24 @@ body:has(#modalHistorico[style*="display: block"]) .info-value {
         display: none !important;
     }
 
-    /* ===== MANTER LAYOUT 2 COLUNAS NA IMPRESSÃO ===== */
+    /* ===== FORÇAR GRID 2x2 NA ABA REVISAR ===== */
     body:not(:has(#modalHistorico[style*="display: block"])) #revisar > div {
-        display: block !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 15px !important;
+        margin-bottom: 20px;
     }
 
     body:not(:has(#modalHistorico[style*="display: block"])) #revisar > div > p {
-        margin-bottom: 8px !important;
+        margin: 0 !important;
         font-size: 13px !important;
+        display: flex !important;
+        gap: 8px !important;
     }
 
     body:not(:has(#modalHistorico[style*="display: block"])) #revisar strong {
-        display: inline-block;
-        min-width: 150px;
+        min-width: 120px;
+        font-weight: 600;
     }
 
     body:not(:has(#modalHistorico[style*="display: block"])) .item-review {
