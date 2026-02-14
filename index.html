@@ -1573,6 +1573,82 @@ body:has(#modalHistorico[style*="display: block"]) .info-value {
         grid-template-columns: 1fr;
     }
 }
+
+/* ===== MODAL DETALHES DO CLIENTE ===== */
+.modal-detalhes {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.modal-detalhes.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-detalhes .modal-content {
+    background: white;
+    border-radius: 16px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideIn 0.3s ease;
+}
+
+.modal-detalhes .modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 16px 16px 0 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.modal-detalhes .modal-header h2 {
+    margin-bottom: 8px;
+}
+
+.modal-detalhes .modal-body {
+    padding: 25px;
+}
+
+.modal-detalhes .btn-fechar {
+    background: #6c757d;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.modal-detalhes .btn-fechar:hover {
+    background: #5a6268;
+}
+
+.item-linha {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border-left: 4px solid #667eea;
+}
+
+.item-linha:last-child {
+    margin-bottom: 0;
+}
     </style>
 </head>
 <body>
@@ -1592,7 +1668,99 @@ body:has(#modalHistorico[style*="display: block"]) .info-value {
         </div>
     </div>
 
-    <div class="container" id="mainContainer" style="display: none;">
+    <!-- ===== CARDS DE STATUS DO CLIENTE (FORA DO CONTAINER) ===== -->
+<div id="clienteStatusArea" style="display: none;">
+    <div class="container" style="max-width: 800px;">
+        <!-- Card de Status -->
+        <div class="status-card" id="statusCard">
+            <div class="status-header">
+                <div class="status-titulo">📦 Seu Pedido</div>
+                <div class="status-ref" id="statusRef">-</div>
+            </div>
+
+            <div style="text-align: center;">
+                <div class="status-badge-grande status-pendente-badge" id="statusBadge">
+                    🟡 Pendente
+                </div>
+            </div>
+
+            <div class="status-info-grid">
+                <div class="status-info-item">
+                    <div class="status-info-label">Cliente</div>
+                    <div class="status-info-value" id="statusNome">-</div>
+                </div>
+                <div class="status-info-item">
+                    <div class="status-info-label">Data de Entrega</div>
+                    <div class="status-info-value" id="statusDataEntrega">-</div>
+                </div>
+                <div class="status-info-item">
+                    <div class="status-info-label">Total de Peças</div>
+                    <div class="status-info-value" id="statusTotal">-</div>
+                </div>
+            </div>
+
+            <div class="status-timeline" id="timelineStatus">
+                <div class="timeline-item">
+                    <div class="timeline-icon concluido" id="icon-recebido">✓</div>
+                    <div class="timeline-texto">
+                        <div class="timeline-titulo">Pedido Recebido</div>
+                        <div class="timeline-data" id="data-recebido">-</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon pendente" id="icon-pendente">🟡</div>
+                    <div class="timeline-texto">
+                        <div class="timeline-titulo">Pendente</div>
+                        <div class="timeline-data" id="data-pendente">Aguardando...</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon pendente" id="icon-producao">🔵</div>
+                    <div class="timeline-texto">
+                        <div class="timeline-titulo">Em Produção</div>
+                        <div class="timeline-data" id="data-producao">Aguardando...</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon pendente" id="icon-pronto">📦</div>
+                    <div class="timeline-texto">
+                        <div class="timeline-titulo">Pronto para Entrega</div>
+                        <div class="timeline-data" id="data-pronto">Aguardando...</div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon pendente" id="icon-entregue">🟢</div>
+                    <div class="timeline-texto">
+                        <div class="timeline-titulo">Entregue</div>
+                        <div class="timeline-data" id="data-entregue">Aguardando...</div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-ver-detalhes" onclick="abrirDetalhesCliente()">
+                👁️ Ver Detalhes
+            </button>
+        </div>
+
+        <!-- Card de Contato -->
+        <div class="formulario-card" id="contatoCard" style="padding: 12px;">
+            <h3 style="text-align: center; color: #667eea; margin-bottom: 6px; font-size: 0.95em;">
+                📞 Precisa de Ajuda?
+            </h3>
+            <p style="text-align: center; color: #666; line-height: 1.2; margin-bottom: 10px; font-size: 0.8em;">
+                Caso tenha alguma dúvida ou precise fazer alterações, entre em contato conosco.
+            </p>
+            
+            <div style="background: linear-gradient(135deg, #e8f0fe 0%, #f3e8ff 100%); padding: 10px; border-radius: 6px; text-align: center;">
+                <p style="color: #333; font-weight: 600; margin-bottom: 3px; font-size: 0.8em;">📱 WhatsApp / Telefone</p>
+                <p style="color: #667eea; font-size: 1em; font-weight: 700; margin: 0;">(00) 00000-0000</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== CONTAINER PRINCIPAL (ADMIN) ===== -->
+<div class="container" id="mainContainer" style="display: none;">
         <div class="header">
     <h1>📋 Sublimaster | Pedido</h1>
     <p>Crie seu pedido em 3 passos</p>
@@ -1600,91 +1768,6 @@ body:has(#modalHistorico[style*="display: block"]) .info-value {
     <!-- ===== NOVO: Botão Histórico ===== -->
     <button class="btn-historico" onclick="abrirHistorico()">📊 Histórico</button>
     <!-- ================================== -->
-</div>
-        <!-- ===== CARD DE STATUS DO PEDIDO (OCULTO POR PADRÃO) ===== -->
-<div class="status-card" id="statusCard" style="display: none;">
-    <div class="status-header">
-        <div class="status-titulo">📦 Seu Pedido</div>
-        <div class="status-ref" id="statusRef">-</div>
-    </div>
-
-    <div style="text-align: center;">
-        <div class="status-badge-grande status-pendente-badge" id="statusBadge">
-            🟡 Pendente
-        </div>
-    </div>
-
-    <div class="status-info-grid">
-        <div class="status-info-item">
-            <div class="status-info-label">Cliente</div>
-            <div class="status-info-value" id="statusNome">-</div>
-        </div>
-        <div class="status-info-item">
-            <div class="status-info-label">Data de Entrega</div>
-            <div class="status-info-value" id="statusDataEntrega">-</div>
-        </div>
-        <div class="status-info-item">
-            <div class="status-info-label">Total de Peças</div>
-            <div class="status-info-value" id="statusTotal">-</div>
-        </div>
-    </div>
-
-    <div class="status-timeline" id="timelineStatus">
-        <div class="timeline-item">
-            <div class="timeline-icon concluido" id="icon-recebido">✓</div>
-            <div class="timeline-texto">
-                <div class="timeline-titulo">Pedido Recebido</div>
-                <div class="timeline-data" id="data-recebido">-</div>
-            </div>
-        </div>
-        <div class="timeline-item">
-            <div class="timeline-icon pendente" id="icon-pendente">🟡</div>
-            <div class="timeline-texto">
-                <div class="timeline-titulo">Pendente</div>
-                <div class="timeline-data" id="data-pendente">Aguardando...</div>
-            </div>
-        </div>
-        <div class="timeline-item">
-            <div class="timeline-icon pendente" id="icon-producao">🔵</div>
-            <div class="timeline-texto">
-                <div class="timeline-titulo">Em Produção</div>
-                <div class="timeline-data" id="data-producao">Aguardando...</div>
-            </div>
-        </div>
-        <div class="timeline-item">
-            <div class="timeline-icon pendente" id="icon-pronto">📦</div>
-            <div class="timeline-texto">
-                <div class="timeline-titulo">Pronto para Entrega</div>
-                <div class="timeline-data" id="data-pronto">Aguardando...</div>
-            </div>
-        </div>
-        <div class="timeline-item">
-            <div class="timeline-icon pendente" id="icon-entregue">🟢</div>
-            <div class="timeline-texto">
-                <div class="timeline-titulo">Entregue</div>
-                <div class="timeline-data" id="data-entregue">Aguardando...</div>
-            </div>
-        </div>
-    </div>
-
-    <button class="btn-ver-detalhes" onclick="abrirDetalhesCliente()">
-        👁️ Ver Detalhes
-    </button>
-</div>
-
-<!-- ===== CARD DE CONTATO (OCULTO POR PADRÃO) ===== -->
-<div class="formulario-card" id="contatoCard" style="display: none; margin-bottom: 20px; padding: 12px;">
-    <h3 style="text-align: center; color: #667eea; margin-bottom: 6px; font-size: 0.95em;">
-        📞 Precisa de Ajuda?
-    </h3>
-    <p style="text-align: center; color: #666; line-height: 1.2; margin-bottom: 10px; font-size: 0.8em;">
-        Caso tenha alguma dúvida ou precise fazer alterações, entre em contato conosco.
-    </p>
-    
-    <div style="background: linear-gradient(135deg, #e8f0fe 0%, #f3e8ff 100%); padding: 10px; border-radius: 6px; text-align: center;">
-        <p style="color: #333; font-weight: 600; margin-bottom: 3px; font-size: 0.8em;">📱 WhatsApp / Telefone</p>
-        <p style="color: #667eea; font-size: 1em; font-weight: 700; margin: 0;">(00) 00000-0000</p>
-    </div>
 </div>
 
         <div class="tabs">
@@ -1947,7 +2030,7 @@ body:has(#modalHistorico[style*="display: block"]) .info-value {
         </div>
     </div>
 
-    <div id="modalHistorico" class="modal">
+   <div id="modalHistorico" class="modal">
     <div class="modal-historico">
         <div class="modal-historico-header">
             <h2 id="modalTitulo">📊 Histórico de Pedidos</h2>
@@ -1983,68 +2066,100 @@ body:has(#modalHistorico[style*="display: block"]) .info-value {
 
             <!-- VIEW DETALHES -->
             <div id="viewDetalhes" class="view-detalhes">
-    <!-- Loading detalhes -->
-    <div class="loading-historico" id="loadingDetalhes">
-        <div class="loading-spinner-historico"></div>
-        <p>Carregando detalhes...</p>
-    </div>
+                <!-- Loading detalhes -->
+                <div class="loading-historico" id="loadingDetalhes">
+                    <div class="loading-spinner-historico"></div>
+                    <p>Carregando detalhes...</p>
+                </div>
 
-    <!-- Container dos detalhes (preenchido dinamicamente) -->
-    <div id="detalhesContent" style="display: none;">
-    <div class="detalhes-body">
-        <div class="detalhes-header">
-            <h3 id="detalhesPedidoRef">-</h3>
-            <p id="detalhesPedidoData">-</p>
-        </div>
+                <!-- Container dos detalhes (preenchido dinamicamente) -->
+                <div id="detalhesContent" style="display: none;">
+                    <div class="detalhes-body">
+                        <div class="detalhes-header">
+                            <h3 id="detalhesPedidoRef">-</h3>
+                            <p id="detalhesPedidoData">-</p>
+                        </div>
 
-        <div class="detalhes-section">
-            <h4>👤 Informações do Cliente</h4>
-            <div class="info-grid">
-                <div class="info-row">
-                    <span class="info-label">Nome Completo</span>
-                    <span class="info-value" id="detalhesNome">-</span>
+                        <div class="detalhes-section">
+                            <h4>👤 Informações do Cliente</h4>
+                            <div class="info-grid">
+                                <div class="info-row">
+                                    <span class="info-label">Nome Completo</span>
+                                    <span class="info-value" id="detalhesNome">-</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Telefone</span>
+                                    <span class="info-value" id="detalhesTelefone">-</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">E-mail</span>
+                                    <span class="info-value" id="detalhesEmail">-</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Data de Entrega</span>
+                                    <span class="info-value" id="detalhesDataEntrega">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detalhes-section">
+                            <h4>📦 Itens do Pedido</h4>
+                            <table class="itens-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Nome</th>
+                                        <th>Número</th>
+                                        <th>Tam. Camiseta</th>
+                                        <th>Tam. Calção</th>
+                                        <th style="text-align: center;">Qtd</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="detalhesItensBody">
+                                    <!-- Preenchido dinamicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- ===== BOTÕES FIXOS NO RODAPÉ ===== -->
+                    <div class="detalhes-actions">
+                        <div class="detalhes-actions-grid">
+                            <button class="btn-action btn-voltar" onclick="voltarLista()">⬅️ Voltar</button>
+                            <button class="btn-action btn-copiar-link" onclick="copiarLinkPlanilha()">📋 Copiar Link</button>
+                            <button class="btn-action btn-imprimir" onclick="imprimirDetalhes()">🖨️ Imprimir</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="info-row">
-                    <span class="info-label">Telefone</span>
-                    <span class="info-value" id="detalhesTelefone">-</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">E-mail</span>
-                    <span class="info-value" id="detalhesEmail">-</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Data de Entrega</span>
-                    <span class="info-value" id="detalhesDataEntrega">-</span>
-               </div>
             </div>
         </div>
-
-        <div class="detalhes-section">
-            <h4>📦 Itens do Pedido</h4>
-            <table class="itens-table">
-                <thead>
-                    <tr>
-                        <th>Tipo</th>
-                        <th>Nome</th>
-                        <th>Número</th>
-                        <th>Tam. Camiseta</th>
-                        <th>Tam. Calção</th>
-                        <th style="text-align: center;">Qtd</th>
-                    </tr>
-                </thead>
-                <tbody id="detalhesItensBody">
-                    <!-- Preenchido dinamicamente -->
-                </tbody>
-            </table>
-        </div>
     </div>
+</div>
 
-    <!-- ===== BOTÕES FIXOS NO RODAPÉ ===== -->
-    <div class="detalhes-actions">
-        <div class="detalhes-actions-grid">
-            <button class="btn-action btn-voltar" onclick="voltarLista()">⬅️ Voltar</button>
-            <button class="btn-action btn-copiar-link" onclick="copiarLinkPlanilha()">📋 Copiar Link</button>
-            <button class="btn-action btn-imprimir" onclick="imprimirDetalhes()">🖨️ Imprimir</button>
+<!-- ===== MODAL DE DETALHES DO CLIENTE ===== -->
+<div class="modal-detalhes" id="modalDetalhesCliente">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>📋 Detalhes do Pedido</h2>
+            <p style="opacity: 0.9; font-size: 14px;" id="modalClienteInfo">-</p>
+        </div>
+        <div class="modal-body">
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">👤 Informações do Cliente</h3>
+                <p><strong>Nome:</strong> <span id="modalClienteNome">-</span></p>
+                <p><strong>Telefone:</strong> <span id="modalClienteTelefone">-</span></p>
+                <p><strong>E-mail:</strong> <span id="modalClienteEmail">-</span></p>
+                <p><strong>Data de Entrega:</strong> <span id="modalClienteDataEntrega">-</span></p>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                <h3 style="color: #667eea; margin-bottom: 15px;">📦 Itens do Pedido</h3>
+                <div id="modalClienteItens">
+                    <!-- Preenchido dinamicamente -->
+                </div>
+            </div>
+
+            <button class="btn-fechar" onclick="fecharDetalhesCliente()">✕ Fechar</button>
         </div>
     </div>
 </div>
@@ -2174,15 +2289,11 @@ function buscarStatusPedidoCliente(referencia) {
 }
 
 function mostrarCardStatus(dados) {
-    // ✅ OCULTAR ABAS DE CRIAÇÃO
-    document.querySelector('.tabs').style.display = 'none';
-    document.getElementById('dados').style.display = 'none';
-    document.getElementById('itens').style.display = 'none';
-    document.getElementById('revisar').style.display = 'none';
+    // ✅ OCULTAR CONTAINER ADMIN INTEIRO
+    document.getElementById('mainContainer').style.display = 'none';
     
-    // ✅ MOSTRAR CARD DE STATUS
-    document.getElementById('statusCard').style.display = 'block';
-    document.getElementById('contatoCard').style.display = 'block';
+    // ✅ MOSTRAR ÁREA DO CLIENTE
+    document.getElementById('clienteStatusArea').style.display = 'block';
     
     // ✅ PREENCHER DADOS
     document.getElementById('statusRef').textContent = dados.referencia;
@@ -2271,7 +2382,108 @@ function atualizarTimelineCliente(statusAtual, dataCriacao) {
 }
 
 function abrirDetalhesCliente() {
-    verDetalhes(document.getElementById('statusRef').textContent);
+    const referencia = document.getElementById('statusRef').textContent;
+    
+    // Buscar dados
+    buscarDetalhesCliente(referencia);
+}
+
+function buscarDetalhesCliente(referencia) {
+    const callbackName = 'jsonpClienteDetalhes_' + Date.now();
+    
+    window[callbackName] = function(dados) {
+        if (dados && dados.referencia) {
+            preencherModalCliente(dados);
+            document.getElementById('modalDetalhesCliente').classList.add('show');
+        } else {
+            alert('❌ Erro ao carregar detalhes do pedido');
+        }
+        
+        delete window[callbackName];
+        const script = document.getElementById(callbackName);
+        if (script) script.remove();
+    };
+    
+    const script = document.createElement('script');
+    script.id = callbackName;
+    script.src = scriptURL + '?action=buscarDetalhes&referencia=' + 
+                 encodeURIComponent(referencia) + 
+                 '&callback=' + callbackName + 
+                 '&t=' + Date.now();
+    
+    script.onerror = function() {
+        alert('❌ Erro ao conectar com o servidor');
+        delete window[callbackName];
+    };
+    
+    document.body.appendChild(script);
+}
+
+function preencherModalCliente(dados) {
+    document.getElementById('modalClienteInfo').textContent = 
+        dados.referencia + ' • Criado em ' + formatarDataBrasileira(dados.data);
+    
+    document.getElementById('modalClienteNome').textContent = dados.nome;
+    document.getElementById('modalClienteTelefone').textContent = dados.telefone;
+    document.getElementById('modalClienteEmail').textContent = dados.email || '-';
+    
+    // Formatar data de entrega
+    let dataEntregaFormatada = '-';
+    if (dados.dataEntrega) {
+        if (dados.dataEntrega.includes('-')) {
+            const [ano, mes, dia] = dados.dataEntrega.split('-');
+            dataEntregaFormatada = `${dia}/${mes}/${ano}`;
+        } else {
+            dataEntregaFormatada = dados.dataEntrega;
+        }
+    }
+    document.getElementById('modalClienteDataEntrega').textContent = dataEntregaFormatada;
+    
+    // Preencher itens
+    const container = document.getElementById('modalClienteItens');
+    container.innerHTML = '';
+    
+    if (!dados.itens || dados.itens.length === 0) {
+        container.innerHTML = '<p style="color: #999; text-align: center;">Nenhum item encontrado</p>';
+        return;
+    }
+    
+    let totalPecas = 0;
+    dados.itens.forEach((item, index) => {
+        totalPecas += parseInt(item.quantidade) || 0;
+        
+        const tipoLimpo = item.tipo.replace(/^\d+\s*-\s*/, '');
+        
+        let tamanhos = '';
+        if (item.tamCamiseta && item.tamCalcao) {
+            tamanhos = `${item.tamCamiseta}/${item.tamCalcao}`;
+        } else if (item.tamCamiseta) {
+            tamanhos = `Cam: ${item.tamCamiseta}`;
+        } else if (item.tamCalcao) {
+            tamanhos = `Cal: ${item.tamCalcao}`;
+        } else {
+            tamanhos = '-';
+        }
+        
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'item-linha';
+        itemDiv.innerHTML = `
+            <strong>${index + 1}. ${tipoLimpo}</strong> → 
+            ${item.nome || '(sem nome)'} | 
+            ${item.numero ? 'Nº ' + item.numero : '-'} | 
+            ${tamanhos} | 
+            Qtd: ${item.quantidade || 1}
+        `;
+        container.appendChild(itemDiv);
+    });
+    
+    // Atualizar título com total
+    const h3 = container.previousElementSibling;
+    h3.textContent = `📦 Itens do Pedido (${totalPecas} peças)`;
+}
+
+function fecharDetalhesCliente() {
+    document.getElementById('modalDetalhesCliente').classList.remove('show');
 }
 
         function carregarParametrosURL() {
