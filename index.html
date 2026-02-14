@@ -1428,7 +1428,7 @@ body:has(#modalHistorico[style*="display: block"]) .info-value {
         <input type="text" id="referencia" placeholder="Ex: PED-2026-001" required>
     </div>
     <div class="form-group">
-        <label>📅 Data de Entrega</label>
+        <label>📅 Data de Entrega *</label>
         <input type="date" id="dataEntrega">
     </div>
 </div>
@@ -1846,17 +1846,17 @@ function validarSenha() {
     const dadosCriptografados = urlParams.get('data');
     
     if (dadosCriptografados) {
-    try {
-        // Decodificar Base64
-        const dadosDecodificados = atob(dadosCriptografados);
-        const partes = dadosDecodificados.split('|');
-        
-        referencia = partes[0] || '';
-        nome = partes[1] || '';
-        telefone = partes[2] || '';
-        email = partes[3] || '';
-        dataEntrega = partes[4] || '';
-    } catch (error) {
+        try {
+            // Decodificar Base64
+            const dadosDecodificados = atob(dadosCriptografados);
+            const partes = dadosDecodificados.split('|');
+            
+            referencia = partes[0] || '';
+            nome = partes[1] || '';
+            telefone = partes[2] || '';
+            email = partes[3] || '';
+            dataEntrega = partes[4] || '';
+        } catch (error) {
             console.error('Erro ao decodificar link:', error);
             alert('⚠️ Link inválido ou corrompido!');
             return;
@@ -1867,6 +1867,7 @@ function validarSenha() {
         nome = urlParams.get('nome') || urlParams.get('name');
         telefone = urlParams.get('tel') || urlParams.get('telefone') || urlParams.get('phone');
         email = urlParams.get('email') || urlParams.get('mail');
+        dataEntrega = urlParams.get('dataEntrega') || '';
     }
     
     if (referencia || nome || telefone) {
@@ -1898,12 +1899,14 @@ function validarSenha() {
         document.getElementById('telefone').style.backgroundColor = '#f0f0f0';
     }
     
+    // ✅ E-MAIL: Preencher SE vier no link, mas NÃO bloquear
     if (email) {
         document.getElementById('email').value = email;
-        document.getElementById('email').readOnly = true;
-        document.getElementById('email').style.backgroundColor = '#f0f0f0';
+        // ❌ NÃO aplicar readOnly nem backgroundColor
+        // Cliente pode editar/preencher
     }
-            
+    
+    // ✅ DATA DE ENTREGA: Preencher e bloquear
     if (dataEntrega) {
         document.getElementById('dataEntrega').value = dataEntrega;
         document.getElementById('dataEntrega').readOnly = true;
@@ -1945,15 +1948,16 @@ function validarSenha() {
         }
 
         // ==================== LINK ====================
-       function gerarLink() {
+    function gerarLink() {
     const referencia = document.getElementById('referencia').value.trim();
     const nome = document.getElementById('nome').value.trim();
     const telefone = document.getElementById('telefone').value.trim();
     const email = document.getElementById('email').value.trim();
     const dataEntrega = document.getElementById('dataEntrega').value.trim();
 
-    if (!referencia || !nome || !telefone) {
-        alert('⚠️ Preencha Referência, Nome e Telefone para gerar o link!');
+    // ✅ VALIDAÇÃO: Referência, Nome, Telefone e DATA DE ENTREGA obrigatórios
+    if (!referencia || !nome || !telefone || !dataEntrega) {
+        alert('⚠️ Preencha Referência, Nome, Telefone e Data de Entrega para gerar o link!');
         return;
     }
 
@@ -3015,22 +3019,6 @@ function imprimirDetalhes() {
     
     // Abrir diálogo de impressão
     window.print();
-}
-
-// ==================== FECHAR MODAL AO CLICAR FORA ====================
-// Modificar o window.onclick existente para incluir modal histórico
-var windowOnClickOriginal = window.onclick;
-window.onclick = function(event) {
-    // Chamar função original se existir
-    if (windowOnClickOriginal) {
-        windowOnClickOriginal(event);
-    }
-    
-    // Adicionar comportamento do modal histórico
-    const modalHistorico = document.getElementById('modalHistorico');
-    if (event.target === modalHistorico) {
-        fecharHistorico();
-    }
 }
     </script>
 </body>
