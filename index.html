@@ -1195,16 +1195,10 @@
     .itens-table th, .itens-table td { padding: 8px 6px; white-space: nowrap; }
     .item-tamanho { font-size: 10px; padding: 2px 6px; }
 
-    /* RESUMO — forçar largura correta dentro do detalhes-section */
     #resumoTamanhos {
         min-width: 0;
         width: 100%;
         box-sizing: border-box;
-    }
-    .resumo-grid-row {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
     }
 }
         
@@ -3149,7 +3143,7 @@ function preencherDetalhesPedido(dados) {
     }
 
     if (wrapper.children.length) {
-        document.querySelector('.detalhes-section:last-of-type').appendChild(wrapper);
+        document.querySelector('.detalhes-body').appendChild(wrapper);
     }
 }
     
