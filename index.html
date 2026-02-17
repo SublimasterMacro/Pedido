@@ -769,6 +769,7 @@
     border-radius: 8px;
     overflow: hidden;
     margin-top: 8px;
+    width: 100%;
 }
 .resumo-titulo {
     background: #f8f9fa;
@@ -794,6 +795,10 @@
 }
 
 @media (max-width: 600px) {
+    #resumoTamanhos {
+        width: 100%;
+        box-sizing: border-box;
+    }
     .resumo-grid-row {
         flex-wrap: nowrap;
         overflow-x: auto;
