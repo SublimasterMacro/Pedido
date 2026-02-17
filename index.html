@@ -3049,7 +3049,7 @@ function copiarLinkStatus(el) {
     navigator.clipboard.writeText(link).then(function() {
         var t = document.createElement('div');
         t.textContent = '✅ Link copiado!';
-        t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;';
+        t.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#333;color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;';
         document.body.appendChild(t);
         setTimeout(function() { t.remove(); }, 2500);
     }).catch(function(err) { alert('❌ Erro ao copiar: ' + err); });
