@@ -1618,12 +1618,12 @@
                                 </table>
                             </div>
                         </div>
-
+                        
                         <div class="detalhes-actions">
                             <div class="detalhes-actions-grid">
-                                <button class="btn-action btn-voltar" onclick="voltarLista()">⬅️ Voltar</button>
-                                <button class="btn-action btn-copiar-link" onclick="copiarLinkPlanilha()">📋 Copiar Link</button>
-                                <button class="btn-action btn-imprimir" onclick="imprimirDetalhes()">🖨️ Imprimir</button>
+                                <button id="btnClienteVoltar"     class="btn-action btn-voltar"      onclick="voltarOuFechar()">⬅️ Voltar</button>
+                                <button id="btnClienteCopiarLink" class="btn-action btn-copiar-link" onclick="copiarLinkPlanilha()">📋 Copiar Link</button>
+                                <button id="btnClienteImprimir"   class="btn-action btn-imprimir"    onclick="imprimirDetalhes()">🖨️ Imprimir</button>
                             </div>
                         </div>
                     </div>
@@ -1958,10 +1958,25 @@ function atualizarTimelineCliente(statusAtual, dataCriacao) {
 // ABRIR DETALHES DO CLIENTE (MODAL)
 // =============================================
 function abrirDetalhesCliente() {
-    if (dadosClienteCache) {
-        preencherModalCliente(dadosClienteCache);
-        document.getElementById('modalDetalhesCliente').classList.add('show');
-    }
+    if (!dadosClienteCache) return;
+
+    // Abre o mesmo modal do histórico
+    document.getElementById('modalHistorico').style.display = 'block';
+
+    // Esconde lista, busca e botões admin — mostra só detalhes
+    document.getElementById('viewLista').style.display    = 'none';
+    document.getElementById('viewDetalhes').style.display = 'block';
+    document.getElementById('buscaArea').style.display    = 'none';
+    document.getElementById('modalTitulo').textContent    = '📄 Detalhes do Pedido';
+
+    // Esconde botões Copiar Link e Imprimir — deixa só Voltar
+    document.getElementById('btnClienteCopiarLink').style.display = 'none';
+    document.getElementById('btnClienteImprimir').style.display   = 'none';
+    document.getElementById('btnClienteVoltar').style.display     = 'block';
+
+    // Carrega os dados no layout do histórico
+    document.getElementById('loadingDetalhes').style.display = 'none';
+    preencherDetalhesPedido(dadosClienteCache);
 }
 
 function buscarDetalhesCliente(referencia) {
@@ -2743,10 +2758,28 @@ function fecharHistorico() {
 // VOLTAR PARA LISTA
 // =============================================
 function voltarLista() {
-    document.getElementById('viewLista').style.display   = 'block';
+    // Restaura botões admin ao voltar no histórico
+    document.getElementById('btnClienteCopiarLink').style.display = 'block';
+    document.getElementById('btnClienteImprimir').style.display   = 'block';
+    document.getElementById('btnClienteVoltar').style.display     = 'block';
+
+    document.getElementById('viewLista').style.display    = 'block';
     document.getElementById('viewDetalhes').style.display = 'none';
-    document.getElementById('buscaArea').style.display   = 'block';
-    document.getElementById('modalTitulo').textContent   = '📊 Histórico de Pedidos';
+    document.getElementById('buscaArea').style.display    = 'block';
+    document.getElementById('modalTitulo').textContent    = '📊 Histórico de Pedidos';
+}
+
+// =============================================
+// voltarOuFechar
+// =============================================
+function voltarOuFechar() {
+    if (dadosClienteCache) {
+        // Modo cliente: fechar o modal inteiro
+        document.getElementById('modalHistorico').style.display = 'none';
+    } else {
+        // Modo admin: voltar para lista
+        voltarLista();
+    }
 }
 
 // =============================================
