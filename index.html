@@ -763,6 +763,61 @@
             margin: 0 auto 15px;
         }
 
+        .resumo-tamanhos {
+    margin-top: 20px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.resumo-titulo {
+    background: #f8f9fa;
+    color: #667eea;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 8px 12px;
+    border-bottom: 2px solid #e9ecef;
+}
+.resumo-grid-row {
+    display: flex;
+    border-top: 1px solid #e9ecef;
+}
+.resumo-label {
+    background: #667eea;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    width: 60px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.resumo-cell {
+    width: 60px;
+    flex: 0 0 60px;
+    text-align: center;
+    border-left: 1px solid #e9ecef;
+}
+.resumo-cell-header {
+    background: #667eea;
+    color: white;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 5px 4px;
+    border-bottom: 1px solid #e9ecef;
+}
+.resumo-cell-value {
+    background: #e0e0e0;
+    border: 1px solid #bbb;
+    margin: 4px;
+    padding: 5px 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #222;
+    border-radius: 2px;
+}
+
         /* =============================================
            STATUS BADGES
         ============================================= */
@@ -2978,32 +3033,30 @@ function preencherDetalhesPedido(dados) {
     document.getElementById('detalhesTelefone').textContent   = dados.telefone;
     document.getElementById('detalhesEmail').textContent      = dados.email || '-';
 
-    // Formatar data de entrega
-    let dataEntregaFmt = '-';
+    var dataEntregaFmt = '-';
     if (dados.dataEntrega) {
         if (dados.dataEntrega.includes('-')) {
-            const [ano, mes, dia] = dados.dataEntrega.split('-');
-            dataEntregaFmt = dia + '/' + mes + '/' + ano;
+            var p = dados.dataEntrega.split('-');
+            dataEntregaFmt = p[2] + '/' + p[1] + '/' + p[0];
         } else {
             dataEntregaFmt = dados.dataEntrega;
         }
     }
     document.getElementById('detalhesDataEntrega').textContent = dataEntregaFmt;
 
-    // Tabela de itens
-    const tbody = document.getElementById('detalhesItensBody');
+    var tbody = document.getElementById('detalhesItensBody');
     tbody.innerHTML = '';
 
     if (!dados.itens || dados.itens.length === 0) {
-        const tr = document.createElement('tr');
+        var tr = document.createElement('tr');
         tr.innerHTML = '<td colspan="6" style="text-align:center;color:#999;">Nenhum item encontrado</td>';
         tbody.appendChild(tr);
         return;
     }
 
-    dados.itens.forEach(function (item) {
-        const tipoLimpo = item.tipo.replace(/^\d+\s*-\s*/, '');
-        const tr = document.createElement('tr');
+    dados.itens.forEach(function(item) {
+        var tipoLimpo = item.tipo.replace(/^\d+\s*-\s*/, '');
+        var tr = document.createElement('tr');
         tr.innerHTML =
             '<td class="item-tipo">' + tipoLimpo + '</td>' +
             '<td>' + (item.nome || '-') + '</td>' +
@@ -3013,6 +3066,58 @@ function preencherDetalhesPedido(dados) {
             '<td style="text-align:center;">' + (item.quantidade  || 1)  + '</td>';
         tbody.appendChild(tr);
     });
+
+    // =============================================
+    // RESUMO POR TAMANHO
+    // =============================================
+    var totalPecas = 0;
+    var camMap = {}, calMap = {};
+
+    dados.itens.forEach(function(item) {
+        var qtd = parseInt(item.quantidade) || 1;
+        totalPecas += qtd;
+        if (item.tamCamiseta) camMap[item.tamCamiseta] = (camMap[item.tamCamiseta] || 0) + qtd;
+        if (item.tamCalcao)   calMap[item.tamCalcao]   = (calMap[item.tamCalcao]   || 0) + qtd;
+    });
+
+    var ordemTam = ['PP','P','M','G','GG','G1','G2','G3','G4','G5',
+                    'BLPP','BLP','BLM','BLG','BLGG','BLG1','BLG2','BLG3','BLG4','BLG5',
+                    '1A','2A','4A','6A','8A','10A','12A'];
+
+    function ordenar(map) {
+        return ordemTam.filter(function(t){ return map[t]; });
+    }
+
+    function montarLinha(label, map) {
+        var tams = ordenar(map);
+        if (!tams.length) return '';
+        var cells = tams.map(function(t) {
+            var n = String(map[t]).padStart(2, '0');
+            return '<div class="resumo-cell">' +
+                '<div class="resumo-cell-header">' + t + '</div>' +
+                '<div class="resumo-cell-value">' + n + '</div>' +
+            '</div>';
+        }).join('');
+        return '<div class="resumo-grid-row">' +
+            '<div class="resumo-label">' + label + '</div>' + cells +
+        '</div>';
+    }
+
+    var linhas = montarLinha('CAM.', camMap) + montarLinha('CAL.', calMap);
+
+    // Remove resumo anterior se existir (evita duplicatas ao reabrir)
+    var resumoAnterior = document.getElementById('resumoTamanhos');
+    if (resumoAnterior) resumoAnterior.remove();
+
+    if (linhas) {
+        var resumoEl = document.createElement('div');
+        resumoEl.id        = 'resumoTamanhos';
+        resumoEl.className = 'resumo-tamanhos';
+        resumoEl.innerHTML =
+            '<div class="resumo-titulo">QUANTIDADE: ' + String(totalPecas).padStart(2, '0') + '</div>' +
+            linhas;
+        document.querySelector('.detalhes-section:last-of-type').appendChild(resumoEl);
+    }
 }
 
 // =============================================
