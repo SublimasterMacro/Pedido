@@ -777,6 +777,14 @@
     font-size: 13px;
     padding: 8px 12px;
     border-bottom: 2px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.resumo-titulo-ordem {
+    font-size: 13px;
+    color: #999;
+    font-weight: 600;
 }
 .resumo-grid-row {
     display: flex;
@@ -3105,7 +3113,10 @@ function preencherDetalhesPedido(dados) {
         var divCam = document.createElement('div');
         divCam.className = 'resumo-tamanhos';
         divCam.innerHTML =
-            '<div class="resumo-titulo">CAMISETA — ' + String(totalCam).padStart(2,'0') + ' PEÇAS</div>' +
+            '<div class="resumo-titulo">' +
+                '<span>CAMISETA — ' + String(totalCam).padStart(2,'0') + ' PEÇAS</span>' +
+                '<span class="resumo-titulo-ordem">ORDEM DE CORTE</span>' +
+            '</div>' +
             '<div class="resumo-grid-row">' + montarGrade(camMap) + '</div>';
         wrapper.appendChild(divCam);
     }
@@ -3114,7 +3125,10 @@ function preencherDetalhesPedido(dados) {
         var divCal = document.createElement('div');
         divCal.className = 'resumo-tamanhos';
         divCal.innerHTML =
-            '<div class="resumo-titulo">CALÇÃO — ' + String(totalCal).padStart(2,'0') + ' PEÇAS</div>' +
+            '<div class="resumo-titulo">' +
+                '<span>CALÇÃO — ' + String(totalCal).padStart(2,'0') + ' PEÇAS</span>' +
+                '<span class="resumo-titulo-ordem">ORDEM DE CORTE</span>' +
+            '</div>' +
             '<div class="resumo-grid-row">' + montarGrade(calMap) + '</div>';
         wrapper.appendChild(divCal);
     }
