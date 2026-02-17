@@ -2827,31 +2827,35 @@ function preencherListaPedidos(pedidos) {
         card.dataset.telefone   = pedido.telefone;
 
         card.innerHTML =
-            '<div class="pedido-header">' +
-                '<div class="pedido-ref">'  + pedido.referencia + '</div>' +
-                '<div class="pedido-data">' + formatarDataBrasileira(pedido.data) + '</div>' +
-            '</div>' +
-            '<div style="margin-bottom:15px;">' +
-                '<span class="status-badge ' + statusClass + '">' + statusEmoji + ' ' + statusTexto + '</span>' +
-            '</div>' +
-            '<div class="pedido-info">' +
-                '<div class="pedido-info-item"><span class="pedido-info-label">Cliente:</span><span>' + pedido.nome + '</span></div>' +
-                '<div class="pedido-info-item"><span class="pedido-info-label">Telefone:</span><span>' + pedido.telefone + '</span></div>' +
-                '<div class="pedido-info-item"><span class="pedido-info-label">E-mail:</span><span>' + (pedido.email || '-') + '</span></div>' +
-                '<div class="pedido-info-item"><span class="pedido-info-label">Quantidade:</span><span>' + pedido.totalItens + ' Peças</span></div>' +
-            '</div>' +
-            '<div class="pedido-actions" style="display:grid;grid-template-columns:2fr 1fr;gap:10px;">' +
-                '<select class="status-dropdown" onchange="alterarStatus(\'' + refEscapada + '\', this.value)">' +
-                    '<option value="🟡 Pendente"'           + (pedido.status && pedido.status.includes('Pendente')  ? ' selected' : '') + '>🟡 Pendente</option>' +
-                    '<option value="🔵 Em Produção"'        + (pedido.status && pedido.status.includes('Produção')  ? ' selected' : '') + '>🔵 Em Produção</option>' +
-                    '<option value="📦 Pronto para Entrega"' + (pedido.status && pedido.status.includes('Pronto')    ? ' selected' : '') + '>📦 Pronto para Entrega</option>' +
-                    '<option value="🟢 Entregue"'           + (pedido.status && pedido.status.includes('Entregue')  ? ' selected' : '') + '>🟢 Entregue</option>' +
-                '</select>' +
-                '<button class="btn-action btn-ver" onclick="verDetalhes(\'' + refEscapada + '\')">👁️ Ver Detalhes</button>' +
-            '</div>';
-
-        container.appendChild(card);
-    });
+    '<div class="pedido-header">' +
+        '<div class="pedido-ref">'  + pedido.referencia + '</div>' +
+        '<div class="pedido-data">' + formatarDataBrasileira(pedido.data) + '</div>' +
+    '</div>' +
+    '<div style="margin-bottom:15px;">' +
+        '<span class="status-badge ' + statusClass + '">' + statusEmoji + ' ' + statusTexto + '</span>' +
+    '</div>' +
+    '<div class="pedido-info">' +
+        '<div class="pedido-info-item"><span class="pedido-info-label">Cliente:</span><span>' + pedido.nome + '</span></div>' +
+        '<div class="pedido-info-item"><span class="pedido-info-label">Telefone:</span><span>' + pedido.telefone + '</span></div>' +
+        '<div class="pedido-info-item"><span class="pedido-info-label">E-mail:</span><span>' + (pedido.email || '-') + '</span></div>' +
+        '<div class="pedido-info-item"><span class="pedido-info-label">Quantidade:</span><span>' + pedido.totalItens + ' Peças</span></div>' +
+    '</div>' +
+    '<div class="pedido-actions" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+        '<select class="status-dropdown" onchange="alterarStatus(\'' + refEscapada + '\', this.value)">' +
+            '<option value="🟡 Pendente"'            + (pedido.status && pedido.status.includes('Pendente')  ? ' selected' : '') + '>🟡 Pendente</option>' +
+            '<option value="🔵 Em Produção"'         + (pedido.status && pedido.status.includes('Produção')  ? ' selected' : '') + '>🔵 Em Produção</option>' +
+            '<option value="📦 Pronto para Entrega"' + (pedido.status && pedido.status.includes('Pronto')    ? ' selected' : '') + '>📦 Pronto para Entrega</option>' +
+            '<option value="🟢 Entregue"'            + (pedido.status && pedido.status.includes('Entregue')  ? ' selected' : '') + '>🟢 Entregue</option>' +
+        '</select>' +
+        '<button class="btn-action btn-ver" onclick="verDetalhes(\'' + refEscapada + '\')">👁️ Ver Detalhes</button>' +
+    '</div>' +
+    '<div onclick="copiarLinkStatus(\'' + refEscapada + '\',\'' + pedido.nome.replace(/'/g, "\\'") + '\',\'' + pedido.telefone + '\',\'' + (pedido.email || '') + '\',\'' + (pedido.dataEntrega || '') + '\')" ' +
+         'title="Copiar link do status para o cliente" ' +
+         'style="display:flex;align-items:center;gap:6px;margin-top:8px;background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;padding:7px 10px;cursor:pointer;">' +
+        '<span style="flex:1;font-family:monospace;font-size:11px;color:#667eea;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">🔗 Link do cliente — ' + pedido.referencia + '</span>' +
+    '</div>';
+container.appendChild(card);
+});
 }
 
 // =============================================
@@ -3024,6 +3028,31 @@ function copiarLinkPlanilha() {
         btn.style.background = '#1e7e34';
         setTimeout(function () { btn.textContent = orig; btn.style.background = '#28a745'; }, 2000);
     }).catch(function (err) { alert('❌ Erro ao copiar: ' + err); });
+}
+
+// ================================================
+// COPIAR LINK DO STATUS DO PEDIDO
+// ================================================
+
+function copiarLinkStatus(referencia, nome, telefone, email, dataEntrega) {
+    // Converter dataEntrega DD/MM/YYYY → YYYY-MM-DD
+    let dataFormatada = '';
+    if (dataEntrega) {
+        const [d, m, a] = dataEntrega.split('/');
+        dataFormatada = `${a}-${m}-${d}`;
+    }
+
+    const dados = `${referencia}|${nome}|${telefone.replace(/\D/g, '')}|${email}|${dataFormatada}`;
+    const encoded = btoa(dados);
+    const link = `${window.location.href.split('?')[0]}?data=${encoded}`;
+
+    navigator.clipboard.writeText(link).then(function() {
+        const t = document.createElement('div');
+        t.textContent = '✅ Link copiado!';
+        t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;z-index:9999;';
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 2500);
+    }).catch(err => alert('❌ Erro ao copiar: ' + err));
 }
 
 // =============================================
