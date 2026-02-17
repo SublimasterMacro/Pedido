@@ -781,22 +781,23 @@
 .resumo-grid-row {
     display: flex;
     flex-wrap: wrap;
+    gap: 6px;
+    padding: 6px;
 }
 .resumo-cell {
     width: 60px;
     flex: 0 0 60px;
     text-align: center;
-    border-left: 1px solid #e9ecef;
-    border-bottom: 1px solid #e9ecef;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    overflow: hidden;
 }
-.resumo-cell:first-child { border-left: none; }
 .resumo-cell-header {
     background: #667eea;
     color: white;
     font-weight: 700;
     font-size: 13px;
     padding: 5px 4px;
-    border-bottom: 1px solid #e9ecef;
 }
 .resumo-cell-value {
     background: #e0e0e0;
@@ -3104,7 +3105,7 @@ function preencherDetalhesPedido(dados) {
         var divCam = document.createElement('div');
         divCam.className = 'resumo-tamanhos';
         divCam.innerHTML =
-            '<div class="resumo-titulo">Camiseta — ' + String(totalCam).padStart(2,'0') + ' peças</div>' +
+            '<div class="resumo-titulo">CAMISETA — ' + String(totalCam).padStart(2,'0') + ' PEÇAS</div>' +
             '<div class="resumo-grid-row">' + montarGrade(camMap) + '</div>';
         wrapper.appendChild(divCam);
     }
@@ -3113,7 +3114,7 @@ function preencherDetalhesPedido(dados) {
         var divCal = document.createElement('div');
         divCal.className = 'resumo-tamanhos';
         divCal.innerHTML =
-            '<div class="resumo-titulo">Calção — ' + String(totalCal).padStart(2,'0') + ' peças</div>' +
+            '<div class="resumo-titulo">CALÇÃO — ' + String(totalCal).padStart(2,'0') + ' PEÇAS</div>' +
             '<div class="resumo-grid-row">' + montarGrade(calMap) + '</div>';
         wrapper.appendChild(divCal);
     }
@@ -3122,7 +3123,7 @@ function preencherDetalhesPedido(dados) {
         document.querySelector('.detalhes-section:last-of-type').appendChild(wrapper);
     }
 }
-
+    
 // =============================================
 // COPIAR LINK DA PLANILHA
 // =============================================
