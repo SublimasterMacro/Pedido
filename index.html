@@ -764,11 +764,11 @@
         }
 
         .resumo-tamanhos {
-    margin-top: 20px;
     background: #f8f9fa;
     border: 1px solid #e9ecef;
     border-radius: 8px;
     overflow: hidden;
+    margin-top: 8px;
 }
 .resumo-titulo {
     background: #f8f9fa;
@@ -780,25 +780,16 @@
 }
 .resumo-grid-row {
     display: flex;
-    border-top: 1px solid #e9ecef;
-}
-.resumo-label {
-    background: #667eea;
-    color: white;
-    font-size: 11px;
-    font-weight: 700;
-    width: 60px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-wrap: wrap;
 }
 .resumo-cell {
     width: 60px;
     flex: 0 0 60px;
     text-align: center;
     border-left: 1px solid #e9ecef;
+    border-bottom: 1px solid #e9ecef;
 }
+.resumo-cell:first-child { border-left: none; }
 .resumo-cell-header {
     background: #667eea;
     color: white;
@@ -817,7 +808,7 @@
     color: #222;
     border-radius: 2px;
 }
-
+        
         /* =============================================
            STATUS BADGES
         ============================================= */
@@ -3070,53 +3061,65 @@ function preencherDetalhesPedido(dados) {
     // =============================================
     // RESUMO POR TAMANHO
     // =============================================
-    var totalPecas = 0;
+    var totalCam = 0, totalCal = 0;
     var camMap = {}, calMap = {};
 
     dados.itens.forEach(function(item) {
         var qtd = parseInt(item.quantidade) || 1;
-        totalPecas += qtd;
-        if (item.tamCamiseta) camMap[item.tamCamiseta] = (camMap[item.tamCamiseta] || 0) + qtd;
-        if (item.tamCalcao)   calMap[item.tamCalcao]   = (calMap[item.tamCalcao]   || 0) + qtd;
+        if (item.tamCamiseta) {
+            camMap[item.tamCamiseta] = (camMap[item.tamCamiseta] || 0) + qtd;
+            totalCam += qtd;
+        }
+        if (item.tamCalcao) {
+            calMap[item.tamCalcao] = (calMap[item.tamCalcao] || 0) + qtd;
+            totalCal += qtd;
+        }
     });
 
     var ordemTam = ['PP','P','M','G','GG','G1','G2','G3','G4','G5',
                     'BLPP','BLP','BLM','BLG','BLGG','BLG1','BLG2','BLG3','BLG4','BLG5',
                     '1A','2A','4A','6A','8A','10A','12A'];
 
-    function ordenar(map) {
-        return ordemTam.filter(function(t){ return map[t]; });
+    function montarGrade(map) {
+        return ordemTam
+            .filter(function(t) { return map[t]; })
+            .map(function(t) {
+                var n = String(map[t]).padStart(2, '0');
+                return '<div class="resumo-cell">' +
+                    '<div class="resumo-cell-header">' + t + '</div>' +
+                    '<div class="resumo-cell-value">' + n + '</div>' +
+                '</div>';
+            }).join('');
     }
 
-    function montarLinha(label, map) {
-        var tams = ordenar(map);
-        if (!tams.length) return '';
-        var cells = tams.map(function(t) {
-            var n = String(map[t]).padStart(2, '0');
-            return '<div class="resumo-cell">' +
-                '<div class="resumo-cell-header">' + t + '</div>' +
-                '<div class="resumo-cell-value">' + n + '</div>' +
-            '</div>';
-        }).join('');
-        return '<div class="resumo-grid-row">' +
-            '<div class="resumo-label">' + label + '</div>' + cells +
-        '</div>';
+    // Remove resumo anterior se existir (evita duplicatas)
+    var anterior = document.getElementById('resumoTamanhos');
+    if (anterior) anterior.remove();
+
+    var wrapper = document.createElement('div');
+    wrapper.id = 'resumoTamanhos';
+    wrapper.style.marginTop = '15px';
+
+    if (Object.keys(camMap).length) {
+        var divCam = document.createElement('div');
+        divCam.className = 'resumo-tamanhos';
+        divCam.innerHTML =
+            '<div class="resumo-titulo">Camiseta — ' + String(totalCam).padStart(2,'0') + ' peças</div>' +
+            '<div class="resumo-grid-row">' + montarGrade(camMap) + '</div>';
+        wrapper.appendChild(divCam);
     }
 
-    var linhas = montarLinha('CAM.', camMap) + montarLinha('CAL.', calMap);
+    if (Object.keys(calMap).length) {
+        var divCal = document.createElement('div');
+        divCal.className = 'resumo-tamanhos';
+        divCal.innerHTML =
+            '<div class="resumo-titulo">Calção — ' + String(totalCal).padStart(2,'0') + ' peças</div>' +
+            '<div class="resumo-grid-row">' + montarGrade(calMap) + '</div>';
+        wrapper.appendChild(divCal);
+    }
 
-    // Remove resumo anterior se existir (evita duplicatas ao reabrir)
-    var resumoAnterior = document.getElementById('resumoTamanhos');
-    if (resumoAnterior) resumoAnterior.remove();
-
-    if (linhas) {
-        var resumoEl = document.createElement('div');
-        resumoEl.id        = 'resumoTamanhos';
-        resumoEl.className = 'resumo-tamanhos';
-        resumoEl.innerHTML =
-            '<div class="resumo-titulo">QUANTIDADE: ' + String(totalPecas).padStart(2, '0') + '</div>' +
-            linhas;
-        document.querySelector('.detalhes-section:last-of-type').appendChild(resumoEl);
+    if (wrapper.children.length) {
+        document.querySelector('.detalhes-section:last-of-type').appendChild(wrapper);
     }
 }
 
