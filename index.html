@@ -968,14 +968,39 @@
         }
 
         .modal-detalhes .modal-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 16px 16px 0 0;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 16px 16px 0 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;                  /* ← NOVO */
+    justify-content: space-between; /* ← NOVO */
+    align-items: flex-start;        /* ← NOVO */
+}
+
+.modal-detalhes .modal-header .btn-close {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-left: 15px;
+    transition: all 0.3s;
+}
+
+.modal-detalhes .modal-header .btn-close:hover {
+    background: rgba(255,255,255,0.35);
+    transform: rotate(90deg);
+}
 
         .modal-detalhes .modal-header h2 { margin-bottom: 8px; }
 
@@ -1606,9 +1631,12 @@
     <div class="modal-detalhes" id="modalDetalhesCliente">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>📋 Detalhes do Pedido</h2>
-                <p style="opacity:0.9;font-size:14px;" id="modalClienteInfo">-</p>
-            </div>
+    <div>
+        <h2>📋 Detalhes do Pedido</h2>
+        <p style="opacity:0.9;font-size:14px;" id="modalClienteInfo">-</p>
+    </div>
+    <button class="btn-close" onclick="fecharDetalhesCliente()">×</button>
+</div>
             <div class="modal-body">
                 <div style="background:#f8f9fa;padding:20px;border-radius:10px;margin-bottom:20px;">
                     <h3 style="color:#667eea;margin-bottom:15px;">👤 Informações do Cliente</h3>
@@ -1636,6 +1664,7 @@ let itens = [];
 let itemDuplicadoParaAdicionar = null;
 let itemParaDeletar = null;
 let modoAdmin = false;
+let dadosClienteCache = null;
 
 // =============================================
 // HELPERS DO MODAL DE LOADING
@@ -1816,6 +1845,7 @@ function buscarStatusPedidoCliente(referencia) {
 // MOSTRAR CARD DE STATUS DO CLIENTE
 // =============================================
 function mostrarCardStatus(dados) {
+    dadosClienteCache = dados;
     // Garantir que o formulário NÃO apareça
     document.getElementById('mainContainer').style.display = 'none';
 
@@ -1916,8 +1946,11 @@ function atualizarTimelineCliente(statusAtual, dataCriacao) {
 // ABRIR DETALHES DO CLIENTE (MODAL)
 // =============================================
 function abrirDetalhesCliente() {
-    const referencia = document.getElementById('statusRef').textContent;
-    buscarDetalhesCliente(referencia);
+    if (dadosClienteCache) {
+        // Usa dados já carregados — sem nova chamada ao servidor
+        preencherModalCliente(dadosClienteCache);
+        document.getElementById('modalDetalhesCliente').classList.add('show');
+    }
 }
 
 function buscarDetalhesCliente(referencia) {
