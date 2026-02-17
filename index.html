@@ -942,32 +942,32 @@
            MODAL DETALHES CLIENTE
         ============================================= */
         .modal-detalhes {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 1000;
-            padding: 20px;
-            overflow-y: auto;
-        }
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    padding: 20px;
+    overflow-y: auto;
+}
 
-        .modal-detalhes.show {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+.modal-detalhes.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        .modal-detalhes .modal-content {
-            background: white;
-            border-radius: 16px;
-            max-width: 700px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: slideIn 0.3s ease;
-        }
+.modal-detalhes .modal-content {
+    background: white;
+    border-radius: 16px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideIn 0.3s ease;
+}
 
-        .modal-detalhes .modal-header {
+.modal-detalhes .modal-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     padding: 25px;
@@ -975,16 +975,21 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    display: flex;                  /* ← NOVO */
-    justify-content: space-between; /* ← NOVO */
-    align-items: flex-start;        /* ← NOVO */
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
-.modal-detalhes .modal-header .btn-close {
+.modal-detalhes .modal-header h2 {
+    margin-bottom: 8px;
+    font-size: 1.4em;
+}
+
+.modal-detalhes .modal-header .btn-x {
     background: rgba(255,255,255,0.2);
     border: none;
     color: white;
-    font-size: 24px;
+    font-size: 22px;
     cursor: pointer;
     width: 35px;
     height: 35px;
@@ -995,38 +1000,41 @@
     flex-shrink: 0;
     margin-left: 15px;
     transition: all 0.3s;
+    line-height: 1;
 }
 
-.modal-detalhes .modal-header .btn-close:hover {
+.modal-detalhes .modal-header .btn-x:hover {
     background: rgba(255,255,255,0.35);
     transform: rotate(90deg);
 }
 
-        .modal-detalhes .modal-header h2 { margin-bottom: 8px; }
+.modal-detalhes .modal-body {
+    padding: 25px;
+}
 
-        .modal-detalhes .modal-body { padding: 25px; }
+.modal-detalhes .btn-fechar {
+    background: #6c757d;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+}
 
-        .modal-detalhes .btn-fechar {
-            background: #6c757d;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
-        }
+.modal-detalhes .btn-fechar:hover { background: #5a6268; }
 
-        .modal-detalhes .btn-fechar:hover { background: #5a6268; }
-
-        .item-linha {
-            background: white;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-left: 4px solid #667eea;
-        }
+.item-linha {
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border-left: 4px solid #667eea;
+    font-size: 14px;
+    color: #333;
+}
 
         .item-linha:last-child { margin-bottom: 0; }
 
@@ -1629,32 +1637,36 @@
          MODAL DETALHES CLIENTE
     ============================================= -->
     <div class="modal-detalhes" id="modalDetalhesCliente">
-        <div class="modal-content">
-            <div class="modal-header">
-    <div>
-        <h2>📋 Detalhes do Pedido</h2>
-        <p style="opacity:0.9;font-size:14px;" id="modalClienteInfo">-</p>
-    </div>
-    <button class="btn-close" onclick="fecharDetalhesCliente()">×</button>
-</div>
-            <div class="modal-body">
-                <div style="background:#f8f9fa;padding:20px;border-radius:10px;margin-bottom:20px;">
-                    <h3 style="color:#667eea;margin-bottom:15px;">👤 Informações do Cliente</h3>
-                    <p><strong>Nome:</strong> <span id="modalClienteNome">-</span></p>
-                    <p><strong>Telefone:</strong> <span id="modalClienteTelefone">-</span></p>
-                    <p><strong>E-mail:</strong> <span id="modalClienteEmail">-</span></p>
-                    <p><strong>Data de Entrega:</strong> <span id="modalClienteDataEntrega">-</span></p>
-                </div>
+    <div class="modal-content">
 
-                <div style="background:#f8f9fa;padding:20px;border-radius:10px;">
-                    <h3 style="color:#667eea;margin-bottom:15px;" id="modalClienteItensTitle">📦 Itens do Pedido</h3>
-                    <div id="modalClienteItens"></div>
-                </div>
-
-                <button class="btn-fechar" onclick="fecharDetalhesCliente()">✕ Fechar</button>
+        <div class="modal-header">
+            <div>
+                <h2>📋 Detalhes do Pedido</h2>
+                <p style="opacity:0.9;font-size:14px;" id="modalClienteInfo">-</p>
             </div>
+            <button class="btn-x" onclick="fecharDetalhesCliente()">×</button>
         </div>
+
+        <div class="modal-body">
+
+            <div style="background:#f8f9fa;padding:20px;border-radius:10px;margin-bottom:20px;">
+                <h3 style="color:#667eea;margin-bottom:15px;">👤 Informações do Cliente</h3>
+                <p style="margin-bottom:6px;font-size:14px;"><strong>Nome:</strong> <span id="modalClienteNome">-</span></p>
+                <p style="margin-bottom:6px;font-size:14px;"><strong>Telefone:</strong> <span id="modalClienteTelefone">-</span></p>
+                <p style="margin-bottom:6px;font-size:14px;"><strong>E-mail:</strong> <span id="modalClienteEmail">-</span></p>
+                <p style="font-size:14px;"><strong>Data de Entrega:</strong> <span id="modalClienteDataEntrega">-</span></p>
+            </div>
+
+            <div style="background:#f8f9fa;padding:20px;border-radius:10px;">
+                <h3 style="color:#667eea;margin-bottom:15px;" id="modalClienteItensTitle">📦 Itens do Pedido</h3>
+                <div id="modalClienteItens"></div>
+            </div>
+
+            <button class="btn-fechar" onclick="fecharDetalhesCliente()">✕ Fechar</button>
+        </div>
+
     </div>
+</div>
 
 <script>
 const scriptURL = 'https://script.google.com/macros/s/AKfycbyyTwH5ZSSrNjLFbqnRg9JPhIHdF_rxLgVSI_v78e9Sl2_Aq3pTPTQB4DerWBa3LWeC/exec';
@@ -1947,7 +1959,6 @@ function atualizarTimelineCliente(statusAtual, dataCriacao) {
 // =============================================
 function abrirDetalhesCliente() {
     if (dadosClienteCache) {
-        // Usa dados já carregados — sem nova chamada ao servidor
         preencherModalCliente(dadosClienteCache);
         document.getElementById('modalDetalhesCliente').classList.add('show');
     }
@@ -1989,9 +2000,9 @@ function preencherModalCliente(dados) {
     document.getElementById('modalClienteInfo').textContent =
         dados.referencia + ' • Criado em ' + formatarDataBrasileira(dados.data);
 
-    document.getElementById('modalClienteNome').textContent      = dados.nome;
-    document.getElementById('modalClienteTelefone').textContent  = dados.telefone;
-    document.getElementById('modalClienteEmail').textContent     = dados.email || '-';
+    document.getElementById('modalClienteNome').textContent     = dados.nome;
+    document.getElementById('modalClienteTelefone').textContent = dados.telefone;
+    document.getElementById('modalClienteEmail').textContent    = dados.email || '-';
 
     let dataEntrega = '-';
     if (dados.dataEntrega) {
@@ -2016,26 +2027,25 @@ function preencherModalCliente(dados) {
     dados.itens.forEach(function (item, index) {
         totalPecas += parseInt(item.quantidade) || 0;
 
+        // Remove prefixo numérico do tipo (ex: "1 - Linha" → "Linha")
         const tipoLimpo = item.tipo.replace(/^\d+\s*-\s*/, '');
 
         let tamanhos = '';
-        if (item.tamCamiseta && item.tamCalcao) {
-            tamanhos = item.tamCamiseta + '/' + item.tamCalcao;
-        } else if (item.tamCamiseta) {
-            tamanhos = 'Cam: ' + item.tamCamiseta;
-        } else if (item.tamCalcao) {
-            tamanhos = 'Cal: ' + item.tamCalcao;
-        } else {
-            tamanhos = '-';
-        }
+        if (item.tamCamiseta && item.tamCalcao)      tamanhos = item.tamCamiseta + '/' + item.tamCalcao;
+        else if (item.tamCamiseta)                    tamanhos = item.tamCamiseta + '/-';
+        else if (item.tamCalcao)                      tamanhos = '-/' + item.tamCalcao;
+        else                                          tamanhos = '-';
+
+        const numero = item.numero ? 'Nº ' + item.numero : '-';
 
         const div = document.createElement('div');
         div.className = 'item-linha';
         div.innerHTML =
-            '<strong>' + (index + 1) + '. ' + tipoLimpo + '</strong> → ' +
-            (item.nome || '(sem nome)') + ' | ' +
-            (item.numero ? 'Nº ' + item.numero : '-') + ' | ' +
-            tamanhos + ' | Qtd: ' + (item.quantidade || 1);
+            '<strong>' + (index + 1) + '. ' + tipoLimpo + '</strong>' +
+            ' → ' + (item.nome || '(sem nome)') +
+            ' | ' + numero +
+            ' | ' + tamanhos +
+            ' | Qtd: ' + (item.quantidade || 1);
         container.appendChild(div);
     });
 
