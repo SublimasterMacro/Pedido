@@ -1922,17 +1922,57 @@ function buscarStatusPedidoCliente(referencia) {
 // =============================================
 function mostrarCardStatus(dados) {
     dadosClienteCache = dados;
-    // Garantir que o formulário NÃO apareça
-    document.getElementById('mainContainer').style.display = 'none';
 
-    // Mostrar área do cliente
+    // =============================================
+    // VERIFICAR SE PEDIDO JÁ FOI ENTREGUE
+    // =============================================
+    if (dados.status && dados.status.includes('Entregue')) {
+        document.getElementById('mainContainer').style.display    = 'none';
+        document.getElementById('clienteStatusArea').style.display = 'none';
+
+        // Criar tela de link expirado
+        const tela = document.createElement('div');
+        tela.style.cssText =
+            'max-width:480px;margin:60px auto;background:white;border-radius:20px;' +
+            'overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,0.2);text-align:center;';
+
+        tela.innerHTML =
+            '<div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);' +
+                'padding:30px;color:white;">' +
+                '<div style="font-size:3em;margin-bottom:10px;">📦</div>' +
+                '<h2 style="margin:0;font-size:1.4em;">Pedido Entregue</h2>' +
+            '</div>' +
+            '<div style="padding:30px;">' +
+                '<p style="color:#333;font-size:1.05em;font-weight:600;margin-bottom:8px;">' +
+                    dados.referencia +
+                '</p>' +
+                '<p style="color:#666;font-size:0.95em;line-height:1.6;margin-bottom:25px;">' +
+                    'Este pedido já foi concluído e entregue com sucesso.' +
+                '</p>' +
+                '<div style="background:linear-gradient(135deg,#e8f0fe 0%,#f3e8ff 100%);' +
+                    'padding:15px;border-radius:10px;">' +
+                    '<p style="color:#333;font-weight:600;margin-bottom:5px;font-size:0.9em;">' +
+                        '📱 Precisa de ajuda?' +
+                    '</p>' +
+                    '<p style="color:#667eea;font-size:1.1em;font-weight:700;margin:0;">' +
+                        '(66) 99222-9692' +
+                    '</p>' +
+                '</div>' +
+            '</div>';
+
+        document.body.appendChild(tela);
+        return; // <-- Interrompe o restante da função
+    }
+
+    // =============================================
+    // FLUXO NORMAL (pedido não entregue)
+    // =============================================
+    document.getElementById('mainContainer').style.display    = 'none';
     document.getElementById('clienteStatusArea').style.display = 'block';
 
-    // Preencher dados
     document.getElementById('statusRef').textContent  = dados.referencia;
     document.getElementById('statusNome').textContent = dados.nome;
 
-    // Data de entrega
     let dataEntrega = '-';
     if (dados.dataEntrega) {
         if (dados.dataEntrega.includes('-')) {
@@ -1944,7 +1984,6 @@ function mostrarCardStatus(dados) {
     }
     document.getElementById('statusDataEntrega').textContent = dataEntrega;
 
-    // Total de peças
     let totalPecas = 0;
     if (dados.itens && Array.isArray(dados.itens)) {
         dados.itens.forEach(function (item) {
@@ -1953,19 +1992,17 @@ function mostrarCardStatus(dados) {
     }
     document.getElementById('statusTotal').textContent = totalPecas + ' unidades';
 
-    // Badge de status
-    const badge = document.getElementById('statusBadge');
+    const badge  = document.getElementById('statusBadge');
     const status = dados.status || '🟡 Pendente';
     badge.textContent = status;
-    badge.className = 'status-badge-grande';
+    badge.className   = 'status-badge-grande';
 
-    if (status.includes('Pendente'))  badge.classList.add('status-pendente-badge');
+    if (status.includes('Pendente'))      badge.classList.add('status-pendente-badge');
     else if (status.includes('Produção')) badge.classList.add('status-producao-badge');
     else if (status.includes('Pronto'))   badge.classList.add('status-pronto-badge');
     else if (status.includes('Entregue')) badge.classList.add('status-entregue-badge');
     else badge.classList.add('status-pendente-badge');
 
-    // Timeline
     atualizarTimelineCliente(status, dados.data);
 }
 
