@@ -3083,6 +3083,28 @@ function preencherDetalhesPedido(dados) {
     var camMap = {}, calMap = {};
 
     dados.itens.forEach(function(item) {
+        var tipoLimpo = item.tipo.replace(/^\d+\s*-\s*/, '');
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+            '<td class="item-tipo">' + tipoLimpo + '</td>' +
+            '<td>' + (item.nome || '-') + '</td>' +
+            '<td style="text-align:center;">' + (item.numero || '-') + '</td>' +
+            '<td><span class="item-tamanho">' + (item.tamCamiseta || '-') + '</span></td>' +
+            '<td><span class="item-tamanho">' + (item.tamCalcao   || '-') + '</span></td>' +
+            '<td style="text-align:center;">' + (item.quantidade  || 1)  + '</td>';
+        tbody.appendChild(tr);
+    });
+
+    // Não exibe resumo para o cliente
+    if (dadosClienteCache) return;
+
+    // =============================================
+    // RESUMO POR TAMANHO
+    // =============================================
+    var totalCam = 0, totalCal = 0;
+    var camMap = {}, calMap = {};
+
+    dados.itens.forEach(function(item) {
         var qtd = parseInt(item.quantidade) || 1;
         if (item.tamCamiseta) {
             camMap[item.tamCamiseta] = (camMap[item.tamCamiseta] || 0) + qtd;
@@ -3110,7 +3132,6 @@ function preencherDetalhesPedido(dados) {
             }).join('');
     }
 
-    // Remove resumo anterior se existir (evita duplicatas)
     var anterior = document.getElementById('resumoTamanhos');
     if (anterior) anterior.remove();
 
