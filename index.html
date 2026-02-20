@@ -3191,7 +3191,7 @@ function preencherDetalhesPedido(dados) {
         divCam.className = 'resumo-tamanhos';
         divCam.innerHTML =
             '<div class="resumo-titulo">' +
-                '<span>✂ CAMISETA — ' + String(totalCam).padStart(2,'0') + ' PEÇAS</span>' +
+                '<span>✂ CAMISETA — ' + String(totalCam).padStart(2,'0') + (totalCam === 1 ? ' PÇ' : ' PÇS') + '</span>' +
                 '<span class="resumo-titulo-ordem">ORDEM DE CORTE</span>' +
             '</div>' +
             '<div class="resumo-grid-row" style="justify-content:center;">' + montarGrade(camMap) + '</div>';
@@ -3203,7 +3203,7 @@ function preencherDetalhesPedido(dados) {
         divCal.className = 'resumo-tamanhos';
         divCal.innerHTML =
             '<div class="resumo-titulo">' +
-                '<span>✂ CALÇÃO — ' + String(totalCal).padStart(2,'0') + ' PEÇAS</span>' +
+                '<span>✂ CALÇÃO — ' + String(totalCal).padStart(2,'0') + (totalCal === 1 ? ' PÇ' : ' PÇS') + '</span>' +
                 '<span class="resumo-titulo-ordem">ORDEM DE CORTE</span>' +
             '</div>' +
             '<div class="resumo-grid-row" style="justify-content:center;">' + montarGrade(calMap) + '</div>';
