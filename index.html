@@ -3142,7 +3142,7 @@ function preencherDetalhesPedido(dados) {
         tbody.appendChild(tr);
     });
 
-    // Não exibe resumo para o cliente
+    // Não exibe resumo nem observações para o cliente
     if (dadosClienteCache) return;
 
     // =============================================
@@ -3191,10 +3191,10 @@ function preencherDetalhesPedido(dados) {
         divCam.className = 'resumo-tamanhos';
         divCam.innerHTML =
             '<div class="resumo-titulo">' +
-                '<span>CAMISETA — ' + String(totalCam).padStart(2,'0') + ' PEÇAS</span>' +
+                '<span>✂ CAMISETA — ' + String(totalCam).padStart(2,'0') + ' PEÇAS</span>' +
                 '<span class="resumo-titulo-ordem">ORDEM DE CORTE</span>' +
             '</div>' +
-            '<div class="resumo-grid-row">' + montarGrade(camMap) + '</div>';
+            '<div class="resumo-grid-row" style="justify-content:center;">' + montarGrade(camMap) + '</div>';
         wrapper.appendChild(divCam);
     }
 
@@ -3203,27 +3203,30 @@ function preencherDetalhesPedido(dados) {
         divCal.className = 'resumo-tamanhos';
         divCal.innerHTML =
             '<div class="resumo-titulo">' +
-                '<span>CALÇÃO — ' + String(totalCal).padStart(2,'0') + ' PEÇAS</span>' +
+                '<span>✂ CALÇÃO — ' + String(totalCal).padStart(2,'0') + ' PEÇAS</span>' +
                 '<span class="resumo-titulo-ordem">ORDEM DE CORTE</span>' +
             '</div>' +
-            '<div class="resumo-grid-row">' + montarGrade(calMap) + '</div>';
+            '<div class="resumo-grid-row" style="justify-content:center;">' + montarGrade(calMap) + '</div>';
         wrapper.appendChild(divCal);
     }
 
+    // 1º — GRADE
     if (wrapper.children.length) {
         document.querySelector('.detalhes-body').appendChild(wrapper);
     }
-}
 
+    // 2º — OBSERVAÇÕES (sempre abaixo da grade)
     var obsAnterior = document.getElementById('obsWrap');
-if (obsAnterior) obsAnterior.remove();
+    if (obsAnterior) obsAnterior.remove();
 
-var obsDiv = document.createElement('div');
-obsDiv.id = 'obsWrap';
-obsDiv.className = 'obs-wrap';
-obsDiv.innerHTML = '<div class="obs-titulo">📝 Observações</div>' +
-    '<textarea class="obs-textarea" placeholder="Digite observações sobre o pedido..."></textarea>';
-document.querySelector('.detalhes-body').appendChild(obsDiv);
+    var obsDiv = document.createElement('div');
+    obsDiv.id        = 'obsWrap';
+    obsDiv.className = 'obs-wrap';
+    obsDiv.innerHTML =
+        '<div class="obs-titulo">📝 Observações</div>' +
+        '<textarea class="obs-textarea" placeholder="Digite observações sobre o pedido..."></textarea>';
+    document.querySelector('.detalhes-body').appendChild(obsDiv);
+}
     
 // =============================================
 // COPIAR LINK DA PLANILHA
