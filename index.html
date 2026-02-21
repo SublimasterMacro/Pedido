@@ -2271,15 +2271,15 @@ function carregarParametrosURL() {
     }
 
     if (referencia || nome || telefone) {
-        const btnGerarLink = document.querySelector('.btn-link');
-        const linkResult   = document.getElementById('linkResult');
-        if (btnGerarLink) btnGerarLink.style.display = 'none';
-        if (linkResult)   linkResult.style.display   = 'none';
+    const btnGerarLink = document.querySelector('.btn-link');
+    const linkResult   = document.getElementById('linkResult');
+    if (btnGerarLink) btnGerarLink.style.display = 'none';
+    if (linkResult)   linkResult.style.display   = 'none';
 
-        // Ocultar botão histórico no modo cliente
-        const btnHistorico = document.querySelector('.btn-historico');
-        if (btnHistorico) btnHistorico.style.display = 'none';
-    }
+    document.querySelectorAll('.btn-historico').forEach(function(btn) {
+        btn.style.display = 'none';
+    });
+}
 
     function bloquear(id, valor) {
         if (!valor) return;
