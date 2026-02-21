@@ -1401,6 +1401,7 @@
             <h1>📋 Sublimaster | Pedido</h1>
             <p>Crie seu pedido em 3 passos</p>
             <button class="btn-historico" onclick="abrirHistorico()">📊 Histórico</button>
+            <button class="btn-historico" onclick="sair()" style="right: 150px;">🚪 Sair</button>
         </div>
 
         <div class="tabs">
@@ -1805,6 +1806,14 @@ window.addEventListener('DOMContentLoaded', function () {
         verificarEMostrarStatus();
 
     } else {
+        const authSalva = localStorage.getItem('sublimasterAuth');
+if (authSalva && atob(authSalva) === 'autenticado') {
+    document.getElementById('senhaModal').style.display = 'none';
+    document.getElementById('mainContainer').style.display = 'block';
+    modoAdmin = true;
+    carregarHistoricoBackground();
+    return;
+}
         // ===== MODO ADMIN =====
         document.getElementById('senhaModal').style.display = 'block';
         document.getElementById('senhaAdmin').focus();
@@ -1837,6 +1846,7 @@ function validarSenha() {
         document.getElementById('mainContainer').style.display = 'block';
         senhaErro.textContent = '';
         modoAdmin = true;
+        localStorage.setItem('sublimasterAuth', btoa('autenticado'));
 
         console.log('🔄 Pré-carregando histórico em background...');
         carregarHistoricoBackground();
@@ -2882,6 +2892,11 @@ function abrirHistorico() {
 function fecharHistorico() {
     document.getElementById('modalHistorico').style.display = 'none';
     voltarLista();
+}
+
+function sair() {
+    localStorage.removeItem('sublimasterAuth');
+    location.reload();
 }
 
 // =============================================
