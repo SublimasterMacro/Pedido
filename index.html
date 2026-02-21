@@ -3077,18 +3077,7 @@ function verDetalhes(referencia) {
     document.getElementById('buscaArea').style.display    = 'none';
     document.getElementById('modalTitulo').textContent    = '📄 Detalhes do Pedido';
 
-    // Tentar usar cache primeiro
-    if (cachePedidosHistorico && Array.isArray(cachePedidosHistorico)) {
-        const pedido = cachePedidosHistorico.find(function (p) { return p.referencia === referencia; });
-        if (pedido) {
-            document.getElementById('loadingDetalhes').style.display  = 'none';
-            preencherDetalhesPedido(pedido);
-            return;
-        }
-    }
-
-    // Fallback: buscar via JSONP
-    console.warn('⚠️ Pedido não encontrado no cache, buscando...');
+    // Sempre busca via JSONP para garantir que os itens venham completos
     document.getElementById('loadingDetalhes').style.display  = 'block';
     document.getElementById('detalhesContent').style.display  = 'none';
 
