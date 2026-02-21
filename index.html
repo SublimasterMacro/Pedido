@@ -1841,6 +1841,7 @@ if (authSalva && atob(authSalva) === 'autenticado') {
     document.getElementById('mainContainer').style.display = 'block';
     modoAdmin = true;
     carregarHistoricoBackground();
+    document.getElementById('rodapeFixo').style.display = 'flex';
     return;
 }
         // ===== MODO ADMIN =====
@@ -1876,6 +1877,7 @@ function validarSenha() {
         senhaErro.textContent = '';
         modoAdmin = true;
         localStorage.setItem('sublimasterAuth', btoa('autenticado'));
+        document.getElementById('rodapeFixo').style.display = 'flex';
 
         console.log('🔄 Pré-carregando histórico em background...');
         carregarHistoricoBackground();
@@ -3371,7 +3373,7 @@ function imprimirDetalhes() {
 
 </script>
 
-<div class="rodape-fixo">
+<div class="rodape-fixo" id="rodapeFixo" style="display:none;">
     <button class="rodape-btn hist" onclick="abrirHistorico()">
         <span style="font-size:15px;">📊</span><span>Histórico</span>
     </button>
