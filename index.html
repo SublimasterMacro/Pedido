@@ -2671,6 +2671,7 @@ function enviarPedido() {
         if (modoAdmin) {
             cachePedidosHistorico = null;
             carregarHistoricoBackground();
+            cacheDetalhes = {};
         }
 
         document.getElementById('modalMessage').innerHTML =
@@ -2752,6 +2753,7 @@ document.getElementById('btnConfirmarDelete').addEventListener('click', function
         if (modoAdmin) {
             cachePedidosHistorico = null;
             carregarHistoricoBackground();
+            cacheDetalhes = {};
         }
 
         document.getElementById('modalMessage').innerHTML =
@@ -2803,6 +2805,7 @@ function formatarDataBrasileira(dataString) {
 // CACHE DO HISTÓRICO
 // =============================================
 let cachePedidosHistorico = null;
+let cacheDetalhes = {}; 
 
 // =============================================
 // CARREGAR HISTÓRICO EM BACKGROUND (PÓS-LOGIN)
@@ -3077,9 +3080,18 @@ function verDetalhes(referencia) {
     document.getElementById('buscaArea').style.display    = 'none';
     document.getElementById('modalTitulo').textContent    = '📄 Detalhes do Pedido';
 
-    // Sempre busca via JSONP para garantir que os itens venham completos
-    document.getElementById('loadingDetalhes').style.display  = 'block';
-    document.getElementById('detalhesContent').style.display  = 'none';
+    // ← NOVO: verificar cache de detalhes primeiro
+    if (cacheDetalhes[referencia]) {
+        console.log('✅ Detalhes do cache:', referencia);
+        document.getElementById('loadingDetalhes').style.display = 'none';
+        preencherDetalhesPedido(cacheDetalhes[referencia]);
+        return;
+    }
+
+    // Sem cache: buscar via JSONP
+    console.log('🔄 Buscando detalhes:', referencia);
+    document.getElementById('loadingDetalhes').style.display = 'block';
+    document.getElementById('detalhesContent').style.display = 'none';
 
     const callbackName = 'jsonpDetalhes_' + Date.now();
 
@@ -3096,6 +3108,7 @@ function verDetalhes(referencia) {
     window[callbackName] = function (dados) {
         clearTimeout(timeoutId);
         if (dados && dados.referencia) {
+            cacheDetalhes[referencia] = dados; // ← NOVO: salvar no cache
             preencherDetalhesPedido(dados);
         } else {
             alert('❌ Erro: Dados inválidos recebidos do servidor');
