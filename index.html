@@ -1992,8 +1992,9 @@ function mostrarCardStatus(dados) {
     // VERIFICAR SE PEDIDO JÁ FOI ENTREGUE
     // =============================================
     if (dados.status && dados.status.includes('Entregue')) {
-        document.getElementById('mainContainer').style.display    = 'none';
-        document.getElementById('clienteStatusArea').style.display = 'none';
+    document.getElementById('mainContainer').style.display    = 'none';
+    document.getElementById('clienteStatusArea').style.display = 'none';
+    document.getElementById('rodapeFixo').style.setProperty('display', 'none', 'important');
 
         // Criar tela de link expirado
         const tela = document.createElement('div');
