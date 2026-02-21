@@ -1400,9 +1400,10 @@
         <div class="header" style="position: relative;">
             <h1>📋 Sublimaster | Pedido</h1>
             <p>Crie seu pedido em 3 passos</p>
-            <button class="btn-historico" onclick="abrirHistorico()">📊 Histórico</button>
-            <button class="btn-historico" onclick="sair()" style="right: 150px;">🚪 Sair</button>
-        </div>
+            <div style="position:absolute;top:50%;right:30px;transform:translateY(-50%);display:flex;align-items:center;gap:10px;">
+    <button class="btn-historico" onclick="abrirHistorico()">📊 Histórico</button>
+    <button class="btn-historico" onclick="sair()">🚪 Sair</button>
+</div>
 
         <div class="tabs">
             <button class="tab active" onclick="openTab(event, 'dados')">📝 Dados</button>
