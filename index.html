@@ -2277,9 +2277,9 @@ function carregarParametrosURL() {
     if (btnGerarLink) btnGerarLink.style.display = 'none';
     if (linkResult)   linkResult.style.display   = 'none';
 
-    document.querySelectorAll('.btn-historico').forEach(function(btn) {
-        btn.style.display = 'none';
-    });
+    document.querySelectorAll('.btn-historico, .btn-sair-header').forEach(function(btn) {
+    btn.style.display = 'none';
+});
 }
 
     function bloquear(id, valor) {
