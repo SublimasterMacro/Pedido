@@ -1239,24 +1239,34 @@
         z-index: 999;
     }
     .rodape-btn {
-    flex: 1;
-    border: none;
-    background: none;
-    cursor: pointer;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    gap: 8px;
-    font-size: 15px;
-    font-weight: 600;
-    transition: background 0.2s;
-}
+        flex: 1;
+        border: none;
+        background: none;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        gap: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        transition: background 0.2s;
+    }
     .rodape-btn:hover { background: #f8f9fa; }
     .rodape-btn.hist  { color: #667eea; }
     .rodape-btn.sair  { color: #dc3545; }
     .rodape-divider   { width: 1px; background: #e9ecef; margin: 8px 0; }
+
+    /* ← NOVO: ocultar scrollbar nas abas e lista de itens */
+    .tab-content,
+    .items-list {
+        scrollbar-width: none;
+    }
+    .tab-content::-webkit-scrollbar,
+    .items-list::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 @media (max-width: 600px) {
