@@ -1807,8 +1807,7 @@
 </div>
 
 <script>
-const scriptURL = 'https://sublimaster-proxy.sublimaster.workers.dev';
-const SENHA_OFUSCADA = 'MjAyNjA2';
+const scriptURL = 'https://sublimaster-proxy.sublimaster.workers.dev/api';
 
 let itens = [];
 let itemDuplicadoParaAdicionar = null;
@@ -1882,26 +1881,30 @@ if (authSalva && atob(authSalva) === 'autenticado') {
 // =============================================
 // VALIDAR SENHA ADMIN
 // =============================================
-function validarSenha() {
+async function validarSenha() {
     const senhaDigitada = document.getElementById('senhaAdmin').value;
     const senhaErro = document.getElementById('senhaErro');
 
-    if (btoa(senhaDigitada) === SENHA_OFUSCADA) {
+    const res = await fetch('https://sublimaster-proxy.sublimaster.workers.dev/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ senha: senhaDigitada })
+    });
+
+    const data = await res.json();
+
+    if (data.ok) {
         document.getElementById('senhaModal').style.display = 'none';
         document.getElementById('mainContainer').style.display = 'block';
         senhaErro.textContent = '';
         modoAdmin = true;
         localStorage.setItem('sublimasterAuth', btoa('autenticado'));
         document.getElementById('rodapeFixo').classList.add('rodape-ativo');
-
-        console.log('🔄 Pré-carregando histórico em background...');
         carregarHistoricoBackground();
-
     } else {
         senhaErro.textContent = '❌ Senha incorreta! Tente novamente.';
         document.getElementById('senhaAdmin').value = '';
         document.getElementById('senhaAdmin').focus();
-
         const modal = document.querySelector('#senhaModal .modal-content');
         modal.style.animation = 'shake 0.5s';
         setTimeout(() => modal.style.animation = '', 500);
