@@ -3044,27 +3044,30 @@ function preencherListaPedidos(pedidos) {
         '<button class="btn-action btn-ver" onclick="verDetalhes(\'' + refEscapada + '\')">👁️ Ver Detalhes</button>' +
     '</div>' +
     (function() {
-        var dataFormatada = '';
-        if (pedido.dataEntrega) {
-            var partes = pedido.dataEntrega.split('/');
-            if (partes.length === 3) dataFormatada = partes[2] + '-' + partes[1] + '-' + partes[0];
-        }
-        var dados = pedido.referencia + '|' + pedido.nome + '|' + pedido.telefone.replace(/\D/g,'') + '|' + (pedido.email || '') + '|' + dataFormatada;
-        var link = window.location.href.split('?')[0] + '?data=' + btoa(dados);
-        return '<div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;">' +
-            '<div onclick="copiarLinkStatus(this)" data-link="' + link + '" ' +
-            'title="Copiar link do status para o cliente" ' +
-            'style="display:flex;align-items:center;gap:6px;background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;padding:7px 10px;cursor:pointer;overflow:hidden;min-width:0;">' +
-                '<span style="flex:1;font-family:monospace;font-size:11px;color:#667eea;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + link + '</span>' +
-                '<span>🔗</span>' +
-            '</div>' +
-            '<button onclick="abrirModalExcluir(\'' + refEscapada + '\', \'' + pedido.nome.replace(/'/g,"\\'") + '\')" ' +
-            'style="background:#fff0f0;color:#dc3545;border:1.5px solid #f5c6cb;padding:8px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.3s;">🗑️ Excluir</button>' +
-        '</div>';
-    })();
-
-        container.appendChild(card);
-    });
+    var dataFormatada = '';
+    if (pedido.dataEntrega) {
+        var partes = pedido.dataEntrega.split('/');
+        if (partes.length === 3) dataFormatada = partes[2] + '-' + partes[1] + '-' + partes[0];
+    }
+    var dados = pedido.referencia + '|' + pedido.nome + '|' + pedido.telefone.replace(/\D/g,'') + '|' + (pedido.email || '') + '|' + dataFormatada;
+    var link = window.location.href.split('?')[0] + '?data=' + btoa(dados);
+    var bloqueado = pedido.status && (pedido.status.includes('Produção') || pedido.status.includes('Pronto') || pedido.status.includes('Entregue'));
+    return '<div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;">' +
+        '<div onclick="copiarLinkStatus(this)" data-link="' + link + '" ' +
+        'title="Copiar link do status para o cliente" ' +
+        'style="display:flex;align-items:center;gap:6px;background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;padding:7px 10px;cursor:pointer;overflow:hidden;min-width:0;">' +
+            '<span style="flex:1;font-family:monospace;font-size:11px;color:#667eea;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + link + '</span>' +
+            '<span>🔗</span>' +
+        '</div>' +
+        '<button ' +
+        (bloqueado
+            ? 'disabled title="Não é possível excluir pedidos em andamento" style="background:#f0f0f0;color:#aaa;border:1.5px solid #ddd;padding:8px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:not-allowed;white-space:nowrap;"'
+            : 'onclick="abrirModalExcluir(\'' + refEscapada + '\', \'' + pedido.nome.replace(/'/g,"\\'") + '\')" style="background:#fff0f0;color:#dc3545;border:1.5px solid #f5c6cb;padding:8px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.3s;"') +
+        '>🗑️ Excluir</button>' +
+    '</div>';
+})();
+    container.appendChild(card);
+});
 }
 
 // =============================================
