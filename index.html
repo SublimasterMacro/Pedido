@@ -1885,29 +1885,36 @@ async function validarSenha() {
     const senhaDigitada = document.getElementById('senhaAdmin').value;
     const senhaErro = document.getElementById('senhaErro');
 
-    const res = await fetch('https://sublimaster-proxy.sublimaster.workers.dev/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ senha: senhaDigitada })
-    });
+    if (!senhaDigitada) return;
 
-    const data = await res.json();
+    try {
+        const res = await fetch('https://sublimaster-proxy.sublimaster.workers.dev/auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ senha: senhaDigitada })
+        });
 
-    if (data.ok) {
-        document.getElementById('senhaModal').style.display = 'none';
-        document.getElementById('mainContainer').style.display = 'block';
-        senhaErro.textContent = '';
-        modoAdmin = true;
-        localStorage.setItem('sublimasterAuth', btoa('autenticado'));
-        document.getElementById('rodapeFixo').classList.add('rodape-ativo');
-        carregarHistoricoBackground();
-    } else {
-        senhaErro.textContent = '❌ Senha incorreta! Tente novamente.';
-        document.getElementById('senhaAdmin').value = '';
-        document.getElementById('senhaAdmin').focus();
-        const modal = document.querySelector('#senhaModal .modal-content');
-        modal.style.animation = 'shake 0.5s';
-        setTimeout(() => modal.style.animation = '', 500);
+        const data = await res.json();
+
+        if (data.ok) {
+            document.getElementById('senhaModal').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'block';
+            senhaErro.textContent = '';
+            modoAdmin = true;
+            localStorage.setItem('sublimasterAuth', btoa('autenticado'));
+            document.getElementById('rodapeFixo').classList.add('rodape-ativo');
+            carregarHistoricoBackground();
+        } else {
+            senhaErro.textContent = '❌ Senha incorreta! Tente novamente.';
+            document.getElementById('senhaAdmin').value = '';
+            document.getElementById('senhaAdmin').focus();
+            const modal = document.querySelector('#senhaModal .modal-content');
+            modal.style.animation = 'shake 0.5s';
+            setTimeout(() => modal.style.animation = '', 500);
+        }
+    } catch (err) {
+        senhaErro.textContent = '❌ Erro ao conectar. Tente novamente.';
+        console.error(err);
     }
 }
 
