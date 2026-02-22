@@ -3050,7 +3050,7 @@ function preencherListaPedidos(pedidos) {
         return '<div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;">' +
             '<div onclick="copiarLinkStatus(this)" data-link="' + link + '" ' +
             'title="Copiar link do status para o cliente" ' +
-            'style="display:flex;align-items:center;gap:6px;background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;padding:7px 10px;cursor:pointer;">' +
+            'style="display:flex;align-items:center;gap:6px;background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;padding:7px 10px;cursor:pointer;overflow:hidden;min-width:0;">' +
                 '<span style="flex:1;font-family:monospace;font-size:11px;color:#667eea;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + link + '</span>' +
                 '<span>🔗</span>' +
             '</div>' +
