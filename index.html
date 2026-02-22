@@ -1653,6 +1653,17 @@
         </div>
     </div>
 
+    <div id="excluirModal" class="modal">
+  <div class="modal-content">
+    <h2 style="color:#dc3545;">🗑️ Excluir Pedido?</h2>
+    <p id="excluirInfo" style="color:#666;font-size:13px;margin-bottom:20px;line-height:1.5;"></p>
+    <div class="modal-buttons">
+      <button class="modal-btn modal-btn-secondary" id="btnCancelarExcluir">Cancelar</button>
+      <button class="modal-btn" style="background:#dc3545;color:white;" id="btnConfirmarExcluir">Sim, Excluir</button>
+    </div>
+  </div>
+</div>
+
     <!-- =============================================
          MODAL HISTÓRICO
     ============================================= -->
@@ -2979,7 +2990,6 @@ function preencherListaPedidos(pedidos) {
     document.getElementById('emptyState').style.display = 'none';
 
     pedidos.forEach(function (pedido) {
-        // Status: classe e texto
         var statusClass = 'status-pendente';
         var statusEmoji = '🟡';
         var statusTexto = 'Pendente';
@@ -3020,7 +3030,7 @@ function preencherListaPedidos(pedidos) {
         '<div class="pedido-info-item"><span class="pedido-info-label">E-mail:</span><span>' + (pedido.email || '-') + '</span></div>' +
         '<div class="pedido-info-item"><span class="pedido-info-label">Quantidade:</span><span>' + pedido.totalItens + ' Peças</span></div>' +
     '</div>' +
-    '<div class="pedido-actions" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">' +
         '<select class="status-dropdown" onchange="alterarStatus(\'' + refEscapada + '\', this.value)">' +
             '<option value="🟡 Pendente"'            + (pedido.status && pedido.status.includes('Pendente')  ? ' selected' : '') + '>🟡 Pendente</option>' +
             '<option value="🔵 Em Produção"'         + (pedido.status && pedido.status.includes('Produção')  ? ' selected' : '') + '>🔵 Em Produção</option>' +
@@ -3037,15 +3047,20 @@ function preencherListaPedidos(pedidos) {
         }
         var dados = pedido.referencia + '|' + pedido.nome + '|' + pedido.telefone.replace(/\D/g,'') + '|' + (pedido.email || '') + '|' + dataFormatada;
         var link = window.location.href.split('?')[0] + '?data=' + btoa(dados);
-        return '<div onclick="copiarLinkStatus(this)" data-link="' + link + '" ' +
-               'title="Copiar link do status para o cliente" ' +
-               'style="display:flex;align-items:center;gap:6px;margin-top:8px;background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;padding:7px 10px;cursor:pointer;">' +
-                   '<span style="flex:1;font-family:monospace;font-size:11px;color:#667eea;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + link + '</span>' +
-                   '<span>🔗</span>' +
-               '</div>';
+        return '<div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;">' +
+            '<div onclick="copiarLinkStatus(this)" data-link="' + link + '" ' +
+            'title="Copiar link do status para o cliente" ' +
+            'style="display:flex;align-items:center;gap:6px;background:#f8f9fa;border:1px solid #e9ecef;border-radius:6px;padding:7px 10px;cursor:pointer;">' +
+                '<span style="flex:1;font-family:monospace;font-size:11px;color:#667eea;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + link + '</span>' +
+                '<span>🔗</span>' +
+            '</div>' +
+            '<button onclick="abrirModalExcluir(\'' + refEscapada + '\', \'' + pedido.nome.replace(/'/g,"\\'") + '\')" ' +
+            'style="background:#fff0f0;color:#dc3545;border:1.5px solid #f5c6cb;padding:8px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all 0.3s;">🗑️ Excluir</button>' +
+        '</div>';
     })();
-container.appendChild(card);
-});
+
+        container.appendChild(card);
+    });
 }
 
 // =============================================
@@ -3373,6 +3388,68 @@ function imprimirDetalhes() {
     }
     window.print();
 }
+
+// =============================================
+// EXCLUIR PEDIDO
+// =============================================
+var pedidoParaExcluir = null;
+
+function abrirModalExcluir(referencia, nome) {
+    pedidoParaExcluir = referencia;
+    document.getElementById('excluirInfo').innerHTML =
+        '<strong>' + referencia + '</strong> — ' + nome + '<br>Esta ação não pode ser desfeita.';
+    document.getElementById('excluirModal').style.display = 'block';
+}
+
+document.getElementById('btnCancelarExcluir').addEventListener('click', function() {
+    document.getElementById('excluirModal').style.display = 'none';
+    pedidoParaExcluir = null;
+});
+
+document.getElementById('btnConfirmarExcluir').addEventListener('click', function() {
+    if (!pedidoParaExcluir) return;
+
+    var referencia = pedidoParaExcluir;
+    document.getElementById('excluirModal').style.display = 'none';
+    pedidoParaExcluir = null;
+
+    var callbackName = 'jsonpExcluir_' + Date.now();
+
+    window[callbackName] = function(resultado) {
+        delete window[callbackName];
+        var s = document.getElementById(callbackName);
+        if (s) s.remove();
+
+        if (resultado && resultado.status === 'success') {
+            if (cachePedidosHistorico) {
+                cachePedidosHistorico = cachePedidosHistorico.filter(function(p) {
+                    return p.referencia !== referencia;
+                });
+            }
+            var cards = document.querySelectorAll('.pedido-card');
+            cards.forEach(function(card) {
+                if (card.dataset.referencia === referencia) card.remove();
+            });
+        } else {
+            alert('❌ Erro ao excluir pedido!');
+        }
+    };
+
+    var script = document.createElement('script');
+    script.id  = callbackName;
+    script.src = scriptURL +
+        '?action=excluirPedido' +
+        '&referencia=' + encodeURIComponent(referencia) +
+        '&callback=' + callbackName +
+        '&t=' + Date.now();
+
+    script.onerror = function() {
+        alert('❌ Erro ao conectar com o servidor!');
+        delete window[callbackName];
+    };
+
+    document.body.appendChild(script);
+});
 
 </script>
 
